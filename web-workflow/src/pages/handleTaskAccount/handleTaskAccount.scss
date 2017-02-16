@@ -1,0 +1,24 @@
+.am-panel-bd{
+  overflow: hidden;
+}
+
+.disable{
+  margin: 0;
+  padding-top: 8px;
+}
+
+.tips{
+  color: red;
+}
+
+.prompt-title{
+  text-align: center;
+  font-size: large;
+  font-weight:bold;
+}
+
+@media (min-width: 800px) {
+  form{
+    padding-right: 88px;
+  }
+}

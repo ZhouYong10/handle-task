@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <title><%=title%></title>
+
+    <link rel="import" href="../../components/head/head.html?__inline">
+
+    <link rel="stylesheet" href="rechargeHistory.scss?__inline">
+</head>
+<body>
+
+<div id="app">
+
+    <link rel="import" href="../../components/header/header.html?__inline">
+    <link rel="import" href="../../components/menu/menu.html?__inline">
+
+    <div id="app-content" class="app-content am-g">
+
+        <div class="am-panel am-panel-primary">
+            <div class="am-panel-hd"><%= title %></div>
+            <div class="am-panel-bd">
+
+                <div id="searchForm" class="am-form am-form-inline">
+                    <validator name="search">
+                        <form method="get" action="/user/search/recharge">
+                            <div class="am-form-group am-form-group-sm search-title">
+                                <label for="rechargeTotal" class="am-u-sm-3 am-form-label taskTypeLabel">充值金额</label>
+                                <div class="am-u-sm-9 taskTypeWrap">
+                                    <input id="rechargeTotal" type="text" class="am-form-field am-input-sm am-radius"
+                                           placeholder="请输入合法的金额" name="funds"
+                                           v-validate:funds="{required: true}">
+                                </div>
+                            </div>
+
+                            <div class="am-form-group am-form-group-sm search-title">
+                                <label for="rechargeTime" class="am-u-sm-3 am-form-label taskTypeLabel">充值时间</label>
+                                <div class="am-u-sm-9 taskTypeWrap">
+                                    <input id="rechargeTime" type="text" class="am-form-field am-input-sm am-radius"
+                                           placeholder="点击选择充值时间" name="createTime"
+                                           onclick="laydate({istime: false, format: 'YYYY-MM-DD'})"
+                                           v-validate:createtime="{required: true}">
+                                </div>
+                            </div>
+
+                            <div class="am-form-group am-form-group-sm">
+                                <button class="am-btn am-btn-success am-radius am-btn-sm"
+                                        v-if="!$search.funds.required || !$search.createtime.required">
+                                    <i class="am-icon-search"></i>
+                                    搜索
+                                </button>
+                            </div>
+                        </form>
+                    </validator>
+                </div>
+
+                <div class="am-scrollable-horizontal am-text-center flowTask-content">
+                    <table class="am-table am-table-bordered am-table-radius am-table-striped am-text-nowrap am-table-hover">
+                        <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>订单号</th>
+                            <th>充值时间</th>
+                            <th>充值金额</th>
+                            <th>状态</th>
+                            <th>描述</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+
+                        <% for(var i = 0; i < recharges.length; i++){ %>
+                        <tr>
+                            <td class="am-text-middle"><%= i + 1 %></td>
+                            <td class="am-text-middle"><%= recharges[i].alipayId %></td>
+                            <td class="am-text-middle"><%= recharges[i].createTime %></td>
+                            <td class="am-text-middle"><%= recharges[i].funds %></td>
+                            <td class="am-text-middle"><%= recharges[i].status %></td>
+                            <td class="am-text-middle"><%= recharges[i].dec %></td>
+                        </tr>
+                        <% } %>
+
+                        </tbody>
+                    </table>
+
+                    <input type="hidden" value="<%= pages %>" id="pages">
+                    <div id="laypage"></div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<link rel="import" href="../../components/foot/foot.html?__inline">
+
+<!--import plugin-->
+<script src="/static/plugins/laypage/laypage.js"></script>
+<script src="/static/plugins/laydate/laydate.js"></script>
+
+<script>
+    require('rechargeHistory');
+</script>
+
+</body>
+</html>

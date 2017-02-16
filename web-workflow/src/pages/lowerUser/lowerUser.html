@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <title><%=title%></title>
+
+    <link rel="import" href="../../components/head/head.html?__inline">
+
+    <link rel="stylesheet" href="./lowerUser.scss?__inline">
+</head>
+<body>
+
+<div id="app">
+
+    <link rel="import" href="../../components/header/header.html?__inline">
+    <link rel="import" href="../../components/menu/menu.html?__inline">
+
+    <div id="app-content" class="app-content am-g">
+
+        <div class="am-panel am-panel-primary">
+            <div class="am-panel-hd"><%= title %></div>
+            <div class="am-panel-bd">
+
+                <div id="searchForm" class="am-form am-form-inline">
+                    <validator name="search">
+                        <div class="am-form-group am-form-group-sm search-title">
+                            <label for="taskName" class="am-u-sm-3 am-form-label taskTypeLabel">
+                                用户名
+                            </label>
+                            <div class="am-u-sm-9 taskTypeWrap">
+                                <form id="search" method="get" action="/user/search/lowerUser">
+                                    <input id="taskName" type="text" class="am-form-field am-input-sm am-radius"
+                                           name="username" placeholder="支持模糊查询"
+                                           v-validate:username="{required: true}">
+                                </form>
+                            </div>
+                        </div>
+
+                        <div class="am-form-group am-form-group-sm">
+                            <button form="search" class="am-btn am-btn-success am-radius am-btn-sm" v-if="$search.valid">
+                                <i class="am-icon-search"></i>
+                                搜索
+                            </button>&nbsp;&nbsp;
+
+                            <% if(role == '顶级代理' || role == '超级代理'){ %>
+                            <a class="am-btn am-btn-success am-radius am-btn-sm" href="/user/addLowerUser">
+                                <i class="am-icon-plus-circle"></i>
+                                添加下级用户
+                            </a>
+                            <% } %>
+
+                        </div>
+                    </validator>
+                </div>
+
+                <div class="am-scrollable-horizontal am-text-center loweruser-content">
+                    <table class="am-table am-table-bordered am-table-radius am-table-striped am-text-nowrap am-table-hover">
+                        <thead>
+                        <tr>
+                            <th>账号</th>
+                            <th>创建时间</th>
+                            <th>等级</th>
+                            <th>余额</th>
+                            <th>下线/人</th>
+                            <th>最后登陆时间</th>
+                            <th>操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+
+                        <% for(var i = 0; i < users.length; i++){ %>
+                        <tr>
+                            <td><%= users[i].username %></td>
+                            <td><%= users[i].createTime %></td>
+                            <td><%= users[i].role %></td>
+                            <td>￥ <%= users[i].funds %></td>
+                            <td><%= users[i].childNum %></td>
+                            <td><%= users[i].lastLoginTime %></td>
+                            <td  class="am-text-middle">
+                                <a type="button" class="am-btn am-btn-primary am-radius am-btn-xs"
+                                   href="/user/removeLowerUser?id=<%= users[i]._id %>"
+                                   onclick="return confirm('确认删除该用户吗？');">删除</a>
+                            </td>
+                        </tr>
+                        <% } %>
+
+                        </tbody>
+                    </table>
+
+                    <input type="hidden" value="<%= pages %>" id="pages">
+                    <div id="laypage"></div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<link rel="import" href="../../components/foot/foot.html?__inline">
+
+<!--import plugin-->
+<script src="/static/plugins/laypage/laypage.js"></script>
+
+<script>
+    require('lowerUser');
+</script>
+
+</body>
+</html>

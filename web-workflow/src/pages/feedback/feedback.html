@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <title><%=title%></title>
+
+    <link rel="import" href="../../components/head/head.html?__inline">
+
+    <link rel="stylesheet" href="feedback.scss?__inline">
+</head>
+<body>
+
+<div id="app">
+
+    <link rel="import" href="../../components/header/header.html?__inline">
+    <link rel="import" href="../../components/menu/menu.html?__inline">
+
+    <div id="app-content" class="app-content am-g">
+
+        <div class="am-panel am-panel-primary">
+            <div class="am-panel-hd"><%= title %></div>
+            <div class="am-panel-bd">
+
+                <a class="am-btn am-btn-success am-radius" href="/user/feedback/add">
+                    <i class="am-icon-plus-circle"></i>
+                    我要提意见
+                </a>
+                <div class="am-scrollable-horizontal am-text-center feedback-content">
+                    <table class="am-table am-table-bordered am-table-radius am-table-striped am-text-nowrap am-table-hover">
+                        <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>提交日期</th>
+                            <th>反馈内容</th>
+                            <th>状态</th>
+                            <th>处理人意见</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+
+                        <% for(var i = 0; i < feedbacks.length; i++){ %>
+                        <tr>
+                            <td><%= i + 1 %></td>
+                            <td><%= feedbacks[i].createTime %></td>
+                            <td><%= feedbacks[i].content %></td>
+                            <td><%= feedbacks[i].status %></td>
+                            <td><%= feedbacks[i].treatAdvice %></td>
+                        </tr>
+                        <% } %>
+
+                        </tbody>
+                    </table>
+
+                    <input type="hidden" value="<%= pages %>" id="pages">
+                    <div id="laypage"></div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<link rel="import" href="../../components/foot/foot.html?__inline">
+
+<!--import plugin-->
+<script src="/static/plugins/laypage/laypage.js"></script>
+
+<script>
+    $(function() {
+        laypage({
+            cont: 'laypage',
+            pages: $('#pages').val(), //可以叫服务端把总页数放在某一个隐藏域，再获取。假设我们获取到的是18
+            skin: 'molv', //皮肤
+            skip: true, //是否开启跳页
+            groups: 3, //连续显示分页数
+            last: $('#pages').val(),
+            curr: function(){ //通过url获取当前页，也可以同上（pages）方式获取
+                var page = location.search.match(/page=(\d+)/);
+                return page ? page[1] : 1;
+            }(),
+            jump: function(e, first){ //触发分页后的回调
+                if(!first){ //一定要加此判断，否则初始时会无限刷新
+                    location.href = '?page='+e.curr;
+                }
+            }
+        });
+    })
+</script>
+
+</body>
+</html>

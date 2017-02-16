@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <title><%=title%></title>
+
+    <link rel="import" href="../../components/head/head.html?__inline">
+
+    <link rel="stylesheet" href="WXlikeQuickBulkAdd.scss?__inline">
+</head>
+<body>
+
+<div id="app">
+
+    <link rel="import" href="../../components/header/header.html?__inline">
+    <link rel="import" href="../../components/menu/menu.html?__inline">
+
+    <div id="app-content" class="app-content am-g">
+
+        <div class="am-panel am-panel-primary">
+            <div class="am-panel-hd"><%= title %></div>
+            <div id="wxLike" class="am-panel-bd">
+
+                <input type="hidden" value="<%= price %>" v-model="readPrice">
+                <input type="hidden" value="<%= price2 %>" v-model="likePrice">
+
+                <component :is="currentView" :view.sync="currentView" :orders.sync="orders" :price="readPrice" :price2="likePrice"></component>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<link rel="import" href="../../components/foot/foot.html?__inline">
+
+<!--import plugin-->
+
+<script>
+    require('WXlikeQuickBulkAdd');
+</script>
+
+</body>
+</html>
+

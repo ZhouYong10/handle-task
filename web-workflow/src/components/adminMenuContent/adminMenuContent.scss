@@ -1,0 +1,28 @@
+.adminMenuContent{
+  margin: 0;
+  .title{
+    background-color: #0E90D2;
+    color: #fff;
+    font-weight: bold;
+  }
+  .am-accordion-content{
+    padding: 0;
+  }
+  .list{
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    li{
+      padding: 10px 12px;
+      border-bottom: 1px solid #DEDEDE;
+      background-color: #fff;
+      a{
+        color: #0E90D2;
+      }
+    }
+  }
+  .tips{
+    color: red;
+    display: none;
+  }
+}

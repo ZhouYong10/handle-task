@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <title><%=title%></title>
+
+    <link rel="import" href="../../components/head/head.html?__inline">
+
+    <link rel="stylesheet" href="./adminWXlikeQuickAlre.scss?__inline">
+</head>
+<body>
+
+<div id="app">
+
+    <link rel="import" href="../../components/adminHeader/adminHeader.html?__inline">
+    <link rel="import" href="../../components/adminMenu/adminMenu.html?__inline">
+
+    <div id="app-content" class="app-content am-g">
+
+        <div class="am-hide-sm am-u-lg-2 am-u-md-3">
+            <link rel="import" href="../../components/adminMenuContent/adminMenuContent.html?__inline">
+        </div>
+
+        <div class="am-u-lg-10 am-u-md-9">
+            <div class="am-panel am-panel-primary">
+                <div class="am-panel-hd"><%= title %></div>
+                <div class="am-panel-bd am-scrollable-horizontal">
+
+                    <div id="searchForm" class="am-form am-form-inline" style="padding-bottom: 6px;">
+                        <validator name="search">
+                            <form method="get" action="/admin/search/WX/like/dingding" class="am-form-inline">
+                                <!--<div class="am-form-group">-->
+                                    <!--<input class="am-radius am-input-sm" type="text" placeholder="选择查询日期"-->
+                                           <!--onclick="laydate({istime: true,format: 'YYYY-MM-DD'})"-->
+                                           <!--v-validate:date="{required: true}" name="date">-->
+                                <!--</div>-->
+
+                                <!--<div class="am-form-group">-->
+                                    <!--<select class="am-radius am-input-sm" style="width:66px;" name="type">-->
+                                        <!--<option value=""> 平台 </option>-->
+                                        <!--<option value="tuike">推客</option>-->
+                                        <!--<option value="daiding">代丁</option>-->
+                                        <!--<option value="weichuanmei">微传媒</option>-->
+                                    <!--</select>-->
+                                <!--</div>-->
+
+                                <div class="am-form-group">
+                                    <!--<button class="am-btn am-btn-success am-radius am-btn-sm" v-if="$search.valid">-->
+                                        <!--<i class="am-icon-search"></i>-->
+                                        <!--查询-->
+                                    <!--</button>-->
+                                    <span style="float: right; padding: 3px 0 0 16px;">阅读总额: <%= readTotal %> </span>
+                                </div>
+                            </form>
+                        </validator>
+                    </div>
+
+                    <div class="am-scrollable-horizontal am-text-center list-content">
+                        <table class="am-table am-table-bordered am-table-radius am-text-nowrap">
+                            <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>用户</th>
+                                <th>下单日期</th>
+                                <th>地址</th>
+                                <th>标题</th>
+                                <th>数量/速度</th>
+                                <th>阅读初始量</th>
+                                <th>价格</th>
+                                <th>备注</th>
+                                <th>返利</th>
+                                <th>操作</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+
+                            <% for(var i = 0; i < orders.length; i++){ %>
+                            <tr class="<% if(orders[i].status == '已处理' && orders[i].error == undefined){ %> am-primary
+                        <% }else if(orders[i].status == '已退款'){ %> am-danger
+                        <% }else if(orders[i].status == '已处理' && orders[i].error != undefined){ %> am-active <% } %>">
+                                <td class="am-text-middle"><%= i + 1  %></td>
+                                <td class="am-text-middle"><%= orders[i].user %></td>
+                                <td class="am-text-middle"><%= orders[i].createTime %></td>
+                                <td class="am-text-middle">
+                                    <input type="text" value="<%= orders[i].address %>" style="width: 56px;"><br/>
+                                    <a class="clipboard am-btn am-btn-primary am-radius am-btn-xs"
+                                       title="<%= orders[i].address %>"
+                                       data-clipboard-text="<%= orders[i].address %>">复制</a>
+                                </td>
+                                <td class="am-text-middle">
+                                    <a class="am-text-truncate text-break" title="<%= orders[i].title %>">
+                                        <%= orders[i].title %>
+                                    </a>
+                                </td>
+                                <td class="am-text-middle">
+                                    阅读数量: <%= orders[i].num %> <br/>
+                                    点赞数量: <%= orders[i].num2 %> <br/>
+                                    速度: <%= orders[i].speed %>/分
+                                </td>
+                                <td class="am-text-middle"><%= orders[i].startReadNum %></td>
+                                <td class="am-text-middle"><%= orders[i].totalPrice %></td>
+                                <td class="am-text-middle">
+                                    <a class="am-text-truncate text-break" title="<%= orders[i].remark %>">
+                                        <%= orders[i].remark %>
+                                    </a>
+                                </td>
+                                <td class="am-text-middle">
+                                    A: <%= orders[i].adminProfit %><br/>
+                                    B: <%= orders[i].topProfit %><br/>
+                                    C: <%= orders[i].superProfit %><br/>
+                                </td>
+                                <td class="am-text-middle">
+                                    <% if(orders[i].status == '已处理' && orders[i].error == undefined){ %>
+                                    <a class="am-btn am-btn-primary am-radius am-btn-xs refundProfit"
+                                       href="/admin/order/refundProfit?id=<%= orders[i]._id %>&url=<%= path %>">退款</a>
+                                    <% }else if(orders[i].status == '已处理' && orders[i].error != undefined){ %>
+
+                                    <% if(orders[i].errorInfo != undefined){ %>
+                                    <div class="operation">
+                                        <a class="am-text-truncate text-break am-badge-warning am-radius"
+                                           title="<%= orders[i].errorInfo %>">
+                                            <%= orders[i].errorInfo %>
+                                        </a>
+                                    </div>
+                                    <% } %>
+
+                                    <% if(orders[i].errorDealInfo != undefined){ %>
+                                    <div class="operation">
+                                        <a class="am-text-truncate text-break am-badge-primary am-radius"
+                                           title="<%= orders[i].errorDealInfo %>">
+                                            <%= orders[i].errorDealInfo %>
+                                        </a>
+                                    </div>
+                                    <div class="operation">
+                                        <a class="am-btn am-btn-primary am-radius am-btn-xs refundProfit"
+                                           href="/admin/order/refundProfit?id=<%= orders[i]._id %>&url=<%= path %>">退款</a>
+                                    </div>
+                                    <% } %>
+
+                                    <% if(orders[i].errorDealInfo == undefined){ %>
+                                    <div class="operation">
+                                        <a class="am-btn am-btn-primary am-radius am-btn-xs dealError"
+                                           href="/admin/order/dealError?id=<%= orders[i]._id %>&url=<%= path %>">处理</a>
+                                    </div>
+                                    <div class="operation">
+                                        <a class="am-btn am-btn-primary am-radius am-btn-xs refundProfit"
+                                           href="/admin/order/refundProfit?id=<%= orders[i]._id %>&url=<%= path %>">退款</a>
+                                    </div>
+                                    <% } %>
+
+                                    <% }else if(orders[i].status == '已退款'){ %>
+
+                                    <% if(orders[i].errorInfo != undefined){ %>
+                                    <div class="operation">
+                                        <a class="am-text-truncate text-break am-badge-warning am-radius"
+                                           title="<%= orders[i].errorInfo %>">
+                                            <%= orders[i].errorInfo %>
+                                        </a>
+                                    </div>
+                                    <% } %>
+
+                                    <% if(orders[i].errorDealInfo != undefined){ %>
+                                    <div class="operation">
+                                        <a class="am-text-truncate text-break am-badge-primary am-radius"
+                                           title="<%= orders[i].errorDealInfo %>">
+                                            <%= orders[i].errorDealInfo %>
+                                        </a>
+                                    </div>
+                                    <% } %>
+
+                                    <% if(orders[i].refundInfo != undefined){ %>
+                                    <div class="operation">
+                                        <a class="am-text-truncate text-break am-badge-danger am-radius"
+                                           title="<%= orders[i].refundInfo %>">
+                                            <%= orders[i].refundInfo %>
+                                        </a>
+                                    </div>
+                                    <% } %>
+
+                                    <% } %>
+                                </td>
+                            </tr>
+                            <% } %>
+
+                            </tbody>
+                        </table>
+
+                        <input type="hidden" value="<%= pages %>" id="pages">
+                        <div id="laypage"></div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<link rel="import" href="../../components/foot/foot.html?__inline">
+
+<!--import plugin-->
+<script src="/static/js/clipboard.js"></script>
+<script src="/static/plugins/layer/layer.js"></script>
+<script src="/static/plugins/laypage/laypage.js"></script>
+<script src="/static/plugins/laydate/laydate.js"></script>
+
+<script>
+    require('adminMenuContent');
+    require('adminWXlikeQuickAlre');
+</script>
+
+
+</body>
+</html>

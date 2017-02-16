@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <title><%=title%></title>
+
+    <link rel="import" href="../../components/head/head.html?__inline">
+
+    <link rel="stylesheet" href="userInfo.scss?__inline">
+</head>
+<body>
+
+<div id="app">
+
+    <link rel="import" href="../../components/header/header.html?__inline">
+    <link rel="import" href="../../components/menu/menu.html?__inline">
+
+    <div id="app-content" class="app-content am-g">
+
+        <div class="am-panel am-panel-primary">
+            <div class="am-panel-hd"><%= title %></div>
+            <div class="am-panel-bd">
+
+                <form class="am-form am-form-horizontal" id="userInfo" method="post" action="/user/info">
+                    <div class="am-form-group">
+                        <label class="am-u-sm-4 am-u-lg-2 am-form-label">用户账号</label>
+                        <div class="am-u-sm-8 am-u-lg-10">
+                            <p class="disable"><%= user.username %></p>
+                        </div>
+                    </div>
+                    <div class="am-form-group">
+                        <label class="am-u-sm-4 am-u-lg-2 am-form-label">账户余额</label>
+                        <div class="am-u-sm-8 am-u-lg-10">
+                            <p class="disable">￥ <%= user.funds %></p>
+                        </div>
+                    </div>
+                    <div class="am-form-group">
+                        <label class="am-u-sm-4 am-u-lg-2 am-form-label">下级返利</label>
+                        <div class="am-u-sm-8 am-u-lg-10">
+                            <p class="disable"><a href="/user/lowerUser/profit" title="显示下级返利详情">￥ <%= user.profit %></a></p>
+                        </div>
+                    </div>
+                    <div class="am-form-group">
+                        <label class="am-u-sm-4 am-u-lg-2 am-form-label">账号状态</label>
+                        <div class="am-u-sm-8 am-u-lg-10">
+                            <p class="disable"><%= user.status %></p>
+                        </div>
+                    </div>
+                    <div class="am-form-group">
+                        <label class="am-u-sm-4 am-u-lg-2 am-form-label">用户级别</label>
+                        <div class="am-u-sm-8 am-u-lg-10">
+                            <p class="disable"><%= user.role %></p>
+                        </div>
+                    </div>
+                    <div class="am-form-group">
+                        <label class="am-u-sm-4 am-u-lg-2 am-form-label">上级</label>
+                        <div class="am-u-sm-8 am-u-lg-10">
+                            <p class="disable"><%= user.parent %></p>
+                        </div>
+                    </div>
+                    <div class="am-form-group">
+                        <label class="am-u-sm-4 am-u-lg-2 am-form-label">下级/人</label>
+                        <div class="am-u-sm-8 am-u-lg-10">
+                            <p class="disable"><%= user.childNum %></p>
+                        </div>
+                    </div>
+                    <div class="am-form-group">
+                        <label class="am-u-sm-4 am-u-lg-2 am-form-label">注册时间</label>
+                        <div class="am-u-sm-8 am-u-lg-10">
+                            <p class="disable"><%= user.createTime %></p>
+                        </div>
+                    </div>
+                    <div class="am-form-group">
+                        <label class="am-u-sm-4 am-u-lg-2 am-form-label">最后登陆时间</label>
+                        <div class="am-u-sm-8 am-u-lg-10">
+                            <p class="disable"><%= user.lastLoginTime %></p>
+                        </div>
+                    </div>
+                    <div class="am-form-group">
+                        <label for="five" class="am-u-sm-4 am-u-lg-2 am-form-label">ＱＱ号码</label>
+                        <div class="am-u-sm-8 am-u-lg-10">
+                            <input class="am-radius am-input-sm" type="text" id="five" name="QQ" value="<%= user.QQ %>" v-if="isEdit">
+                            <p class="disable" v-if="!isEdit"><%= user.QQ %></p>
+                        </div>
+                    </div>
+                    <div class="am-form-group">
+                        <label for="six" class="am-u-sm-4 am-u-lg-2 am-form-label">电话号码</label>
+                        <div class="am-u-sm-8 am-u-lg-10">
+                            <input class="am-radius am-input-sm" type="text" id="six" name="phone" value="<%= user.phone %>" v-if="isEdit">
+                            <p class="disable" v-if="!isEdit"><%= user.phone %></p>
+                        </div>
+                    </div>
+                    <div class="am-form-group">
+                        <label for="seven" class="am-u-sm-4 am-u-lg-2 am-form-label">电子邮件</label>
+                        <div class="am-u-sm-8 am-u-lg-10">
+                            <input class="am-radius am-input-sm" type="email" id="seven" name="email" value="<%= user.email %>" v-if="isEdit">
+                            <p class="disable" v-if="!isEdit"><%= user.email %></p>
+                        </div>
+                    </div>
+
+                    <div class="am-form-group">
+                        <div class="am-u-sm-8 am-u-sm-offset-4 am-u-lg-10 am-u-lg-offset-2">
+                            <button class="am-btn am-btn-primary am-radius am-btn-sm" @click.stop.prevent="edit" v-if="!isEdit">编辑</button>
+                            <button type="submit" class="am-btn am-btn-primary am-radius am-btn-sm" v-if="isEdit">保存</button>
+                            <button class="am-btn am-btn-default am-radius am-btn-sm" @click.stop.prevent="cancel" v-if="isEdit">取消</button>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<link rel="import" href="../../components/foot/foot.html?__inline">
+
+<!--import plugin-->
+<script>
+    require('./userinfo');
+</script>
+
+</body>
+</html>

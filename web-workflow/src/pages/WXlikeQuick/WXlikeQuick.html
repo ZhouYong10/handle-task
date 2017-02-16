@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <title><%=title%></title>
+
+    <link rel="import" href="../../components/head/head.html?__inline">
+
+    <link rel="stylesheet" href="WXlikeQuick.scss?__inline">
+</head>
+<body>
+
+<div id="app">
+
+    <link rel="import" href="../../components/header/header.html?__inline">
+    <link rel="import" href="../../components/menu/menu.html?__inline">
+
+    <div id="app-content" class="app-content am-g">
+
+        <div class="am-panel am-panel-primary">
+            <div class="am-panel-hd"><%= title %></div>
+            <div class="am-panel-bd">
+
+                <div id="searchForm" class="am-form am-form-inline">
+                    <validator name="search">
+                        <div class="am-form-group am-form-group-sm search-title">
+                            <label for="taskName" class="am-u-sm-3 am-form-label taskTypeLabel">
+                                任务地址
+                            </label>
+                            <div class="am-u-sm-9 taskTypeWrap">
+                                <form id="search" method="get" action="/WX/account/search/like/quick">
+                                    <input id="taskName" type="text" class="am-form-field am-input-sm am-radius"
+                                           name="account" placeholder="请输入任务地址"
+                                           v-validate:account="{required: true}">
+                                </form>
+                            </div>
+                        </div>
+
+                        <div class="am-form-group am-form-group-sm">
+                            <button form="search" class="am-btn am-btn-success am-radius am-btn-sm" v-if="$search.valid">
+                                <i class="am-icon-search"></i>
+                                搜索
+                            </button>&nbsp;&nbsp;
+                            <a href="/WX/like/quick/add" class="am-btn am-btn-primary am-radius am-btn-sm addTask">
+                                <i class="am-icon-plus"></i>
+                                新增任务
+                            </a>&nbsp;&nbsp;
+                            <a href="/WX/like/quick/bulk/add" class="am-btn am-btn-primary am-radius am-btn-sm addTask">
+                                <i class="am-icon-plus-circle"></i>
+                                批量添加
+                            </a>
+                        </div>
+                    </validator>
+                </div>
+
+                <div class="am-scrollable-horizontal am-text-center WXfriend-content">
+                    <table class="am-table am-table-bordered am-table-radius am-text-nowrap">
+                        <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>创建时间</th>
+                            <th>地址</th>
+                            <th>标题</th>
+                            <th>数量</th>
+                            <th>限速/分</th>
+                            <th>总价</th>
+                            <th>备注</th>
+                            <th>阅读初始量</th>
+                            <th>进度</th>
+                            <th>状态</th>
+                            <th>操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+
+                        <% for(var i = 0; i < orders.length; i++){ %>
+                        <tr class="<% if((orders[i].status == '执行中' || orders[i].status == '已完成') && orders[i].error == undefined){ %> am-primary
+                        <% }else if(orders[i].status == '已退款'){ %> am-danger
+                        <% }else if((orders[i].status == '执行中' || orders[i].status == '已完成') && orders[i].error != undefined){ %> am-active <% } %>">
+                            <td class="am-text-middle">
+                                <input type="hidden" id="orderID" value="<%= orders[i]._id %>">
+                                <%= i + 1  %>
+                            </td>
+                            <td class="am-text-middle"><%= orders[i].createTime %></td>
+                            <td class="am-text-middle">
+                                <a class="am-text-truncate text-break" title="<%= orders[i].address %>">
+                                    <%= orders[i].address %>
+                                </a>
+                            </td>
+                            <td class="am-text-middle">
+                                <a class="am-text-truncate text-break" title="<%= orders[i].title %>">
+                                    <%= orders[i].title %>
+                                </a>
+                            </td>
+                            <td class="am-text-middle">
+                                阅读: <%= orders[i].num %> <br/>
+                                点赞: <%= orders[i].num2 %>
+                            </td>
+                            <td class="am-text-middle"><%= orders[i].speed %></td>
+                            <td class="am-text-middle"><%= orders[i].totalPrice %></td>
+                            <td class="am-text-middle">
+                                <a class="am-text-truncate text-break" title="<%= orders[i].remark %>">
+                                    <%= orders[i].remark %>
+                                </a>
+                            </td>
+                            <td class="am-text-middle"><%= orders[i].startReadNum %></td>
+                            <td class="am-text-middle"><%= orders[i].schedule %></td>
+                            <td class="am-text-middle"><%= orders[i].status %></td>
+                            <td class="am-text-middle">
+                                <% if((orders[i].status == '执行中' || orders[i].status == '已完成') && orders[i].error == undefined){ %>
+                                <a class="am-btn am-btn-primary am-radius am-btn-xs orderError"
+                                   href="/user/order/error?id=<%= orders[i]._id %>&url=<%= path %>">报错</a>
+                                <% }else if((orders[i].status == '执行中' || orders[i].status == '已完成') && orders[i].error != undefined){ %>
+
+                                <% if(orders[i].errorInfo != undefined){ %>
+                                <div class="operation">
+                                    <a class="am-text-truncate text-break am-badge-warning am-radius"
+                                       title="<%= orders[i].errorInfo %>">
+                                        <%= orders[i].errorInfo %>
+                                    </a>
+                                </div>
+                                <% } %>
+
+                                <% if(orders[i].errorDealInfo != undefined){ %>
+                                <div class="operation">
+                                    <a class="am-text-truncate text-break am-badge-primary am-radius"
+                                       title="<%= orders[i].errorDealInfo %>">
+                                        <%= orders[i].errorDealInfo %>
+                                    </a>
+                                </div>
+                                <% } %>
+
+                                <% }else if(orders[i].status == '已退款'){ %>
+
+                                <% if(orders[i].errorInfo != undefined){ %>
+                                <div class="operation">
+                                    <a class="am-text-truncate text-break am-badge-warning am-radius"
+                                       title="<%= orders[i].errorInfo %>">
+                                        <%= orders[i].errorInfo %>
+                                    </a>
+                                </div>
+                                <% } %>
+
+                                <% if(orders[i].errorDealInfo != undefined){ %>
+                                <div class="operation">
+                                    <a class="am-text-truncate text-break am-badge-primary am-radius"
+                                       title="<%= orders[i].errorDealInfo %>">
+                                        <%= orders[i].errorDealInfo %>
+                                    </a>
+                                </div>
+                                <% } %>
+
+                                <% if(orders[i].refundInfo != undefined){ %>
+                                <div class="operation">
+                                    <a class="am-text-truncate text-break am-badge-danger am-radius"
+                                       title="<%= orders[i].refundInfo %>">
+                                        <%= orders[i].refundInfo %>
+                                    </a>
+                                </div>
+                                <% } %>
+
+                                <% } %>
+                            </td>
+                        </tr>
+                        <% } %>
+
+                        </tbody>
+                    </table>
+
+                    <input type="hidden" value="<%= pages %>" id="pages">
+                    <div id="laypage"></div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<link rel="import" href="../../components/foot/foot.html?__inline">
+
+<!--import plugin-->
+<script src="/static/plugins/layer/layer.js"></script>
+<script src="/static/plugins/laypage/laypage.js"></script>
+
+<script>
+    require('WXlikeQuick');
+</script>
+
+</body>
+</html>

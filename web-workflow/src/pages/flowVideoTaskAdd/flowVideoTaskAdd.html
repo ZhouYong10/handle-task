@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <title><%=title%></title>
+
+    <link rel="import" href="../../components/head/head.html?__inline">
+
+    <link rel="stylesheet" href="flowVideoTaskAdd.scss?__inline">
+</head>
+<body>
+
+<div id="app">
+
+    <link rel="import" href="../../components/header/header.html?__inline">
+    <link rel="import" href="../../components/menu/menu.html?__inline">
+
+    <div id="app-content" class="app-content am-g">
+
+        <div id="flowVideo" class="am-panel am-panel-primary">
+            <div class="am-panel-hd"><%= title %></div>
+            <div class="am-panel-bd">
+
+                <div class="am-panel am-panel-danger">
+                    <div class="am-panel-hd prompt-title">提示</div>
+                    <div class="am-panel-bd prompt-content">
+                        <span class="tips">价格说明：初始10000流量起步执行，不足10000按10000算，超过部分按照1000来算，不足1000按1000计算。</span>
+                    </div>
+                </div>
+
+                <validator name="forumFlow">
+                    <form class="am-form am-form-horizontal" method="post" action="/flow/videoTask/add">
+                        <input type="hidden" value="<%= orderFlag %>" name="orderFlag">
+
+                        <div class="am-form-group">
+                            <label for="taskAddress" class="am-u-sm-4 am-u-lg-2 am-form-label"><span class="tips">* </span>目标地址</label>
+                            <div class="am-u-sm-8 am-u-lg-10">
+                                <input id="taskAddress" class="am-radius am-input-sm" type="text" placeholder="请填写任务地址" name="address"
+                                       v-validate:address="{required: true, isaddress: true}">
+                                <span class="tips" v-if="$forumFlow.address.required">任务地址不能为空!</span>
+                                <span class="tips" v-if="$forumFlow.address.isaddress">请填写合法的地址!</span>
+                            </div>
+                        </div>
+
+                        <div class="am-form-group">
+                            <label class="am-u-sm-4 am-u-lg-2 am-form-label">价格明细</label>
+                            <div class="am-u-sm-8 am-u-lg-10">
+                                <p class="disable">￥ <%= price %>/1000</p>
+                                <input type="hidden" v-model="price" value="<%= price %>">
+                                <input type="hidden" name="name" value="<%= productName %>">
+                            </div>
+                        </div>
+
+                        <div class="am-form-group">
+                            <label for="readNum" class="am-u-sm-4 am-u-lg-2 am-form-label"><span class="tips">* </span>任务数量</label>
+                            <div class="am-u-sm-8 am-u-lg-10">
+                                <input id="readNum" class="am-radius am-input-sm" type="text"
+                                       placeholder="初始10000流量起步执行，不足10000按10000算，超过部分按照1000来算，不足1000按1000计算"
+                                       v-model="num" name="num"
+                                       v-validate:num="{required: true, isnum: true, maxprice: true}">
+                                <span class="tips" v-if="$forumFlow.num.required">需要添加的阅读数量不能为空!</span>
+                                <span class="tips" v-if="$forumFlow.num.isnum">数量必须为正整数!</span>
+                            </div>
+                        </div>
+
+                        <div class="am-form-group">
+                            <label class="am-u-sm-4 am-u-lg-2 am-form-label">任务总价</label>
+                            <div class="am-u-sm-8 am-u-lg-10">
+                                <span class="disable">￥ {{totalPrice}}</span>
+                                <span class="tips" v-if="$forumFlow.num.maxprice">您的余额不足，请充值!</span>
+                                <input type="hidden" v-model="funds" value="<%= money %>">
+                            </div>
+                        </div>
+
+                        <div class="am-form-group">
+                            <div class="am-u-sm-8 am-u-sm-offset-4 am-u-lg-10 am-u-lg-offset-2">
+                                <button type="submit" class="am-btn am-btn-primary am-radius" v-if="$forumFlow.valid">提交任务</button>
+                            </div>
+                        </div>
+                    </form>
+                </validator>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<link rel="import" href="../../components/foot/foot.html?__inline">
+
+<!--import plugin-->
+
+<script>
+    require('flowVideoTaskAdd');
+</script>
+
+</body>
+</html>

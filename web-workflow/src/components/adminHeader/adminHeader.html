@@ -1,0 +1,76 @@
+<link rel="stylesheet" href="adminHeader.scss?__inline">
+
+<header data-am-widget="header" class="am-header am-header-default">
+    <div class="am-u-lg-10 am-u-lg-centered">
+        <div class="am-header-left am-header-nav">
+            <a href="/admin/home">
+                <i class="am-header-icon am-icon-user"></i>
+                <h1 class="am-hide-sm">
+                    全站码头
+                </h1>
+            </a>
+            <!--<a href="#phone-link" class="am-show-sm">-->
+                <!--<i class="am-header-icon am-icon-money"></i>-->
+                <!--￥<%= money %>-->
+            <!--</a>-->
+            <a href="#phone-link" style="margin: -13px;">
+                <span class="am-show-sm">￥<%= money %></span>
+                <span class="am-show-sm">￥<%= freezeFunds %></span>
+            </a>
+        </div>
+
+        <h1 class="am-header-title am-hide-sm">
+            可用: ￥<%= money %> &nbsp; 冻结: ￥<%= freezeFunds %>
+        </h1>
+
+        <div class="am-header-right am-header-nav">
+            <div class="am-dropdown" data-am-dropdown>
+                <button class="am-btn am-btn-primary am-dropdown-toggle" data-am-dropdown-toggle>
+                    <span class="am-show-sm">￥ </span>
+                    <span class="am-hide-sm">资金管理 </span>
+                    <span class="tips withdraw"> * </span>
+                    <span class="am-icon-caret-down"></span>
+                </button>
+                <ul class="am-dropdown-content header-dropdown-content">
+                    <li><a href="/admin/recharge/history">充值记录</a></li>
+                    <li class="am-dropdown-header app-sub-header">提现管理</li>
+                    <li><a href="/admin/withdraw/wait">待处理 <span class="tips updateNum withdraw"></span> </a></li>
+                    <li><a href="/admin/withdraw/already">已处理</a></li>
+                </ul>
+            </div>
+            <div class="am-dropdown" data-am-dropdown>
+                <button class="am-btn am-btn-primary am-dropdown-toggle" data-am-dropdown-toggle>
+                    <i class="am-icon-gear am-show-sm"> </i>
+                    <span class="am-hide-sm">设置 </span>
+                    <span class="am-icon-caret-down"></span>
+                </button>
+                <ul class="am-dropdown-content header-dropdown-content">
+                    <li class="am-dropdown-header app-sub-header">用户管理</li>
+                    <li><a href="/admin/manage/user/add">添加用户</a></li>
+                    <li><a href="/admin/manage/user">所有用户</a></li>
+                    <li class="am-dropdown-header app-sub-header">价格&状态管理</li>
+                    <li><a href="/admin/price/forum">论坛模块</a></li>
+                    <li><a href="/admin/price/flow">流量模块</a></li>
+                    <li><a href="/admin/price/WX/MP/WB">微信/美拍/微博</a></li>
+                    <li><a href="/admin/price/handle">人工平台</a></li>
+                    <li class="am-dropdown-header app-sub-header">公告管理</li>
+                    <li><a href="/admin/placard/send">发布公告</a></li>
+                    <li><a href="/admin/placard/history">历史公告</a></li>
+                    <li><a href="/admin/placard/add">增加公告类型</a></li>
+                    <li class="app-logout"><a id="removeAutoLogin" href="/user/logout">退出登陆</a></li>
+                </ul>
+            </div>
+
+            <a href="#right-link" class="">
+                <!-- 按钮触发器， 需要指定 target -->
+                <button class="am-btn am-btn-primary  am-show-sm" data-am-offcanvas="{target: '#adminMenu', effect: 'push'}">
+                    <i class="am-header-icon am-icon-bars"></i>
+                </button>
+            </a>
+        </div>
+    </div>
+</header>
+
+
+
+

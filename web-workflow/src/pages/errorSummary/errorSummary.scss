@@ -1,0 +1,37 @@
+
+.search-title{
+  overflow: hidden;
+}
+
+#errorType{
+  width:160px;
+  overflow: hidden;
+
+}
+
+.errorTypeLabel{
+  padding: 7px 3px 0;
+}
+
+.errorTypeWrap{
+  padding:0 32px 0 3px;
+}
+
+.errorSummary-content{
+  padding-top: 12px;
+}
+
+th{
+  text-align: center;
+}
+
+.text-break {
+  color: #000;
+  display: inline-block;
+  max-width: 120px;
+  cursor: pointer;
+}
+
+.operation{
+  margin-bottom: 2px;
+}

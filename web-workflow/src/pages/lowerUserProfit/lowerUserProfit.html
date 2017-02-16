@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:v-validate="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8">
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <title><%=title%></title>
+
+    <link rel="import" href="../../components/head/head.html?__inline">
+
+    <link rel="stylesheet" href="lowerUserProfit.scss?__inline">
+</head>
+<body>
+
+<div id="app">
+
+    <link rel="import" href="../../components/header/header.html?__inline">
+    <link rel="import" href="../../components/menu/menu.html?__inline">
+
+    <div id="app-content" class="app-content am-g">
+
+        <div class="am-panel am-panel-primary">
+            <div class="am-panel-hd"><%= title %></div>
+            <div class="am-panel-bd">
+
+                <div id="searchForm" class="am-form am-form-inline">
+                    <validator name="search">
+                        <div class="am-form-group am-form-group-sm search-title">
+                            <label for="rechargeTime" class="am-u-sm-3 am-form-label taskTypeLabel">消费时间</label>
+                            <div class="am-u-sm-9 taskTypeWrap">
+                                <form id="search" method="get" action="/user/search/lowerUser/profit">
+                                    <input id="rechargeTime" type="text" class="am-form-field am-input-sm am-radius"
+                                           name="createTime" placeholder="点击选择消费日期"
+                                           onclick="laydate({istime: false, format: 'YYYY-MM-DD'})"
+                                           v-validate:createTime="{required: true}">
+                                </form>
+                            </div>
+                        </div>
+
+                        <div class="am-form-group am-form-group-sm">
+                            <button form="search" class="am-btn am-btn-success am-radius am-btn-sm" v-if="$search.valid">
+                                <i class="am-icon-search"></i>
+                                搜索
+                            </button>
+                        </div>
+                    </validator>
+                    <div class="totalProfit">总计： ￥<%= totalProfit %></div>
+                </div>
+
+                <div class="am-scrollable-horizontal am-text-center flowTask-content">
+                    <table class="am-table am-table-bordered am-table-radius am-text-nowrap am-table-hover">
+                        <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>时间</th>
+                            <th>用户</th>
+                            <th>类型	</th>
+                            <th>返利金额</th>
+                            <th>状态</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+
+                        <% for(var i = 0; i < profits.length; i ++ ){ %>
+                        <tr class="<% if(profits[i].status == 'refund'){ %> am-danger <% } %>">
+                            <td><%= i + 1 %></td>
+                            <td><%= profits[i].createTime %></td>
+                            <td><%= profits[i].orderUsername %></td>
+                            <td><%= profits[i].typeName %><%= profits[i].smallTypeName %></td>
+                            <% if(profits[i].status == 'success'){ %>
+                            <td>
+                                <span class="profitSuccess">+ ￥<%= profits[i].profit %></span>
+                            </td>
+                            <td>完成</td>
+                            <% } %>
+                            <% if(profits[i].status == 'refund'){ %>
+                            <td>- ￥<%= profits[i].profit %></td>
+                            <td>退款</td>
+                            <% } %>
+                        </tr>
+                        <% } %>
+
+                        </tbody>
+                    </table>
+
+                    <input type="hidden" value="<%= pages %>" id="pages">
+                    <div id="laypage"></div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<link rel="import" href="../../components/foot/foot.html?__inline">
+
+<!--import plugin-->
+<script src="/static/plugins/laypage/laypage.js"></script>
+<script src="/static/plugins/laydate/laydate.js"></script>
+
+<script>
+    require('lowerUserProfit');
+</script>
+
+</body>
+</html>
+
+

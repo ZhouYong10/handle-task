@@ -1,0 +1,56 @@
+<div class="am-scrollable-horizontal am-text-center WXfriend-content">
+    <table class="am-table am-table-bordered am-table-radius am-text-nowrap">
+        <thead>
+        <tr>
+            <th>#</th>
+            <th>地址</th>
+            <th>标题</th>
+            <th>数量</th>
+            <th>总价</th>
+            <th>信息提示</th>
+            <th>操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr v-for="order in orders" :class="{'am-primary': order.noErr, 'am-danger': !order.noErr}" >
+            <td class="am-text-middle">
+                {{$index + 1}}
+            </td>
+            <td class="am-text-middle">
+                <a v-if="order.noErr != 'edit'" class="am-text-truncate text-break" title="{{order.address}}">
+                    {{order.address}}
+                </a>
+                <input v-if="order.noErr == 'edit'" type="text" value="{{order.address}}" v-model="order.address"/>
+            </td>
+            <td class="am-text-middle">
+                <a class="am-text-truncate text-break" title="{{order.title}}">
+                    {{order.title}}
+                </a>
+            </td>
+            <td class="am-text-middle">
+                <div v-if="order.noErr != 'edit'">
+                    阅读: {{order.num}}  <br/>
+                    点赞: {{order.num2}}
+                </div>
+                <div v-if="order.noErr == 'edit'">
+                    阅读: <input type="text" value="{{order.num}}" v-model="order.num"/>  <br/>
+                    点赞: <input type="text" value="{{order.num2}}" v-model="order.num2"/>
+                </div>
+            </td>
+            <td class="am-text-middle">{{order.totalPrice}}</td>
+            <td class="am-text-middle">
+                <a class="am-text-truncate text-break" title="{{order.errMsg}}">
+                    {{order.errMsg}}
+                </a>
+            </td>
+            <td class="am-text-middle">
+                <a v-if="order.noErr != 'edit' && order.noErr != 'committed'" class="am-btn am-btn-primary am-radius am-btn-xs" @click="edit(order)">修改</a>
+                <a v-if="order.noErr == 'edit'" class="am-btn am-btn-primary am-radius am-btn-xs" @click="save(order)">保存</a>
+                <a v-if="order.noErr == true && order.noErr != 'committed'" class="am-btn am-btn-primary am-radius am-btn-xs" @click="commit(order)">提交</a>
+            </td>
+        </tr>
+
+        </tbody>
+    </table>
+
+</div>

@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:v-validate="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8">
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <title><%=title%></title>
+
+    <link rel="import" href="../../components/head/head.html?__inline">
+
+    <link rel="stylesheet" href="index.scss?__inline" >
+</head>
+<body>
+
+<div id="login" class="login">
+    <validator name="login">
+        <form class="am-form am-form-horizontal am-u-sm-12 am-u-lg-3 am-u-lg-centered">
+            <fieldset>
+                <legend>广告营销系统</legend>
+
+                <!--<div class="am-form-group am-form-group-sm">-->
+                    <!--<label for="login-username" class="am-u-sm-1 am-u-lg-2 am-form-label"><i class="am-icon-user am-icon-sm"></i> </label>-->
+                    <!--<div class="am-u-sm-11 am-u-lg-9 am-u-end">-->
+                        <!--<input type="text" id="login-username" class="am-form-field am-radius"  v-model="username"-->
+                               <!--placeholder="请输入账户名" v-validate:username="{ required: true}">-->
+                        <!--<span class="tips" v-if="$login.username.required">账户名不能为空!</span>-->
+                    <!--</div>-->
+                <!--</div>-->
+
+                <div class="am-form-group am-form-group-sm">
+                    <input type="text" class="am-form-field"  v-model="username"
+                           placeholder="请输入账户名" v-validate:username="{ required: true}">
+                    <span class="tips" v-if="$login.username.required">账户名不能为空!</span>
+                </div>
+
+                <!--<div class="am-form-group am-form-group-sm">-->
+                    <!--<label for="login-password" class="am-u-sm-1 am-u-lg-2 am-form-label"><i class="am-icon-key am-icon-sm"></i> </label>-->
+                    <!--<div class="am-u-sm-11 am-u-lg-9 am-u-end">-->
+                        <!--<input type="password" id="login-password" class="am-form-field am-radius" v-model="password"-->
+                               <!--placeholder="请输入密码" v-validate:password="{ required: true}">-->
+                        <!--<span class="tips" v-if="$login.password.required">密码不能为空!</span>-->
+                    <!--</div>-->
+                <!--</div>-->
+
+                <div class="am-form-group am-form-group-sm">
+                    <input type="password" class="am-form-field" v-model="password"
+                           placeholder="请输入密码" v-validate:password="{ required: true}">
+                    <span class="tips" v-if="$login.password.required">密码不能为空!</span>
+                </div>
+
+                <!--<div class="am-form-group am-form-group-sm">-->
+                    <!--<label for="login-password" class="am-u-sm-1 am-u-lg-2 am-form-label"><i class="am-icon-refresh am-icon-sm"></i> </label>-->
+                    <!--<div class="am-u-sm-11 am-u-lg-9 am-u-end am-g-collapse">-->
+                        <!--<div class="am-u-sm-5">-->
+                            <!--<input type="text" class="am-form-field am-radius" v-model="securityCode"-->
+                                   <!--placeholder="不区分大小写" v-validate:security-code="{ required: true}">-->
+                            <!--<span class="tips" v-if="$login.securityCode.required">验证码不能为空!</span>-->
+                        <!--</div>-->
+                        <!--<div class="am-u-sm-7">-->
+                            <!--<img class="am-img-responsive am-radius getSecurityCode" src="/securityImg" @click.stop.prevent="changeImg"/>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                <!--</div>-->
+
+                <div class="am-form-group am-form-group-sm am-g-collapse">
+                    <div class="am-u-sm-5">
+                        <input type="text" class="am-form-field" v-model="securityCode"
+                               placeholder="不区分大小写" v-validate:security-code="{ required: true}">
+                        <span class="tips" v-if="$login.securityCode.required">验证码不能为空!</span>
+                    </div>
+                    <div class="am-u-sm-7">
+                        <img class="am-img-responsive getSecurityCode" src="/securityImg" @click.stop.prevent="changeImg"/>
+                    </div>
+                </div>
+
+                <!--<div class="am-form-group am-form-group-sm">-->
+                    <!--<div class="am-u-sm-offset-1 am-u-sm-11 am-u-lg-offset-2 am-u-lg9 am-u-end">-->
+                        <!--<div class="am-checkbox">-->
+                            <!--<label>-->
+                                <!--<input type="checkbox" v-model="isAutoLogin"> 两周内免登陆-->
+                            <!--</label>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                <!--</div>-->
+
+                <div class="am-form-group am-form-group-sm">
+                    <div class="am-checkbox">
+                        <label>
+                            <input type="checkbox" v-model="isAutoLogin"> 记住密码
+                        </label>
+                    </div>
+                </div>
+
+                <!--<div class="am-form-group">-->
+                    <!--<div class="am-u-sm-10 am-u-sm-offset-1 am-u-lg-9 am-u-lg-offset-2">-->
+                        <!--<button class="am-btn am-btn-primary am-radius" @click.stop.prevent="onLogin" v-if="$login.valid">登陆</button>-->
+                    <!--</div>-->
+                <!--</div>-->
+
+                <div class="am-form-group">
+                    <button class="am-btn am-btn-primary am-u-sm-centered" @click.stop.prevent="onLogin" v-if="$login.valid">登陆</button>
+                </div>
+            </fieldset>
+        </form>
+    </validator>
+</div>
+
+<link rel="import" href="../../components/foot/foot.html?__inline">
+
+<!--import plugin-->
+<script src="/static/plugins/layer/layer.js"></script>
+
+<script>
+    require(['index']);
+</script>
+
+</body>
+</html>

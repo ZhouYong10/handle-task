@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <title><%=title%></title>
+
+    <link rel="import" href="../../components/head/head.html?__inline">
+
+    <link rel="stylesheet" href="./adminErrorAlre.scss?__inline">
+</head>
+<body>
+
+<div id="app">
+
+    <link rel="import" href="../../components/adminHeader/adminHeader.html?__inline">
+    <link rel="import" href="../../components/adminMenu/adminMenu.html?__inline">
+
+    <div id="app-content" class="app-content am-g">
+
+        <div class="am-hide-sm am-u-lg-2 am-u-md-3">
+            <link rel="import" href="../../components/adminMenuContent/adminMenuContent.html?__inline">
+        </div>
+
+        <div class="am-u-lg-10 am-u-md-9">
+            <div class="am-panel am-panel-primary">
+                <div class="am-panel-hd"><%= title %></div>
+                <div class="am-panel-bd am-scrollable-horizontal ">
+
+                    <div id="searchForm" class="am-form am-form-inline">
+                        <validator name="search">
+                            <form method="get" action="/admin/search/error/order">
+                                <div class="am-form-group am-form-group-sm search-title">
+                                    <label for="taskName" class="am-u-sm-3 am-form-label taskTypeLabel">
+                                        用户名
+                                    </label>
+                                    <div class="am-u-sm-9 taskTypeWrap">
+                                        <input id="taskName" type="text" class="am-form-field am-input-sm am-radius"
+                                               placeholder="可模糊搜索" name="username"
+                                               v-validate:username="{required: true}">
+                                    </div>
+                                </div>
+
+                                <div class="am-form-group am-form-group-sm">
+                                    <button class="am-btn am-btn-success am-radius am-btn-sm" v-if="$search.valid">
+                                        <i class="am-icon-search"></i>
+                                        搜索
+                                    </button>
+                                </div>
+                            </form>
+                        </validator>
+                    </div>
+
+                    <div class="am-scrollable-horizontal am-text-center user-content">
+                        <table class="am-table am-table-bordered am-table-radius am-table-striped am-text-nowrap am-table-hover">
+                            <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>用户</th>
+                                <th>提交日期</th>
+                                <th>报错日期</th>
+                                <th>错误类别</th>
+                                <th>地址|账号</th>
+                                <th>阅读初始量</th>
+                                <th>问题描述</th>
+                                <th>处理备注</th>
+                                <th>操作</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+
+                            <% for(var i = 0; i < orders.length; i++){ %>
+                            <tr>
+
+                            <tr class="<% if(orders[i].status == '已退款'){ %> am-danger <% } %>">
+                                <td class="am-text-middle"><%= i + 1 %></td>
+                                <td class="am-text-middle"><%= orders[i].user %></td>
+                                <td class="am-text-middle"><%= orders[i].createTime %></td>
+                                <td class="am-text-middle"><%= orders[i].errorTime %></td>
+                                <td class="am-text-middle">
+                                    <a href="/admin/redirect/aim/order?id=<%= orders[i]._id %>&type=<%= orders[i].type %>&smallType=<%= orders[i].smallType %>">
+                                        <%= orders[i].typeName %> / <%= orders[i].smallTypeName %>
+                                    </a>
+                                </td>
+                                <td class="am-text-middle">
+                                    <% if(orders[i].address){ %>
+                                    <input type="text" value="<%= orders[i].address %>" style="width: 56px;"><br/>
+                                    <a class="clipboard am-btn am-btn-primary am-radius am-btn-xs"
+                                       title="<%= orders[i].address %>"
+                                       data-clipboard-text="<%= orders[i].address %>">复制</a>
+                                    <% } %>
+                                    <% if(orders[i].account){ %>
+                                    <input type="text" value="<%= orders[i].account %>" style="width: 56px;"><br/>
+                                    <a class="clipboard am-btn am-btn-primary am-radius am-btn-xs"
+                                       title="<%= orders[i].account %>"
+                                       data-clipboard-text="<%= orders[i].account %>">复制</a>
+                                    <% } %>
+                                </td>
+                                <td class="am-text-middle"><%= orders[i].startReadNum %></td>
+                                <td class="am-text-middle">
+                                    <a class="am-text-truncate text-break" title="<%= orders[i].errorInfo %>">
+                                        <%= orders[i].errorInfo %>
+                                    </a>
+                                </td>
+                                <td class="am-text-middle">
+                                    <a class="am-text-truncate text-break" title="<%= orders[i].errorDealInfo %>">
+                                        <%= orders[i].errorDealInfo %>
+                                    </a>
+                                </td>
+                                <td class="am-text-middle">
+                                    <% if(orders[i].status != '已退款'){ %>
+                                    <a class="am-btn am-btn-primary am-radius am-btn-xs refundProfit"
+                                       href="/admin/order/refundProfit?id=<%= orders[i]._id %>&url=<%= path %>">退款</a>
+                                    <% }else{ %>
+                                    <a class="am-text-truncate am-badge-danger am-radius text-break" title="<%= orders[i].refundInfo %>">
+                                        <%= orders[i].refundInfo %>
+                                    </a>
+                                    <% } %>
+                                </td>
+                            </tr>
+                            <% } %>
+
+                            </tbody>
+                        </table>
+
+                        <input type="hidden" value="<%= pages %>" id="pages">
+                        <div id="laypage"></div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!--<div class="am-u-lg-10 am-u-md-9">-->
+            <!--<div class="am-panel am-panel-primary">-->
+                <!--<div class="am-panel-hd"><%= title %></div>-->
+                <!--<div class="am-panel-bd am-scrollable-horizontal am-text-center">-->
+
+                    <!--<table class="am-table am-table-bordered am-table-radius am-table-striped am-text-nowrap am-table-hover">-->
+                        <!--<thead>-->
+                        <!--<tr>-->
+                            <!--<th>#</th>-->
+                            <!--<th>用户</th>-->
+                            <!--<th>提交日期</th>-->
+                            <!--<th>报错日期</th>-->
+                            <!--<th>错误类别</th>-->
+                            <!--<th>地址|账号</th>-->
+                            <!--<th>阅读初始量</th>-->
+                            <!--<th>问题描述</th>-->
+                            <!--<th>处理备注</th>-->
+                            <!--<th>操作</th>-->
+                        <!--</tr>-->
+                        <!--</thead>-->
+                        <!--<tbody>-->
+
+                        <!--<% for(var i = 0; i < orders.length; i++){ %>-->
+                        <!--<tr>-->
+
+                        <!--<tr class="<% if(orders[i].status == '已退款'){ %> am-danger <% } %>">-->
+                            <!--<td class="am-text-middle"><%= i + 1 %></td>-->
+                            <!--<td class="am-text-middle"><%= orders[i].user %></td>-->
+                            <!--<td class="am-text-middle"><%= orders[i].createTime %></td>-->
+                            <!--<td class="am-text-middle"><%= orders[i].errorTime %></td>-->
+                            <!--<td class="am-text-middle">-->
+                                <!--<a href="/admin/redirect/aim/order?id=<%= orders[i]._id %>&type=<%= orders[i].type %>&smallType=<%= orders[i].smallType %>">-->
+                                    <!--<%= orders[i].typeName %> / <%= orders[i].smallTypeName %>-->
+                                <!--</a>-->
+                            <!--</td>-->
+                            <!--<td class="am-text-middle">-->
+                                <!--<% if(orders[i].address){ %>-->
+                                <!--<input type="text" value="<%= orders[i].address %>" style="width: 56px;"><br/>-->
+                                <!--<a class="clipboard am-btn am-btn-primary am-radius am-btn-xs"-->
+                                   <!--title="<%= orders[i].address %>"-->
+                                   <!--data-clipboard-text="<%= orders[i].address %>">复制</a>-->
+                                <!--<% } %>-->
+                                <!--<% if(orders[i].account){ %>-->
+                                <!--<input type="text" value="<%= orders[i].account %>" style="width: 56px;"><br/>-->
+                                <!--<a class="clipboard am-btn am-btn-primary am-radius am-btn-xs"-->
+                                   <!--title="<%= orders[i].account %>"-->
+                                   <!--data-clipboard-text="<%= orders[i].account %>">复制</a>-->
+                                <!--<% } %>-->
+                            <!--</td>-->
+                            <!--<td class="am-text-middle"><%= orders[i].startReadNum %></td>-->
+                            <!--<td class="am-text-middle">-->
+                                <!--<a class="am-text-truncate text-break" title="<%= orders[i].errorInfo %>">-->
+                                    <!--<%= orders[i].errorInfo %>-->
+                                <!--</a>-->
+                            <!--</td>-->
+                            <!--<td class="am-text-middle">-->
+                                <!--<a class="am-text-truncate text-break" title="<%= orders[i].errorDealInfo %>">-->
+                                    <!--<%= orders[i].errorDealInfo %>-->
+                                <!--</a>-->
+                            <!--</td>-->
+                            <!--<td class="am-text-middle">-->
+                                <!--<% if(orders[i].status != '已退款'){ %>-->
+                                <!--<a class="am-btn am-btn-primary am-radius am-btn-xs refundProfit"-->
+                                   <!--href="/admin/order/refundProfit?id=<%= orders[i]._id %>&url=<%= path %>">退款</a>-->
+                                <!--<% }else{ %>-->
+                                <!--<a class="am-text-truncate am-badge-danger am-radius text-break" title="<%= orders[i].refundInfo %>">-->
+                                    <!--<%= orders[i].refundInfo %>-->
+                                <!--</a>-->
+                                <!--<% } %>-->
+                            <!--</td>-->
+                        <!--</tr>-->
+                        <!--<% } %>-->
+
+                        <!--</tbody>-->
+                    <!--</table>-->
+
+                    <!--<input type="hidden" value="<%= pages %>" id="pages">-->
+                    <!--<div id="laypage"></div>-->
+                <!--</div>-->
+            <!--</div>-->
+        <!--</div>-->
+    </div>
+</div>
+
+<link rel="import" href="../../components/foot/foot.html?__inline">
+
+<!--import plugin-->
+<script src="/static/js/clipboard.js"></script>
+<script src="/static/plugins/layer/layer.js"></script>
+<script src="/static/plugins/laypage/laypage.js"></script>
+
+<script>
+    require('adminMenuContent');
+    require('adminErrorAlre');
+</script>
+
+</body>
+</html>

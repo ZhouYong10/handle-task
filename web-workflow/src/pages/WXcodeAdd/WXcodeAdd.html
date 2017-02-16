@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <title><%=title%></title>
+
+    <link rel="import" href="../../components/head/head.html?__inline">
+
+    <link rel="stylesheet" href="WXcodeAdd.scss?__inline">
+</head>
+<body>
+
+<div id="app">
+
+    <link rel="import" href="../../components/header/header.html?__inline">
+    <link rel="import" href="../../components/menu/menu.html?__inline">
+
+    <div id="app-content" class="app-content am-g">
+
+        <div id="wxCode" class="am-panel am-panel-primary">
+            <div class="am-panel-hd"><%= title %></div>
+            <div class="am-panel-bd">
+
+                <div class="am-panel am-panel-danger">
+                    <div class="am-panel-hd prompt-title">提示</div>
+                    <div class="am-panel-bd">
+                        1．单次下单上限1万，累计上限100万。<br/>
+                        2．多次提交同一链接排队执行。<br/>
+                        3．个别任务会有延时，显示完成后半小时之后会显示。<br/>
+                    </div>
+                </div>
+
+                <validator name="wxCode">
+                <form class="am-form am-form-horizontal" method="post" enctype="multipart/form-data" action="/wx/code/add">
+                    <input type="hidden" value="<%= orderFlag %>" name="orderFlag">
+                    <div class="am-form-group">
+                        <label class="am-u-sm-4 am-u-lg-2 am-form-label">价格明细</label>
+                        <div class="am-u-sm-8 am-u-lg-10">
+                            <p class="disable">关注单价￥<%= fansPrice %>; 回复单价￥<%= replyPrice %></p>
+                            <input type="hidden" v-model="fansPrice" value="<%= fansPrice %>">
+                            <input type="hidden" v-model="replyPrice" value="<%= replyPrice %>">
+                        </div>
+                    </div>
+
+                    <div class="am-form-group">
+                        <label for="fansID" class="am-u-sm-4 am-u-lg-2 am-form-label"><span class="tips">* </span>二维码地址</label>
+                        <div class="am-u-sm-8 am-u-lg-10">
+                            <input id="fansID" class="am-radius am-input-sm" type="file"
+                                   placeholder="请选择要上传的二维码图片" style="padding-top: 8px;"
+                            v-validate:photo="{required: true}" name="photo">
+                            <span class="tips" v-if="$wxCode.photo.required">二维码图片不能为空!</span>
+                        </div>
+                    </div>
+
+                    <div class="am-form-group">
+                        <label for="fansRemark" class="am-u-sm-4 am-u-lg-2 am-form-label">关注后回复</label>
+                        <div class="am-u-sm-8 am-u-lg-10">
+                            <textarea id="fansRemark" class="am-radius" rows="3" v-model="reply"
+                                      placeholder="可空,设置关注后回复内容,多条用|分割,每次随机抽取一条"
+                                      @keyup="total" @change="total" name="reply"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="am-form-group">
+                        <label for="fansNum" class="am-u-sm-4 am-u-lg-2 am-form-label"><span class="tips">* </span>关注数量</label>
+                        <div class="am-u-sm-8 am-u-lg-10">
+                            <input id="fansNum" class="am-radius am-input-sm" type="text" placeholder="请填写关注数量，最低20起"
+                            v-validate:num="{required: true, isnum: true, min20: true, maxprice: true}"
+                                   name="num" v-model="num" v-on:keyup="total" v-on:change="total">
+                            <span class="tips" v-if="$wxCode.num.required">数量不能为空!</span>
+                            <span class="tips" v-if="$wxCode.num.isnum">数量必须为正整数!</span>
+                            <span class="tips" v-if="$wxCode.num.min20">关注数量，最低20起!</span>
+                        </div>
+                    </div>
+
+                    <div class="am-form-group">
+                        <label for="fansSpeed" class="am-u-sm-4 am-u-lg-2 am-form-label">关注限速</label>
+                        <div class="am-u-sm-8 am-u-lg-10">
+                            <input id="fansSpeed" class="am-radius am-input-sm" type="text" name="speed"
+                                   placeholder="限速单位：数量/分钟， 例如限制一分钟最多增加100，输入100即可"
+                                   v-validate:speed="{isnum: true}" name="days">
+                            <span class="tips" v-if="$wxCode.speed.isnum">必须为正整数!</span>
+                        </div>
+                    </div>
+
+                    <div class="am-form-group">
+                        <label class="am-u-sm-4 am-u-lg-2 am-form-label">任务总价</label>
+                        <div class="am-u-sm-8 am-u-lg-10">
+                            <p class="disable taskPrice">￥ {{count}}</p>
+                            <span class="tips" v-if="$wxCode.num.maxprice">您的余额不足，请充值!</span>
+                            <input type="hidden" v-model="funds" value="<%= money %>">
+                        </div>
+                    </div>
+
+                    <div class="am-form-group">
+                        <div class="am-u-sm-8 am-u-sm-offset-4 am-u-lg-10 am-u-lg-offset-2">
+                            <button type="submit" class="am-btn am-btn-primary am-radius"
+                                    v-if="$wxCode.valid">提交任务</button>
+                        </div>
+                    </div>
+                </form>
+                </validator>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<link rel="import" href="../../components/foot/foot.html?__inline">
+
+<!--import plugin-->
+<!--<script src="/static/js/city.js"></script>-->
+<script src="/static/plugins/laydate/laydate.js"></script>
+
+
+<script>
+    require('WXcodeAdd');
+</script>
+
+</body>
+</html>
+

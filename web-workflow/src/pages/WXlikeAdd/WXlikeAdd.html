@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <title><%=title%></title>
+
+    <link rel="import" href="../../components/head/head.html?__inline">
+
+    <link rel="stylesheet" href="WXlikeAdd.scss?__inline">
+</head>
+<body>
+
+<div id="app">
+
+    <link rel="import" href="../../components/header/header.html?__inline">
+    <link rel="import" href="../../components/menu/menu.html?__inline">
+
+    <div id="app-content" class="app-content am-g">
+
+        <div id="wxLike" class="am-panel am-panel-primary">
+            <div class="am-panel-hd"><%= title %></div>
+            <div class="am-panel-bd">
+
+                <div class="am-panel am-panel-danger">
+                    <div class="am-panel-hd prompt-title">提示</div>
+                    <div class="am-panel-bd">
+                        1.多个平台提交任务会导致量不足，责任自负。<br/>
+
+                        2.微信点赞数量不能大于阅读数量的10%，否则无法执行。<br/>
+
+                        3.微信阅读最低速度8个/分钟，最高速度137个/分钟。<br/>
+
+                        4.个别任务会有延时，显示完成后半小时之后会显示。<br/>
+                    </div>
+                </div>
+
+                <validator name="wxlike">
+                <form class="am-form am-form-horizontal" method="post" action="/wx/like/add">
+                    <input type="hidden" value="<%= orderFlag %>" name="orderFlag">
+
+                    <div class="am-form-group">
+                        <label for="taskAddress" class="am-u-sm-4 am-u-lg-2 am-form-label"><span class="tips">* </span>图文地址</label>
+                        <div class="am-u-sm-8 am-u-lg-10">
+                            <input id="taskAddress" class="am-radius am-input-sm" type="text" placeholder="请填写图文地址" name="address"
+                                   v-validate:address="{required: true, isaddress: true}" v-model="address" @change="parseAddress">
+                            <span class="tips" v-if="$wxlike.address.required">任务地址不能为空!</span>
+                            <span class="tips" v-if="$wxlike.address.isaddress">请填写合法的地址!</span>
+                        </div>
+                    </div>
+
+                    <div class="am-form-group">
+                        <label class="am-u-sm-4 am-u-lg-2 am-form-label">任务标题</label>
+                        <div class="am-u-sm-8 am-u-lg-10">
+                            <p class="disable">{{articleTitle}}</p>
+                            <input type="hidden" name="title" value="{{articleTitle}}">
+                        </div>
+                    </div>
+
+                    <div class="am-form-group">
+                        <label class="am-u-sm-4 am-u-lg-2 am-form-label">价格明细</label>
+                        <div class="am-u-sm-8 am-u-lg-10">
+                            <p class="disable">微信阅读￥ <%= price %>/个, 微信点赞￥ <%= price2 %>/个</p>
+                            <input type="hidden" value="<%= price %>" v-model="price">
+                            <input type="hidden" value="<%= price2 %>" v-model="price2">
+                        </div>
+                    </div>
+
+                    <div class="am-form-group">
+                        <label for="readNum" class="am-u-sm-4 am-u-lg-2 am-form-label"><span class="tips">* </span>阅读数量</label>
+                        <div class="am-u-sm-8 am-u-lg-10">
+                            <input id="readNum" class="am-radius am-input-sm" type="text" placeholder="需要增加的图文阅读数量,最低500起"
+                                   v-on:keyup="total" v-on:change="total" v-model="num" name="num"
+                                   v-validate:num="{required: true, min500: true, isnum: true, maxprice: true}">
+                            <span class="tips" v-if="$wxlike.num.required">需要添加的阅读数量不能为空!</span>
+                            <span class="tips" v-if="$wxlike.num.isnum">数量必须为正整数!</span>
+                            <span class="tips" v-if="$wxlike.num.min500">数量最低500起!</span>
+                        </div>
+                    </div>
+
+                    <div class="am-form-group">
+                        <label for="likeNum" class="am-u-sm-4 am-u-lg-2 am-form-label">点赞数量</label>
+                        <div class="am-u-sm-8 am-u-lg-10">
+                            <input id="likeNum" class="am-radius am-input-sm" type="text"
+                                   placeholder="如果不填则系统默认赠送 0.5% 的赞，如果不需要赠送请写 0。"
+                                   v-model="num2" v-on:keyup="total" v-on:change="total" name="num2"
+                                   v-validate:replynum="{minnum: true, isnum: true, maxprice: true}">
+                            <span class="tips" v-if="$wxlike.replynum.isnum">数量必须为正整数!</span>
+                            <span class="tips" v-if="$wxlike.replynum.minnum">点赞数量不能大于阅读数量的3%!</span>
+                        </div>
+                    </div>
+
+                    <div class="am-form-group">
+                        <label class="am-u-sm-4 am-u-lg-2 am-form-label">任务总价</label>
+                        <div class="am-u-sm-8 am-u-lg-10">
+                            <p class="disable">￥ {{totalPrice}}</p>
+                            <span class="tips" v-if="$wxlike.num.maxprice">您的余额不足，请充值!</span>
+                            <input type="hidden" v-model="funds" value="<%= money %>">
+                        </div>
+                    </div>
+
+                    <div class="am-form-group">
+                        <label for="taskSpeed" class="am-u-sm-4 am-u-lg-2 am-form-label">阅读限速</label>
+                        <div class="am-u-sm-8 am-u-lg-10">
+                            <input id="taskSpeed" class="am-radius am-input-sm" type="text" name="speed"
+                                   placeholder="限速单位：数量/分钟， 例如限制一分钟最多增加100个阅读，输入100即可"
+                                   v-validate:spped="{isnum: true}">
+                            <span class="tips" v-if="$wxlike.spped.isnum">必须为正整数!</span>
+                        </div>
+                    </div>
+
+                    <div class="am-form-group">
+                        <label for="taskRemark" class="am-u-sm-4 am-u-lg-2 am-form-label">任务备注</label>
+                        <div class="am-u-sm-8 am-u-lg-10">
+                            <textarea id="taskRemark" class="am-radius" rows="3" placeholder="添加任务备注" name="remark"></textarea>
+                        </div>
+                    </div>
+
+                    <!--<div class="am-form-group">-->
+                    <!--<label for="planTime" class="am-u-sm-4 am-u-lg-2 am-form-label"><span class="tips">* </span>计划时间</label>-->
+                    <!--<div class="am-u-sm-8 am-u-lg-10">-->
+                    <!--<input id="planTime" class="am-radius am-input-sm" type="text" placeholder="首次开始任务的时间">-->
+                    <!--</div>-->
+                    <!--</div>-->
+
+                    <!--<div class="am-form-group">-->
+                    <!--<label for="continuedTime" class="am-u-sm-4 am-u-lg-2 am-form-label">计划持续</label>-->
+                    <!--<div class="am-u-sm-8 am-u-lg-10">-->
+                    <!--<input id="continuedTime" class="am-radius am-input-sm" type="text" placeholder="任务持续的天数，以后每天在计划时间重复执行">-->
+                    <!--</div>-->
+                    <!--</div>-->
+
+
+
+                    <div class="am-form-group">
+                        <div class="am-u-sm-8 am-u-sm-offset-4 am-u-lg-10 am-u-lg-offset-2">
+                            <button type="submit" class="am-btn am-btn-primary am-radius" v-if="$wxlike.valid">提交任务</button>
+                        </div>
+                    </div>
+                </form>
+                </validator>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<link rel="import" href="../../components/foot/foot.html?__inline">
+
+<!--import plugin-->
+
+<script>
+    require('WXlikeAdd');
+</script>
+
+</body>
+</html>
+

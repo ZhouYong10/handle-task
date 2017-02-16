@@ -1,0 +1,30 @@
+.tips{
+  color: red;
+}
+
+.prompt-title{
+  text-align: center;
+  font-size: large;
+  font-weight:bold;
+}
+
+.disable{
+  margin: 0;
+  padding-top: 8px;
+}
+
+.no-margin{
+  margin-bottom:0 !important;
+}
+
+.order-content{
+  margin: 0;
+  padding: 0;
+  padding-top: 8px;
+}
+
+@media (min-width: 800px) {
+  form{
+    padding-right: 88px;
+  }
+}

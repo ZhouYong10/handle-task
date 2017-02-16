@@ -1,0 +1,63 @@
+<link rel="stylesheet" href="header.scss?__inline">
+
+<header data-am-widget="header" class="am-header am-header-default">
+    <div class="am-u-lg-10 am-u-lg-centered">
+        <div class="am-header-left am-header-nav">
+            <a href="/client/home">
+                <i class="am-header-icon am-icon-home"></i>
+                <h1 class="am-hide-sm">
+                    广告营销系统
+                </h1>
+                &nbsp;&nbsp;
+                <div class="am-hide-lg-only" style="font-size: 1.5em;">
+                    ￥<span class="userCash am-hide-lg-only"><%= money %></span>
+                </div>
+            </a>
+        </div>
+
+        <h1 class="am-header-title am-show-lg-only">
+            可用余额: ￥<span class="userCash"><%= money %></span>
+            <input id="userStatus" type="hidden" value="<%= userStatus %>">
+        </h1>
+
+        <div class="am-header-right am-header-nav">
+            <div class="am-dropdown" data-am-dropdown>
+                <button class="am-btn am-btn-primary am-dropdown-toggle" data-am-dropdown-toggle>
+                    <span class="am-show-sm">￥ </span>
+                    <span class="am-hide-sm">资金管理 </span>
+                    <span class="am-icon-caret-down"></span>
+                </button>
+                <ul class="am-dropdown-content header-dropdown-content">
+                    <li><a href="/user/recharge">在线充值</a></li>
+                    <li><a href="/user/recharge/history">充值记录</a></li>
+                    <li><a href="/user/consume/history">消费记录</a></li>
+                    <li><a href="/user/withdraw">申请提现</a></li>
+                </ul>
+            </div>
+            <div class="am-dropdown" data-am-dropdown>
+                <button class="am-btn am-btn-primary am-dropdown-toggle" data-am-dropdown-toggle>
+                    <i class="am-icon-user am-show-sm"> </i>
+                    <span class="am-hide-sm"><%=username%> (<%=role%>)</span>
+                    <input id="username" type="hidden" value="<%=username%>">
+                    <span class="am-icon-caret-down"></span>
+                </button>
+                <ul class="am-dropdown-content header-dropdown-content">
+                    <li><a href="/user/changePwd">修改密码</a></li>
+                    <li><a href="/user/info">我的详情</a></li>
+                    <li><a href="/user/lowerUser">我的下级用户</a></li>
+                    <li><a href="/user/lowerUser/profit">下级返利</a></li>
+                    <li><a href="/user/my/price">我的价格</a></li>
+                    <li><a href="/user/feedback">问题反馈</a></li>
+                    <li><a href="/user/errorSummary">错误信息汇总</a></li>
+                    <li><a id="removeAutoLogin" href="/user/logout">退出登陆</a></li>
+                </ul>
+            </div>
+
+            <a href="#cart-link"></a>
+        </div>
+    </div>
+</header>
+
+
+
+

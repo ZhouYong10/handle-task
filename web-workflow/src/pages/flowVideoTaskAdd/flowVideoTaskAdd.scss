@@ -1,0 +1,26 @@
+
+.tips{
+  color: red;
+}
+
+.prompt-title{
+  text-align: center;
+  font-size: large;
+  font-weight:bold;
+}
+
+.prompt-content{
+  color: #c62b26;
+}
+
+.disable{
+  display: inline-block;
+  margin: 0;
+  padding-top: 8px;
+}
+
+@media (min-width: 800px) {
+  form{
+    padding-right: 88px;
+  }
+}

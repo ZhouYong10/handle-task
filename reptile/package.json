@@ -1,0 +1,21 @@
+{
+  "name": "reptile",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "supervisor ./app.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bufferhelper": "^0.2.1",
+    "cheerio": "^0.20.0",
+    "iconv": "^2.1.11",
+    "iconv-lite": "^0.4.13",
+    "moment": "^2.12.0",
+    "mongodb": "^1.4.40",
+    "mongoskin": "^1.4.13",
+    "request": "^2.69.0"
+  }
+}

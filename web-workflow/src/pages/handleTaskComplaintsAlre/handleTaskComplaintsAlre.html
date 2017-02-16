@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <title><%=title%></title>
+
+    <link rel="import" href="../../components/head/head.html?__inline">
+    <link rel="stylesheet" href="/static/plugins/fancybox/css/jquery.fancybox.css">
+
+    <link rel="stylesheet" href="handleTaskComplaintsAlre.scss?__inline">
+</head>
+<body>
+
+<div id="app">
+
+    <link rel="import" href="../../components/header/header.html?__inline">
+    <link rel="import" href="../../components/menu/menu.html?__inline">
+
+    <div id="app-content" class="app-content am-g">
+
+        <div class="am-panel am-panel-primary">
+            <div class="am-panel-hd"><%= title %></div>
+            <div class="am-panel-bd">
+
+                <div class="am-scrollable-horizontal am-text-center forum-context">
+                    <table class="am-table am-table-bordered am-table-radius am-text-nowrap">
+                        <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>提交时间</th>
+                            <th>类型/标题</th>
+                            <th>账号/地址</th>
+                            <th>价格</th>
+                            <th>说明</th>
+                            <th>二维码</th>
+                            <th>样图</th>
+                            <th>任务图</th>
+                            <th>账号/昵称</th>
+                            <th>投诉原因</th>
+                            <th>状态/拒绝理由</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+
+                        <% for(var i = 0; i < orders.length; i++){ %>
+                        <tr>
+                            <td class="am-text-middle"><%= i + 1  %></td>
+                            <td class="am-text-middle"><%= orders[i].taskCreateTime %></td>
+                            <td class="am-text-middle">
+                                <%= orders[i].smallTypeName %> <br/>
+                                <a class="am-text-truncate text-break" title="<%= orders[i].title %>">
+                                    <%= orders[i].title %>
+                                </a>
+                            </td>
+                            <td class="am-text-middle">
+                                <% if(orders[i].account){ %>
+                                <a class="am-text-truncate text-break" title="<%= orders[i].account %>">
+                                    <%= orders[i].account %>
+                                </a>
+                                <% } %>
+
+                                <% if(orders[i].address){ %>
+                                <a class="am-text-truncate text-break" title="<%= orders[i].address %>">
+                                    <%= orders[i].address %>
+                                </a>
+                                <% } %>
+                            </td>
+                            <td class="am-text-middle">
+                                <% if(role == '管理员'){ %>
+                                <%= orders[i].adminPerPrice %>
+                                <% } %>
+
+                                <% if(role == '顶级代理'){ %>
+                                <%= orders[i].topPerPrice %>
+                                <% } %>
+
+                                <% if(role == '超级代理'){ %>
+                                <%= orders[i].superPerPrice %>
+                                <% } %>
+
+                                <% if(role == '金牌代理'){ %>
+                                <%= orders[i].goldPerPrice %>
+                                <% } %>
+                            </td>
+                            <td class="am-text-middle">
+                                <a class="am-text-truncate text-break" title="<%= orders[i].remark %>">
+                                    <%= orders[i].remark %>
+                                </a>
+                            </td>
+                            <td class="am-text-middle">
+                                <% if(orders[i].codePhoto){ %>
+                                <a class="fancybox" href="<%= orders[i].codePhoto %>"
+                                   data-fancybox-group="gallery" title="二维码">
+                                    <img class="am-img-responsive" src="<%= orders[i].codePhoto %>" width="26">
+                                </a>
+                                <% } %>
+                            </td>
+                            <td class="am-text-middle">
+                                <a class="fancybox" href="<%= orders[i].photo %>"
+                                   data-fancybox-group="gallery" title="任务样图">
+                                    <img class="am-img-responsive" src="<%= orders[i].photo %>" width="26">
+                                </a>
+                            </td>
+                            <td class="am-text-middle">
+                                <a class="fancybox" href="<%= orders[i].taskPhoto %>"
+                                   data-fancybox-group="gallery" title="任务图">
+                                    <img class="am-img-responsive" src="<%= orders[i].taskPhoto %>" width="26">
+                                </a>
+                            </td>
+                            <td class="am-text-middle">
+                                <%= orders[i].taskAccount %> <br/>
+                                <%= orders[i].taskName %>
+                            </td>
+                            <td class="am-text-middle">
+                                <a class="am-text-truncate text-break" title="<%= orders[i].complaintsInfo %>">
+                                    <%= orders[i].complaintsInfo %>
+                                </a>
+                            </td>
+                            <td class="am-text-middle">
+                                <% if(orders[i].taskStatus == '投诉成立'){ %>
+                                <%= orders[i].taskStatus %> <br/>
+                                <% } %>
+
+                                <% if(orders[i].taskStatus == '投诉不成立'){ %>
+                                <span class="am-badge-secondary"><%= orders[i].taskStatus %></span> <br/>
+                                <% } %>
+
+                                <% if(orders[i].taskStatus == '被投诉'){ %>
+                                <span class="am-badge-warning"><%= orders[i].taskStatus %></span> <br/>
+                                <% } %>
+
+                                <a class="am-text-truncate text-break" title="<%= orders[i].complaintRefuse %>">
+                                    <%= orders[i].complaintRefuse %>
+                                </a>
+                            </td>
+                        </tr>
+                        <% } %>
+
+                        </tbody>
+                    </table>
+
+                    <input type="hidden" value="<%= pages %>" id="pages">
+                    <div id="laypage"></div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<link rel="import" href="../../components/foot/foot.html?__inline">
+
+<!--import plugin-->
+<script src="/static/plugins/layer/layer.js"></script>
+<script src="/static/plugins/laypage/laypage.js"></script>
+<script src="/static/plugins/laydate/laydate.js"></script>
+<script src="/static/plugins/fancybox/js/jquery.fancybox.js"></script>
+
+<script>
+    require('handleTaskComplaintsAlre');
+</script>
+</body>
+</html>
