@@ -130,6 +130,13 @@ app.get('/', function (req, res) {
   res.render('index', {title: '用户登陆'});
 });
 
+/*
+ * 用户注册
+ * */
+app.get('/sign/in', function (req, res) {
+  res.render('signIn', {title: '用户注册'});
+});
+
 app.get('/securityImg', function (req, res) {
   var ary = ccap.get();
   req.session.securityCode = ary[0].toLowerCase();

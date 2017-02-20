@@ -28,7 +28,8 @@
     $(function() {
         var isIndex = location.pathname == '/';
         var isAdmin = location.pathname.split('/')[1] == 'admin';
-        if(!isIndex && !isAdmin){
+        var isSign = location.pathname.split('/')[1] == 'sign';
+        if(!isIndex && !isAdmin && !isSign){
             $.get('/new/placard', function (result) {
                 var content = '<div style="padding: 0 8px; font-size: 1.3em;">' +
                         '<ul class="am-list"><li><a>' +

@@ -100,6 +100,11 @@
                 <div class="am-form-group">
                     <button class="am-btn am-btn-primary am-u-sm-centered" @click.stop.prevent="onLogin" v-if="$login.valid">登陆</button>
                 </div>
+
+                <div class="am-form-group">
+                    <a class="am-btn am-btn-primary am-round am-u-sm-centered"
+                       href="/sign/in" v-if="!$login.valid">我要注册</a>
+                </div>
             </fieldset>
         </form>
     </validator>

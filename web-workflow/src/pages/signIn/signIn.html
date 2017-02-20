@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:v-validate="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8">
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <title><%=title%></title>
+
+    <link rel="import" href="../../components/head/head.html?__inline">
+
+    <link rel="stylesheet" href="signIn.scss?__inline" >
+</head>
+<body>
+
+<div id="login" class="login">
+    <validator name="login">
+        <form class="am-form am-form-horizontal am-u-sm-12 am-u-lg-3 am-u-lg-centered">
+            <fieldset>
+                <legend>广告营销系统</legend>
+
+                <div class="am-form-group am-form-group-sm">
+                    <input type="text" class="am-form-field"  v-model="username"
+                           placeholder="请输入账户名" v-validate:username="{ required: true}">
+                    <span class="tips" v-if="$login.username.required">账户名不能为空!</span>
+                </div>
+
+                <div class="am-form-group am-form-group-sm">
+                    <input type="password" class="am-form-field" v-model="password"
+                           placeholder="请输入密码" v-validate:password="{ required: true}">
+                    <span class="tips" v-if="$login.password.required">密码不能为空!</span>
+                </div>
+
+                <div class="am-form-group am-form-group-sm">
+                    <input type="password" class="am-form-field" v-model="repassword"
+                           placeholder="确认密码" v-validate:repassword="{ required: true, samepassword: true}">
+                    <span class="tips" v-if="$login.repassword.required">密码不能为空!</span>
+                    <span class="tips" v-if="$login.repassword.samepassword">两次输入的密码不一致！!</span>
+                </div>
+
+                <div class="am-form-group am-form-group-sm">
+                    <input type="text" class="am-form-field"  v-model="qq"
+                           placeholder="请输入ＱＱ号" v-validate:qq="{ required: true}">
+                    <span class="tips" v-if="$login.qq.required">QQ账号不能为空!</span>
+                </div>
+
+                <div class="am-form-group am-form-group-sm">
+                    <label class="am-radio-inline">
+                        <input type="radio"  value="tasker" v-model="role"> 发布者
+                    </label>
+                    <label class="am-radio-inline">
+                        <input type="radio" value="hander" checked v-model="role"> 任务者
+                    </label>
+                </div>
+
+                <div class="am-form-group am-form-group-sm am-g-collapse">
+                    <div class="am-u-sm-5">
+                        <input type="text" class="am-form-field" v-model="securityCode"
+                               placeholder="不区分大小写" v-validate:security-code="{ required: true}">
+                        <span class="tips" v-if="$login.securityCode.required">验证码不能为空!</span>
+                    </div>
+                    <div class="am-u-sm-7">
+                        <img class="am-img-responsive getSecurityCode" src="/securityImg" @click.stop.prevent="changeImg"/>
+                    </div>
+                </div>
+
+                <div class="am-form-group">
+                    <button class="am-btn am-btn-primary am-u-sm-centered" @click.stop.prevent="onSignIn" v-if="$login.valid">提交</button>
+                </div>
+
+            </fieldset>
+        </form>
+    </validator>
+</div>
+
+<link rel="import" href="../../components/foot/foot.html?__inline">
+
+<!--import plugin-->
+<script src="/static/plugins/layer/layer.js"></script>
+
+<script>
+    require(['signIn']);
+</script>
+
+</body>
+</html>
