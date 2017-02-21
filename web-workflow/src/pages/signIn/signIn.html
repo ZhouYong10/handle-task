@@ -32,8 +32,7 @@
 
                 <div class="am-form-group am-form-group-sm">
                     <input type="password" class="am-form-field" v-model="repassword"
-                           placeholder="确认密码" v-validate:repassword="{ required: true, samepassword: true}">
-                    <span class="tips" v-if="$login.repassword.required">密码不能为空!</span>
+                           placeholder="确认密码" v-validate:repassword="{samepassword: true}">
                     <span class="tips" v-if="$login.repassword.samepassword">两次输入的密码不一致！!</span>
                 </div>
 

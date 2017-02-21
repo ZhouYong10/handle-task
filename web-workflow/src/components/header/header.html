@@ -10,14 +10,14 @@
                 </h1>
                 &nbsp;&nbsp;
                 <div class="am-hide-lg-only" style="font-size: 1.5em;">
-                    ￥<span class="userCash am-hide-lg-only"><%= money %></span>
+                    ￥<span class="userCash am-hide-lg-only"><%= user.funds %></span>
                 </div>
             </a>
         </div>
 
         <h1 class="am-header-title am-show-lg-only">
-            可用余额: ￥<span class="userCash"><%= money %></span>
-            <input id="userStatus" type="hidden" value="<%= userStatus %>">
+            可用余额: ￥<span class="userCash"><%= user.funds %></span>
+            <input id="userStatus" type="hidden" value="<%= user.status %>">
         </h1>
 
         <div class="am-header-right am-header-nav">
@@ -37,8 +37,8 @@
             <div class="am-dropdown" data-am-dropdown>
                 <button class="am-btn am-btn-primary am-dropdown-toggle" data-am-dropdown-toggle>
                     <i class="am-icon-user am-show-sm"> </i>
-                    <span class="am-hide-sm"><%=username%> (<%=role%>)</span>
-                    <input id="username" type="hidden" value="<%=username%>">
+                    <span class="am-hide-sm"><%= user.username %> (<%= user.roleName %>)</span>
+                    <input id="username" type="hidden" value="<%= user.username %>">
                     <span class="am-icon-caret-down"></span>
                 </button>
                 <ul class="am-dropdown-content header-dropdown-content">

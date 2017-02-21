@@ -8,7 +8,11 @@ var moment = require('moment');
 
 
 var User = new Class();
-
+User.role = {
+    admin: '管理员',
+    tasker: '发布者',
+    hander: '任务者'
+};
 User.roles = ['管理员','顶级代理','超级代理','金牌代理'];
 
 User.extend(dbWrap);

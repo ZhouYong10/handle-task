@@ -19,6 +19,7 @@ var ccap = CCAP({
 var moment = require('moment');
 var bcrypt = require('bcryptjs');
 
+var Utils = require('./models/Utils');
 var User = require('./models/User');
 var Placard = require('./models/Placard');
 
@@ -130,13 +131,6 @@ app.get('/', function (req, res) {
   res.render('index', {title: '用户登陆'});
 });
 
-/*
- * 用户注册
- * */
-app.get('/sign/in', function (req, res) {
-  res.render('signIn', {title: '用户注册'});
-});
-
 app.get('/securityImg', function (req, res) {
   var ary = ccap.get();
   req.session.securityCode = ary[0].toLowerCase();
@@ -183,6 +177,58 @@ app.post('/login', function(req, res, next) {
       });
     });
   })(req, res, next);
+});
+
+/*
+ * 用户注册
+ * */
+app.get('/sign/in', function (req, res) {
+  res.render('signIn', {title: '用户注册'});
+});
+
+app.post('/sign/in', function(req, res) {
+  var invitationCode = req.query.invitation;
+  var userInfo = req.body;
+  userInfo.username = userInfo.username.replace(/(^\s*)|(\s*$)/g, "");
+  userInfo.roleName = User.role[userInfo.role];
+
+  if(invitationCode) {
+    Utils.decipher(invitationCode, Utils.invitationKey)
+        .then(function (userId) {
+          User.open().findById(userId)
+              .then(function (result) {
+                var parent = User.wrapToInstance(result);
+                userInfo.parent = parent.username;
+                userInfo.parentID = parent._id;
+                User.createUser(userInfo, function (user) {
+                  parent.addChild(user[0]._id);
+                  User.open().updateById(parent._id, {
+                    $set: parent
+                  }).then(function (result) {
+                    res.send({
+                      isOK: true,
+                      path: '/client/home'
+                    });
+                  }, function(error) {
+                    throw (new Error(error));
+                  });
+                }, function (error) {
+                  res.send('添加下级用户失败： ' + error);
+                });
+              }, function (error) {
+                res.send('查询上级用户信息失败： ' + error);
+              });
+        });
+  }else {
+    User.createUser(userInfo, function (user) {
+      res.send({
+        isOK: true,
+        path: '/client/home'
+      });
+    }, function (error) {
+      res.send('添加下级用户失败： ' + error);
+    });
+  }
 });
 
 //对外公共接口
@@ -248,55 +294,6 @@ app.get('/wx/like/complete/remote', function (req, res) {
 });
 
 
-//微传媒提单
-//app.get('/wx/like/forward/remote/weichuanmei', function (req, res) {
-//  Order.open().findOne({
-//    type: 'wx',
-//    smallType: 'read',
-//    status: '未处理',
-//    num: {$gt: global.dingdingOrderNum, $lte: global.weichuanmeiOrderNum}
-//  }).then(function (obj) {
-//    if(obj && !obj.remote) {
-//      Order.open().updateById(obj._id, {
-//        $set: {remote: 'weichuanmei'}
-//      }).then(function() {
-//        res.send(JSON.stringify({
-//          id: obj._id,
-//          address: obj.address,
-//          read: obj.num,
-//          like: obj.num2
-//        }));
-//      });
-//    }else{
-//      res.send(null);
-//    }
-//  });
-//});
-//
-//app.get('/wx/like/complete/remote/weichuanmei', function (req, res) {
-//  var status = req.query.status;
-//  var msg = req.query.msg;
-//  var orderId = req.query.id;
-//  var startReadNum = req.query.startReadNum;
-//  Order.open().findById(orderId)
-//      .then(function (order) {
-//        if(order && order.status == '未处理' && order.remote == 'weichuanmei'){
-//          var orderIns = Order.wrapToInstance(order);
-//          if (status == 1) {
-//            orderIns.startReadNum = startReadNum;
-//            orderIns.complete(function () {
-//              res.end();
-//            });
-//          } else {
-//            orderIns.refund(msg, function() {
-//              res.end();
-//            });
-//          }
-//        }else {
-//          res.end();
-//        }
-//      })
-//});
 
 app.get('/new/placard', function (req, res) {
   Placard.open().newPlacard()
@@ -321,12 +318,9 @@ app.get('/client/home', function (req, res) {
             .then(function (obj) {
               res.render('clientHome', {
                 title: '系统公告',
-                money: user.funds,
                 placards: obj.results,
                 pages: obj.pages,
-                username: user.username,
-                userStatus: user.status,
-                role: user.role
+                user: user
               });
             }, function (error) {
               res.send('获取公告列表失败： ' + error);

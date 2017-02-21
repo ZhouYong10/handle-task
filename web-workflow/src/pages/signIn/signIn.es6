@@ -21,9 +21,12 @@ new Vue({
             $('.getSecurityCode').get(0).src = '/securityImg?' + new Date().getTime();
         },
         onSignIn: function() {  //使用es6语法,获取不到相应的数据,例如this.username,得不到数据.
-            this.$http.post('/login', {
+            this.$http.post('/sign/in', {
                 username: this.username,
                 password: this.password,
+                repassword: this.repassword,
+                qq: this.qq,
+                role: this.role,
                 securityCode: this.securityCode
             }).then((res) => {
                 if(res.data.isOK) {
