@@ -50,6 +50,7 @@ passport.use(new LocalStrategy({
   passwordField: 'password',
   passReqToCallback: true
 }, function(req, uname, password, done) {
+  console.log(uname, password, '=================================');
   var username = uname.replace(/(^\s*)|(\s*$)/g, "");
 
   if(!req.body.isAuto) {
@@ -84,11 +85,50 @@ passport.use(new LocalStrategy({
       });
 }));
 
+function login(req, res, next) {
+  passport.authenticate('local', function(err, user, info) {
+    if (err) {
+      return next(err);
+    }
+    if (!user) {
+      return res.send({
+        isOK: false,
+        message: info
+      });
+    }
+    req.logIn(user, function(err) {
+      if (err) {
+        return next(err);
+      }
+      User.open().updateById(user._id, {
+        $set: {
+          lastLoginTime: moment().format('YYYY-MM-DD HH:mm:ss')
+        }
+      }).then(function () {
+        var userIns = User.wrapToInstance(user);
+        if(userIns.isAdmin()) {
+          res.send({
+            isOK: true,
+            path: '/admin/home'
+          });
+        }else{
+          res.send({
+            isOK: true,
+            path: '/client/home'
+          });
+        }
+      }, function (error) {
+        res.send({
+          isOK: false,
+          message: '更新用户登陆时间失败： ' + error
+        });
+      });
+    });
+  })(req, res, next);
+}
+
 var app = express();
 
-//app.get('/clear', function (req, res) {
-//  Cleaners.test();
-//});
 
 // view engine setup
 app.engine('.html', require('ejs').__express);
@@ -137,46 +177,11 @@ app.get('/securityImg', function (req, res) {
   res.end(ary[1]);
 });
 
+/*
+* 用户登陆
+* */
 app.post('/login', function(req, res, next) {
-  passport.authenticate('local', function(err, user, info) {
-    if (err) {
-      return next(err);
-    }
-    if (!user) {
-      return res.send({
-        isOK: false,
-        message: info
-      });
-    }
-    req.logIn(user, function(err) {
-      if (err) {
-        return next(err);
-      }
-      User.open().updateById(user._id, {
-        $set: {
-          lastLoginTime: moment().format('YYYY-MM-DD HH:mm:ss')
-        }
-      }).then(function () {
-        var userIns = User.wrapToInstance(user);
-        if(userIns.isAdmin()) {
-          res.send({
-            isOK: true,
-            path: '/admin/home'
-          });
-        }else{
-          res.send({
-            isOK: true,
-            path: '/client/home'
-          });
-        }
-      }, function (error) {
-        res.send({
-          isOK: false,
-          message: '更新用户登陆时间失败： ' + error
-        });
-      });
-    });
-  })(req, res, next);
+  login(req, res, next);
 });
 
 /*
@@ -186,49 +191,59 @@ app.get('/sign/in', function (req, res) {
   res.render('signIn', {title: '用户注册'});
 });
 
-app.post('/sign/in', function(req, res) {
-  var invitationCode = req.query.invitation;
-  var userInfo = req.body;
-  userInfo.username = userInfo.username.replace(/(^\s*)|(\s*$)/g, "");
-  userInfo.roleName = User.role[userInfo.role];
-
-  if(invitationCode) {
-    Utils.decipher(invitationCode, Utils.invitationKey)
-        .then(function (userId) {
-          User.open().findById(userId)
-              .then(function (result) {
-                var parent = User.wrapToInstance(result);
-                userInfo.parent = parent.username;
-                userInfo.parentID = parent._id;
-                User.createUser(userInfo, function (user) {
-                  parent.addChild(user[0]._id);
-                  User.open().updateById(parent._id, {
-                    $set: parent
-                  }).then(function (result) {
-                    res.send({
-                      isOK: true,
-                      path: '/client/home'
-                    });
-                  }, function(error) {
-                    throw (new Error(error));
-                  });
-                }, function (error) {
-                  res.send('添加下级用户失败： ' + error);
-                });
-              }, function (error) {
-                res.send('查询上级用户信息失败： ' + error);
-              });
-        });
-  }else {
-    User.createUser(userInfo, function (user) {
-      res.send({
-        isOK: true,
-        path: '/client/home'
-      });
-    }, function (error) {
-      res.send('添加下级用户失败： ' + error);
+app.post('/sign/in', function(req, res, next) {
+  if(req.body.securityCode != req.session.securityCode) {
+    res.send({
+      isOK: false,
+      message: '验证码错误！'
     });
+    return;
   }
+
+  User.open().findOne({username: req.body.username})
+      .then(function (user) {
+        console.log(user, '------------------------');
+        if (user) {
+          res.send({
+            isOK: false,
+            message: '用户名' + req.body.username + '已经存在！'
+          });
+          return;
+        }
+
+        var invitationCode = req.query.invitation;
+        var userInfo = {
+          username: req.body.username.replace(/(^\s*)|(\s*$)/g, ""),
+          password: req.body.password,
+          qq: req.body.qq,
+          role: req.body.role,
+          roleName: User.role[req.body.role]
+        };
+
+        if(invitationCode) {
+          Utils.decipher(invitationCode, Utils.invitationKey)
+              .then(function (userId) {
+                User.open().findById(userId)
+                    .then(function (result) {
+                      var parent = User.wrapToInstance(result);
+                      userInfo.parent = parent.username;
+                      userInfo.parentID = parent._id;
+                      User.createUser(userInfo, function (user) {
+                        parent.addChild(user[0]._id);
+                        User.open().updateById(parent._id, {
+                          $set: parent
+                        }).then(function () {
+                          login(req, res, next);
+                        });
+                      });
+                    });
+              });
+        }else {
+          User.createUser(userInfo, function () {
+            login(req, res, next);
+          });
+        }
+      });
 });
 
 //对外公共接口
