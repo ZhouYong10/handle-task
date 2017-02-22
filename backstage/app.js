@@ -50,7 +50,6 @@ passport.use(new LocalStrategy({
   passwordField: 'password',
   passReqToCallback: true
 }, function(req, uname, password, done) {
-  console.log(uname, password, '=================================');
   var username = uname.replace(/(^\s*)|(\s*$)/g, "");
 
   if(!req.body.isAuto) {
@@ -105,18 +104,17 @@ function login(req, res, next) {
           lastLoginTime: moment().format('YYYY-MM-DD HH:mm:ss')
         }
       }).then(function () {
-        var userIns = User.wrapToInstance(user);
-        if(userIns.isAdmin()) {
-          res.send({
-            isOK: true,
-            path: '/admin/home'
-          });
-        }else{
-          res.send({
-            isOK: true,
-            path: '/client/home'
-          });
+        var aim = {
+          isOK: true
+        };
+        if(user.role == 'admin') {
+          aim.path = '/admin/home';
+        }else if (user.role == 'tasker'){
+          aim.path = '/client/home';
+        }else if(user.role == 'hander'){
+          aim.path = '/client/home';
         }
+        res.send(aim);
       }, function (error) {
         res.send({
           isOK: false,
@@ -202,7 +200,6 @@ app.post('/sign/in', function(req, res, next) {
 
   User.open().findOne({username: req.body.username})
       .then(function (user) {
-        console.log(user, '------------------------');
         if (user) {
           res.send({
             isOK: false,

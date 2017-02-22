@@ -109,7 +109,7 @@ User.extend({
 
 User.include({
     isAdmin: function() {
-        return this.role === '管理员';
+        return this.role === 'admin';
     },
     samePwd: function(pwd) {
         return bcrypt.compareSync(pwd, this.password);
