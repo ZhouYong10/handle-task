@@ -8,6 +8,7 @@
 
     <ul class="am-menu-nav am-avg-sm-4 am-collapse">
 
+        <% if(user.role == 'hander'){ %>
         <li class="am-parent">
             <a href="##" class="menu-item">
                 <span class="navTips complaints"> * </span>
@@ -39,7 +40,9 @@
 
             </ul>
         </li>
+        <% } %>
 
+        <% if(user.role == 'tasker'){ %>
         <li class="am-parent">
             <a href="##" class="menu-item">
                 <span class="navTips checks"> * </span>
@@ -79,6 +82,7 @@
                 </li>
             </ul>
         </li>
+        <% } %>
 
         <li class="am-parent">
             <a href="##" class="menu-item">论坛推广</a>

@@ -21,6 +21,7 @@
         </h1>
 
         <div class="am-header-right am-header-nav">
+            <% if(user.role == 'tasker'){ %>
             <div class="am-dropdown" data-am-dropdown>
                 <button class="am-btn am-btn-primary am-dropdown-toggle" data-am-dropdown-toggle>
                     <span class="am-show-sm">￥ </span>
@@ -34,6 +35,8 @@
                     <li><a href="/user/withdraw">申请提现</a></li>
                 </ul>
             </div>
+            <% } %>
+
             <div class="am-dropdown" data-am-dropdown>
                 <button class="am-btn am-btn-primary am-dropdown-toggle" data-am-dropdown-toggle>
                     <i class="am-icon-user am-show-sm"> </i>

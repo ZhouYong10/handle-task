@@ -110,9 +110,9 @@ function login(req, res, next) {
         if(user.role == 'admin') {
           aim.path = '/admin/home';
         }else if (user.role == 'tasker'){
-          aim.path = '/client/home';
+          aim.path = '/tasker/home';
         }else if(user.role == 'hander'){
-          aim.path = '/client/home';
+          aim.path = '/hander/home';
         }
         res.send(aim);
       }, function (error) {
@@ -323,12 +323,29 @@ app.use(function(req, res, next) {
   }
 });
 
-app.get('/client/home', function (req, res) {
+app.get('/tasker/home', function (req, res) {
   User.open().findById(req.session.passport.user)
       .then(function (user) {
         Placard.open().findPages(null, (req.query.page ? req.query.page : 1))
             .then(function (obj) {
-              res.render('clientHome', {
+              res.render('taskerHome', {
+                title: '系统公告',
+                placards: obj.results,
+                pages: obj.pages,
+                user: user
+              });
+            }, function (error) {
+              res.send('获取公告列表失败： ' + error);
+            });
+      });
+});
+
+app.get('/hander/home', function (req, res) {
+  User.open().findById(req.session.passport.user)
+      .then(function (user) {
+        Placard.open().findPages(null, (req.query.page ? req.query.page : 1))
+            .then(function (obj) {
+              res.render('handerHome', {
                 title: '系统公告',
                 placards: obj.results,
                 pages: obj.pages,

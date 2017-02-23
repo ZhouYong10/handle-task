@@ -25,10 +25,7 @@ router.get('/WX/fans', function (req, res) {
                 .then(function(obj) {
                     res.render('handleWXfans', {
                         title: '人工微信粉丝(回复)',
-                        money: user.funds,
-                        username: user.username,
-                        userStatus: user.status,
-                        role: user.role,
+                        user: user,
                         orders: obj.results,
                         pages: obj.pages,
                         path: '/artificial/WX/fans'
@@ -51,10 +48,7 @@ router.get('/WX/fans/add', function (req, res) {
                             Order.getRandomStr(req).then(function(orderFlag) {
                                 res.render('handleWXfansAdd', {
                                     title: '添加人工微信粉丝(回复)任务',
-                                    money: user.funds,
-                                    username: user.username,
-                                    userStatus: user.status,
-                                    role: user.role,
+                                    user: user,
                                     fansPrice: fansPrice,
                                     replyPrice: replyPrice,
                                     orderFlag: orderFlag
@@ -121,10 +115,7 @@ router.get('/WX/friend', function (req, res) {
                 .then(function(obj) {
                     res.render('handleWXfriend', {
                         title: '人工微信个人好友',
-                        money: user.funds,
-                        username: user.username,
-                        userStatus: user.status,
-                        role: user.role,
+                        user: user,
                         orders: obj.results,
                         pages: obj.pages,
                         path: '/artificial/WX/friend'
@@ -143,10 +134,7 @@ router.get('/WX/friend/add', function (req, res) {
                     Order.getRandomStr(req).then(function(orderFlag) {
                         res.render('handleWXfriendAdd', {
                             title: '添加人工微信个人好友任务',
-                            money: user.funds,
-                            username: user.username,
-                            userStatus: user.status,
-                            role: user.role,
+                            user: user,
                             fansPrice: fansPrice,
                             orderFlag: orderFlag
                         })
@@ -193,10 +181,7 @@ router.get('/WX/vote', function (req, res) {
                     Order.addSchedule(obj.results, 10);
                     res.render('handleWXvote', {
                         title: '人工微信投票',
-                        money: user.funds,
-                        username: user.username,
-                        userStatus: user.status,
-                        role: user.role,
+                        user: user,
                         orders: obj.results,
                         pages: obj.pages,
                         path: '/artificial/WX/vote'
@@ -215,10 +200,7 @@ router.get('/WX/vote/add', function (req, res) {
                     Order.getRandomStr(req).then(function(orderFlag) {
                         res.render('handleWXvoteAdd', {
                             title: '添加人工微信投票任务',
-                            money: user.funds,
-                            username: user.username,
-                            userStatus: user.status,
-                            role: user.role,
+                            user: user,
                             fansPrice: fansPrice,
                             orderFlag: orderFlag
                         })
@@ -265,10 +247,7 @@ router.get('/WX/code', function (req, res) {
                 .then(function(obj) {
                     res.render('handleWXcode', {
                         title: '人工微信扫码(回复)',
-                        money: user.funds,
-                        username: user.username,
-                        userStatus: user.status,
-                        role: user.role,
+                        user: user,
                         orders: obj.results,
                         pages: obj.pages,
                         path: '/artificial/WX/code'
@@ -291,10 +270,7 @@ router.get('/WX/code/add', function (req, res) {
                             Order.getRandomStr(req).then(function(orderFlag) {
                                 res.render('handleWXcodeAdd', {
                                     title: '添加人工微信扫码(回复)任务',
-                                    money: user.funds,
-                                    username: user.username,
-                                    userStatus: user.status,
-                                    role: user.role,
+                                    user: user,
                                     fansPrice: fansPrice,
                                     replyPrice: replyPrice,
                                     orderFlag: orderFlag
@@ -355,10 +331,7 @@ router.get('/WX/article', function (req, res) {
                 .then(function(obj) {
                     res.render('handleWXarticle', {
                         title: '人工微信原文/收藏/分享',
-                        money: user.funds,
-                        username: user.username,
-                        userStatus: user.status,
-                        role: user.role,
+                        user: user,
                         orders: obj.results,
                         pages: obj.pages,
                         path: '/artificial/WX/article'
@@ -381,10 +354,7 @@ router.get('/WX/article/add', function (req, res) {
                             Order.getRandomStr(req).then(function(orderFlag) {
                                 res.render('handleWXarticleAdd', {
                                     title: '添加人工微信原文/收藏/分享任务',
-                                    money: user.funds,
-                                    username: user.username,
-                                    userStatus: user.status,
-                                    role: user.role,
+                                    user: user,
                                     fansPrice: fansPrice,
                                     replyPrice: replyPrice,
                                     orderFlag: orderFlag
@@ -438,10 +408,7 @@ router.get('/task/details', function (req, res) {
                 .then(function (obj) {
                     res.render('handleOrderTasks', {
                         title: '人工平台 / 任务进度详情',
-                        money: user.funds,
-                        username: user.username,
-                        userStatus: user.status,
-                        role: user.role,
+                        user: user,
                         orders: obj.results,
                         pages: obj.pages,
                         msg: req.query.msg
@@ -460,10 +427,7 @@ router.get('/task/check', function (req, res) {
                 .then(function (obj) {
                     res.render('handleTaskCheck', {
                         title: '人工平台 / 待验收任务',
-                        money: user.funds,
-                        username: user.username,
-                        userStatus: user.status,
-                        role: user.role,
+                        user: user,
                         orders: obj.results,
                         pages: obj.pages,
                         path: '/artificial/task/check'
@@ -505,10 +469,7 @@ router.get('/task/complaint', function (req, res) {
                 .then(function (obj) {
                     res.render('handleTaskComplaintsAlre', {
                         title: '人工平台 / 我投诉的任务',
-                        money: user.funds,
-                        username: user.username,
-                        userStatus: user.status,
-                        role: user.role,
+                        user: user,
                         orders: obj.results,
                         pages: obj.pages
                     })
@@ -564,11 +525,7 @@ router.get('/release/have/look', function (req, res) {
         .then(function (user) {
             res.render('handleReleaseLook', {
                 title: '发布必看',
-                money: user.funds,
-                user: user,
-                username: user.username,
-                userStatus: user.status,
-                role: user.role
+                user: user
             });
         }, function (error) {
             res.send('获取用户详细信息失败： ' + error);

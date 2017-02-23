@@ -19,10 +19,7 @@ router.get('/all', function (req, res) {
                 .then(function (obj) {
                     res.render('handleTaskAll', {
                         title: '任务大厅',
-                        money: user.funds,
-                        role: user.role,
-                        userStatus: user.status,
-                        username: user.username,
+                        user: user,
                         orders: obj.results,
                         pages: obj.pages,
                         path: '/forum/taskHistory'
@@ -44,10 +41,7 @@ router.get('/type', function (req, res) {
                 .then(function (obj) {
                     res.render('handleTaskAll', {
                         title: '任务大厅',
-                        money: user.funds,
-                        role: user.role,
-                        userStatus: user.status,
-                        username: user.username,
+                        user: user,
                         orders: obj.results,
                         pages: obj.pages,
                         path: '/forum/taskHistory'
@@ -65,10 +59,7 @@ router.get('/show', function (req, res) {
                     .then(function(order) {
                         Task.getRandomStr(req).then(function(orderFlag) {
                             res.render('handleTaskShow', {
-                                money: user.funds,
-                                role: user.role,
-                                userStatus: user.status,
-                                username: user.username,
+                                user: user,
                                 order: order,
                                 orderFlag: orderFlag
                             });
@@ -108,10 +99,7 @@ router.get('/alre', function (req, res) {
                 .then(function (obj) {
                     res.render('handleTaskAlre', {
                         title: '我做过的任务',
-                        money: user.funds,
-                        role: user.role,
-                        userStatus: user.status,
-                        username: user.username,
+                        user: user,
                         orders: obj.results,
                         pages: obj.pages
                     });
@@ -138,10 +126,7 @@ router.get('/search/task', function (req, res) {
                 .then(function (obj) {
                     res.render('handleTaskAlre', {
                         title: '我做过的任务',
-                        money: user.funds,
-                        role: user.role,
-                        userStatus: user.status,
-                        username: user.username,
+                        user: user,
                         orders: obj.results,
                         pages: obj.pages
                     });
@@ -161,10 +146,7 @@ router.get('/complaints', function (req, res) {
                 .then(function (obj) {
                     res.render('handleTaskComplaints', {
                         title: '我被投诉的任务',
-                        money: user.funds,
-                        role: user.role,
-                        userStatus: user.status,
-                        username: user.username,
+                        user: user,
                         orders: obj.results,
                         pages: obj.pages
                     });
@@ -182,10 +164,7 @@ router.get('/complaints/alre', function (req, res) {
                 .then(function (obj) {
                     res.render('handleTaskComplaintsAlre', {
                         title: '已处理的投诉任务',
-                        money: user.funds,
-                        role: user.role,
-                        userStatus: user.status,
-                        username: user.username,
+                        user: user,
                         orders: obj.results,
                         pages: obj.pages
                     });
@@ -198,11 +177,7 @@ router.get('/account', function (req, res) {
         .then(function (user) {
             res.render('handleTaskAccount', {
                 title: '我做任务的微信账户',
-                money: user.funds,
                 user: user,
-                username: user.username,
-                userStatus: user.status,
-                role: user.role,
                 message: req.session.msg ? req.session.msg : ''
             });
         }, function (error) {
@@ -230,11 +205,7 @@ router.get('/new/tasker/have/look', function (req, res) {
         .then(function (user) {
             res.render('handleTaskerLook', {
                 title: '新手必看',
-                money: user.funds,
                 user: user,
-                username: user.username,
-                userStatus: user.status,
-                role: user.role
             });
         }, function (error) {
             res.send('获取用户详细信息失败： ' + error);
