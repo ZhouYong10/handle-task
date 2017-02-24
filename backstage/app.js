@@ -218,23 +218,21 @@ app.post('/sign/in', function(req, res, next) {
         };
 
         if(invitationCode) {
-          Utils.decipher(invitationCode, Utils.invitationKey)
-              .then(function (userId) {
-                User.open().findById(userId)
-                    .then(function (result) {
-                      var parent = User.wrapToInstance(result);
-                      userInfo.parent = parent.username;
-                      userInfo.parentID = parent._id;
-                      User.createUser(userInfo, function (user) {
+            var userId = Utils.decipher(invitationCode, Utils.invitationKey);
+            User.open().findById(userId)
+                .then(function (result) {
+                    var parent = User.wrapToInstance(result);
+                    userInfo.parent = parent.username;
+                    userInfo.parentID = parent._id;
+                    User.createUser(userInfo, function (user) {
                         parent.addChild(user[0]._id);
                         User.open().updateById(parent._id, {
-                          $set: parent
+                            $set: parent
                         }).then(function () {
-                          login(req, res, next);
+                            login(req, res, next);
                         });
-                      });
                     });
-              });
+                });
         }else {
           User.createUser(userInfo, function () {
             login(req, res, next);

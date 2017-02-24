@@ -43,16 +43,19 @@
                                 <i class="am-icon-search"></i>
                                 搜索
                             </button>&nbsp;&nbsp;
-
-                            <% if(role == '顶级代理' || role == '超级代理'){ %>
-                            <a class="am-btn am-btn-success am-radius am-btn-sm" href="/user/addLowerUser">
-                                <i class="am-icon-plus-circle"></i>
-                                添加下级用户
-                            </a>
-                            <% } %>
-
                         </div>
                     </validator>
+                    <div class="am-form-group am-g-collapse">
+                        <div class="am-u-sm-6">
+                            <input class="am-form-field am-input-sm am-radius" type="text"
+                                   value="http://192.168.1.109:3000/sign/in?invitation=<%= invitation %>">
+                        </div>
+                        <div class="am-u-sm-6">
+                            <a class="clipboard am-btn am-btn-primary am-radius am-btn-sm"
+                               title="通过此链接注册的用户即为我的下级用户。"
+                               data-clipboard-text="http://192.168.1.109:3000/sign/in?invitation=<%= invitation %>">复制</a>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="am-scrollable-horizontal am-text-center loweruser-content">
@@ -102,6 +105,8 @@
 <link rel="import" href="../../components/foot/foot.html?__inline">
 
 <!--import plugin-->
+<script src="/static/js/clipboard.js"></script>
+<script src="/static/plugins/layer/layer.js"></script>
 <script src="/static/plugins/laypage/laypage.js"></script>
 
 <script>

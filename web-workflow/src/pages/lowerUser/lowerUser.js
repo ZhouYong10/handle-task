@@ -11,5 +11,6 @@ new Vue({
 });
 
 $(function () {
+    Utils.clipboard();
     Utils.layPage();
 });
