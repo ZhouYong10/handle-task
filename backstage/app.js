@@ -208,7 +208,7 @@ app.post('/sign/in', function(req, res, next) {
           return;
         }
 
-        var invitationCode = req.query.invitation;
+        var invitationCode = req.body.invitation;
         var userInfo = {
           username: req.body.username.replace(/(^\s*)|(\s*$)/g, ""),
           password: req.body.password,

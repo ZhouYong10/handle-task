@@ -22,6 +22,7 @@ new Vue({
         },
         onSignIn: function() {  //使用es6语法,获取不到相应的数据,例如this.username,得不到数据.
             this.$http.post('/sign/in', {
+                invitation: location.search.split('=')[1],
                 username: this.username,
                 password: this.password,
                 repassword: this.repassword,

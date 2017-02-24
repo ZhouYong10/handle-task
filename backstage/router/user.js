@@ -286,13 +286,14 @@ router.post('/username/notrepeat', function (req, res) {
 router.get('/lowerUser', function (req, res) {
     User.open().findById(req.session.passport.user)
         .then(function (parent) {
+            var invitation = req.headers.host + '/sign/in?invitation=' + Utils.cipher(parent._id + '', Utils.invitationKey);
             if(parent.children && parent.children.length > 0){
                 User.open().findPages({_id: {$in: parent.children}}, (req.query.page ? req.query.page : 1))
                     .then(function(obj) {
                         res.render('lowerUser', {
                             title: '我的下级用户',
                             user: parent,
-                            invitation: Utils.cipher(parent._id + '', Utils.invitationKey),
+                            invitation: invitation,
                             users: obj.results,
                             pages: obj.pages
                         });
@@ -303,7 +304,7 @@ router.get('/lowerUser', function (req, res) {
                 res.render('lowerUser', {
                     title: '我的下级用户',
                     user: parent,
-                    invitation: Utils.cipher(parent._id + '', Utils.invitationKey),
+                    invitation: invitation,
                     users: [],
                     pages: 1
                 });
@@ -316,6 +317,7 @@ router.get('/lowerUser', function (req, res) {
 router.get('/search/lowerUser', function (req, res) {
     User.open().findById(req.session.passport.user)
         .then(function (parent) {
+            var invitation = req.headers.host + '/sign/in?invitation=' + Utils.cipher(parent._id + '', Utils.invitationKey);
             if(parent.children && parent.children.length > 0){
                 User.open().findPages({
                     _id: {$in: parent.children},
@@ -325,7 +327,7 @@ router.get('/search/lowerUser', function (req, res) {
                         res.render('lowerUser', {
                             title: '我的下级用户',
                             user: parent,
-                            invitation: Utils.cipher(parent._id + '', Utils.invitationKey),
+                            invitation: invitation,
                             users: obj.results,
                             pages: obj.pages
                         });
@@ -336,7 +338,7 @@ router.get('/search/lowerUser', function (req, res) {
                 res.render('lowerUser', {
                     title: '我的下级用户',
                     user: parent,
-                    invitation: Utils.cipher(parent._id + '', Utils.invitationKey),
+                    invitation: invitation,
                     users: [],
                     pages: 1
                 });
