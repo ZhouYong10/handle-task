@@ -65,10 +65,10 @@ module.exports = {
             }, reject);
         })
     },
-    newPlacard: function() {
+    newPlacard: function(obj) {
         return new Promise(function(resolve, reject) {
             haveCollection(function () {
-                collection.find()
+                collection.find(obj)
                     .sort({'_id': -1})
                     .limit(1)
                     .toArray(function (error, result) {

@@ -13,6 +13,16 @@ var Placard = new Class();
 
 
 Placard.extend(db);
+Placard.extend({
+    type: {
+        systemPlacard: '系统公告',
+        taskerPlacard: '发布者公告',
+        handerPlacard: '任务者公告'
+    },
+    getTypeName: function(type) {
+        return Placard.type[type];
+    }
+});
 
 Placard.open = function() {
     return Placard.openCollection('Placard');

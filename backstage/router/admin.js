@@ -622,7 +622,8 @@ router.get('/placard/send', function (req, res) {
 
 router.post('/placard/send', function (req, res) {
     Placard.open().insert({
-        placardName: req.body.placardName,
+        type: req.body.type,
+        typeName: Placard.getTypeName(req.body.type),
         placardContent: req.body.placardContent,
         sendTime: moment().format('YYYY-MM-DD HH:mm:ss')
     }).then(function (placard) {

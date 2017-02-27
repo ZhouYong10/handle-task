@@ -306,10 +306,19 @@ app.get('/wx/like/complete/remote', function (req, res) {
 
 
 app.get('/new/placard', function (req, res) {
-  Placard.open().newPlacard()
-      .then(function (obj) {
-    res.send(obj);
-  });
+    User.open().findById(req.session.passport.user)
+        .then(function (user) {
+            var query;
+            if(user.role == 'taker'){
+                query = {type: {$ne: 'handerPlacard'}};
+            }else if(user.role == 'hander'){
+                query = {type: {$ne: 'taskerPlacard'}};
+            }
+            Placard.open().newPlacard(query)
+                .then(function (obj) {
+                    res.send(obj);
+                });
+        });
 });
 
 //拦截未登录
@@ -324,7 +333,7 @@ app.use(function(req, res, next) {
 app.get('/tasker/home', function (req, res) {
   User.open().findById(req.session.passport.user)
       .then(function (user) {
-        Placard.open().findPages(null, (req.query.page ? req.query.page : 1))
+        Placard.open().findPages({type: {$ne: 'handerPlacard'}}, (req.query.page ? req.query.page : 1))
             .then(function (obj) {
               res.render('taskerHome', {
                 title: '系统公告',
@@ -341,7 +350,7 @@ app.get('/tasker/home', function (req, res) {
 app.get('/hander/home', function (req, res) {
   User.open().findById(req.session.passport.user)
       .then(function (user) {
-        Placard.open().findPages(null, (req.query.page ? req.query.page : 1))
+        Placard.open().findPages({type: {$ne: 'taskerPlacard'}}, (req.query.page ? req.query.page : 1))
             .then(function (obj) {
               res.render('handerHome', {
                 title: '系统公告',
