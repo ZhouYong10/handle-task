@@ -7,48 +7,179 @@
     <title><%=title%></title>
 
     <link rel="import" href="../../components/head/head.html?__inline">
-
-    <link rel="stylesheet" href="./taskerHome.scss?__inline">
 </head>
-<body>
 
-<div id="app">
-
+<body data-type="taskerHome">
+<div class="am-g tpl-g">
+    <!-- 头部 -->
     <link rel="import" href="../../components/header/header.html?__inline">
+    <!-- 风格切换 -->
+    <link rel="import" href="../../components/changeStyle/changeStyle.html?__inline">
+    <!-- 侧边导航栏 -->
     <link rel="import" href="../../components/menu/menu.html?__inline">
 
-    <div id="app-content" class="app-content am-g">
 
-        <div class="am-panel am-panel-primary">
-            <div class="am-panel-hd"><%= title %></div>
-            <div class="am-panel-bd">
+    <!-- 内容区域 -->
+    <div class="tpl-content-wrapper">
 
-                <ul class="am-list">
-
-                    <% for(var i = 0; i < placards.length; i++) { %>
-                    <li>
-                        <a>
-                            <span>【<%= placards[i].typeName %>】 </span>
-                            <span><%= placards[i].sendTime %> &nbsp;</span>
-                            <span>
-                                <%= placards[i].placardContent %>
-                                <% if(i == 0 || i == 1){ %>
-                                <img src="/static/images/new-placard.gif" style="display: inline;" width="38">
-                                <% } %>
-                            </span>
-                        </a>
-                    </li>
-                    <% } %>
-
-                </ul>
-
-                <input type="hidden" value="<%= pages %>" id="pages">
-                <div id="laypage" class="am-text-center"></div>
+        <div class="container-fluid am-cf">
+            <div class="row">
+                <div class="am-u-sm-12 am-u-md-12 am-u-lg-9">
+                    <div class="page-header-heading">
+                        <span class="am-icon-home page-header-heading-icon"></span>
+                        部件首页 <small>Amaze UI</small>
+                    </div>
+                    <p class="page-header-description">
+                        Amaze UI 含近 20 个 CSS 组件、20 余 JS 组件，更有多个包含不同主题的 Web 组件。
+                    </p>
+                </div>
             </div>
         </div>
 
+        <div class="row-content am-cf">
+            <div class="row  am-cf">
+                <div class="am-u-sm-12 am-u-md-12 am-u-lg-4">
+                    <div class="widget am-cf">
+                        <div class="widget-head am-cf">
+                            <div class="widget-title am-fl">月度财务收支计划</div>
+                        </div>
+                        <div class="widget-body am-fr">
+                            <div class="am-fl">
+                                <div class="widget-fluctuation-period-text">
+                                    ￥61746.45
+                                    <button class="widget-fluctuation-tpl-btn">
+                                        <i class="am-icon-calendar"></i>
+                                        更多月份
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="am-fr am-cf">
+                                <div class="widget-fluctuation-description-amount text-success">
+                                    +￥30420.56
+                                </div>
+                                <div class="widget-fluctuation-description-text am-text-right">
+                                    8月份收入
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="am-u-sm-12 am-u-md-6 am-u-lg-4">
+                    <div class="widget widget-primary am-cf">
+                        <div class="widget-statistic-header">
+                            本季度利润
+                        </div>
+                        <div class="widget-statistic-body">
+                            <div class="widget-statistic-value">
+                                ￥27,294
+                            </div>
+                            <div class="widget-statistic-description">
+                                本季度比去年多收入 <strong>2593元</strong> 人民币
+                            </div>
+                            <span class="widget-statistic-icon am-icon-credit-card-alt"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="am-u-sm-12 am-u-md-6 am-u-lg-4">
+                    <div class="widget widget-purple am-cf">
+                        <div class="widget-statistic-header">
+                            本季度利润
+                        </div>
+                        <div class="widget-statistic-body">
+                            <div class="widget-statistic-value">
+                                ￥27,294
+                            </div>
+                            <div class="widget-statistic-description">
+                                本季度比去年多收入 <strong>2593元</strong> 人民币
+                            </div>
+                            <span class="widget-statistic-icon am-icon-support"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row am-cf">
+                <div class="am-u-sm-12 am-u-md-8">
+                    <div class="widget am-cf">
+                        <div class="widget-head am-cf">
+                            <div class="widget-title am-fl">月度财务收支计划</div>
+                            <div class="widget-function am-fr">
+                                <a href="javascript:;" class="am-icon-cog"></a>
+                            </div>
+                        </div>
+                        <div class="widget-body-md widget-body tpl-amendment-echarts am-fr" id="tpl-echarts">
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="am-u-sm-12 am-u-md-4">
+                    <div class="widget am-cf">
+                        <div class="widget-head am-cf">
+                            <div class="widget-title am-fl">专用服务器负载</div>
+                            <div class="widget-function am-fr">
+                                <a href="javascript:;" class="am-icon-cog"></a>
+                            </div>
+                        </div>
+                        <div class="widget-body widget-body-md am-fr">
+
+                            <div class="am-progress-title">CPU Load <span class="am-fr am-progress-title-more">28% / 100%</span></div>
+                            <div class="am-progress">
+                                <div class="am-progress-bar" style="width: 15%"></div>
+                            </div>
+                            <div class="am-progress-title">CPU Load <span class="am-fr am-progress-title-more">28% / 100%</span></div>
+                            <div class="am-progress">
+                                <div class="am-progress-bar  am-progress-bar-warning" style="width: 75%"></div>
+                            </div>
+                            <div class="am-progress-title">CPU Load <span class="am-fr am-progress-title-more">28% / 100%</span></div>
+                            <div class="am-progress">
+                                <div class="am-progress-bar am-progress-bar-danger" style="width: 35%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="row am-cf">
+                <div class="am-u-sm-12 widget-margin-bottom-lg">
+                    <div class="widget am-cf widget-body-lg">
+                        <div class="widget-body  am-fr">
+                            <div class="am-scrollable-horizontal ">
+                                <table width="100%" class="am-table am-table-compact am-text-nowrap tpl-table-black " id="example-r">
+                                    <thead>
+                                    <tr>
+                                        <th>公告类型</th>
+                                        <th>发布时间</th>
+                                        <th>公告内容</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <% for(var i = 0; i < placards.length; i++) { %>
+                                    <tr class="gradeX">
+                                        <td>【<%= placards[i].typeName %>】</td>
+                                        <td><%= placards[i].sendTime %></td>
+                                        <td>
+                                            <%= placards[i].placardContent %>
+                                            <% if(i == 0 || i == 1){ %>
+                                            <img src="/static/images/new-placard.gif" style="display: inline;" width="38">
+                                            <% } %>
+                                        </td>
+                                    </tr>
+                                    <% } %>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
     </div>
 </div>
+
 
 <link rel="import" href="../../components/foot/foot.html?__inline">
 

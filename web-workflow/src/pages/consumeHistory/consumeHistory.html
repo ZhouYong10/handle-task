@@ -7,94 +7,135 @@
     <title><%=title%></title>
 
     <link rel="import" href="../../components/head/head.html?__inline">
-
-    <link rel="stylesheet" href="consumeHistory.scss?__inline">
 </head>
-<body>
 
-<div id="app">
+<body data-type="taskerConsumeHis">
 
+<div class="am-g tpl-g">
+    <!-- 头部 -->
     <link rel="import" href="../../components/header/header.html?__inline">
+    <!-- 风格切换 -->
+    <link rel="import" href="../../components/changeStyle/changeStyle.html?__inline">
+    <!-- 侧边导航栏 -->
     <link rel="import" href="../../components/menu/menu.html?__inline">
 
-    <div id="app-content" class="app-content am-g">
 
-        <div class="am-panel am-panel-primary">
-            <div class="am-panel-hd"><%= title %></div>
-            <div class="am-panel-bd">
-
-                <div id="searchForm" class="am-form am-form-inline">
-                    <validator name="search">
-                        <!--<div class="am-form-group am-form-group-sm search-title">-->
-                        <!--<label for="rechargeTotal" class="am-u-sm-3 am-form-label taskTypeLabel">消费金额</label>-->
-                        <!--<div class="am-u-sm-9 taskTypeWrap">-->
-                        <!--<input id="rechargeTotal" type="text" class="am-form-field am-input-sm am-radius" placeholder="">-->
-                        <!--</div>-->
-                        <!--</div>-->
-
-                        <div class="am-form-group am-form-group-sm search-title">
-                            <label for="rechargeTime" class="am-u-sm-3 am-form-label taskTypeLabel">消费时间</label>
-                            <div class="am-u-sm-9 taskTypeWrap">
-                                <form id="search" method="get" action="/user/search/consume">
-                                    <input id="rechargeTime" type="text" class="am-form-field am-input-sm am-radius"
-                                           name="createTime" placeholder="点击选择消费日期"
-                                           onclick="laydate({istime: false, format: 'YYYY-MM-DD'})"
-                                           v-validate:createTime="{required: true}">
-                                </form>
+    <!-- 内容区域 -->
+    <div class="tpl-content-wrapper">
+        <div class="row-content am-cf">
+            <div class="row">
+                <div class="am-u-sm-12 am-u-md-12 am-u-lg-12">
+                    <div class="widget am-cf">
+                        <div class="widget-head am-cf">
+                            <div class="widget-title  am-cf">文章列表</div>
+                        </div>
+                        <div class="widget-body  am-fr">
+                            <div id="searchForm" class="am-form am-form-inline">
+                                <validator name="search">
+                                    <div class="am-u-sm-12 am-u-md-12 am-u-lg-3">
+                                        <div class="am-input-group am-input-group-sm tpl-form-border-form cl-p">
+                                            <form id="search" method="get" action="/user/search/consume">
+                                                <input id="rechargeTime" type="text" class="am-form-field am-input-sm am-radius"
+                                                       name="createTime" placeholder="点击选择消费日期" style="height:33px;"
+                                                       onclick="laydate({istime: false, format: 'YYYY-MM-DD'})"
+                                                       v-validate:createTime="{required: true}">
+                                            </form>
+                                        <span class="am-input-group-btn">
+                                            <button form="search" v-if="$search.valid"
+                                                    class="am-btn am-btn-default am-btn-success
+                                                    tpl-table-list-field am-icon-search"></button>
+                                        </span>
+                                        </div>
+                                    </div>
+                                </validator>
                             </div>
-                        </div>
 
-                        <div class="am-form-group am-form-group-sm">
-                            <button form="search" class="am-btn am-btn-success am-radius am-btn-sm" v-if="$search.valid">
-                                <i class="am-icon-search"></i>
-                                搜索
-                            </button>
-                        </div>
-                    </validator>
-                </div>
+                            <div class="am-u-sm-12 am-scrollable-horizontal am-text-center forum-context">
+                                <table width="100%" class="am-table am-text-nowrap am-table-striped tpl-table-black">
+                                    <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>消费时间</th>
+                                        <th>类型	</th>
+                                        <th>消费金额</th>
+                                        <th>余额	</th>
+                                        <th>描述	</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
 
-                <div class="am-scrollable-horizontal am-text-center flowTask-content">
-                    <table class="am-table am-table-bordered am-table-radius am-table-striped am-text-nowrap am-table-hover">
-                        <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>消费时间</th>
-                            <th>类型	</th>
-                            <th>消费金额</th>
-                            <th>余额	</th>
-                            <th>描述	</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-
-                        <% for(var i = 0; i < orders.length; i++){ %>
-                        <tr class="<% if(orders[i].status == '已处理'){ %> am-primary
+                                    <% for(var i = 0; i < orders.length; i++){ %>
+                                    <tr class="<% if(orders[i].status == '已处理'){ %> am-primary
                         <% }else if(orders[i].status == '已退款'){ %> am-danger <% } %>">
-                            <td class="am-text-middle"><%= i + 1 %></td>
-                            <td class="am-text-middle"><%= orders[i].createTime %></td>
-                            <td class="am-text-middle"><%= orders[i].typeName %><%= orders[i].smallTypeName %></td>
-                            <% if(orders[i].status == '已处理'){ %>
-                            <td class="am-text-middle">￥ -<%= orders[i].totalPrice %></td>
-                            <% } %>
+                                        <td class="am-text-middle"><%= i + 1 %></td>
+                                        <td class="am-text-middle"><%= orders[i].createTime %></td>
+                                        <td class="am-text-middle"><%= orders[i].typeName %><%= orders[i].smallTypeName %></td>
+                                        <% if(orders[i].status == '已处理'){ %>
+                                        <td class="am-text-middle">￥ -<%= orders[i].totalPrice %></td>
+                                        <% } %>
 
-                            <% if(orders[i].status == '已退款'){ %>
-                            <td class="am-text-middle">￥ +<%= orders[i].totalPrice %></td>
-                            <% } %>
-                            <td class="am-text-middle">￥ <%= orders[i].funds %></td>
-                            <td class="am-text-middle"><%= orders[i].description %></td>
-                        </tr>
-                        <% } %>
+                                        <% if(orders[i].status == '已退款'){ %>
+                                        <td class="am-text-middle">￥ +<%= orders[i].totalPrice %></td>
+                                        <% } %>
+                                        <td class="am-text-middle">￥ <%= orders[i].funds %></td>
+                                        <td class="am-text-middle"><%= orders[i].description %></td>
+                                    </tr>
+                                    <% } %>
 
-                        </tbody>
-                    </table>
+                                    <tr class="gradeX">
+                                        <td>Amaze UI 模式窗口</td>
+                                        <td>2016-09-26</td>
+                                        <td>2016-09-26</td>
+                                        <td>2016-09-26</td>
+                                        <td>2016-09-26</td>
+                                        <td>
+                                            <div class="tpl-table-black-operation">
+                                                <a href="javascript:;">
+                                                    <i class="am-icon-pencil"></i> 接手任务
+                                                </a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr class="gradeX">
+                                        <td>Amaze UI 模式窗口</td>
+                                        <td>张鹏飞</td>
+                                        <td>2016-09-26fasdfasdfaaaaaaaaaaaaaaaaaa</td>
+                                        <td>2016-09-26fasdfasdfaaaaaaaaaaaaaaaaaa</td>
+                                        <td>2016-09-26fasdfasdfaaaaaaaaaaaaaaaaaa</td>
+                                        <td>
+                                            <div class="tpl-table-black-operation">
+                                                <a href="javascript:;">
+                                                    <i class="am-icon-pencil"></i> 接手任务
+                                                </a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr class="gradeX">
+                                        <td>Amaze UI 模式窗口</td>
+                                        <td>张鹏飞</td>
+                                        <td>2016-09-26</td>
+                                        <td>2016-09-26</td>
+                                        <td>2016-09-26</td>
+                                        <td>
+                                            <div class="tpl-table-black-operation">
+                                                <a href="javascript:;">
+                                                    <i class="am-icon-pencil"></i> 接手任务
+                                                </a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
 
-                    <input type="hidden" value="<%= pages %>" id="pages">
-                    <div id="laypage"></div>
+                                <input type="hidden" value="<%= pages %>" id="pages">
+                                <div id="laypage"></div>
+                            </div>
+
+                        </div>
+                    </div>
                 </div>
-
             </div>
         </div>
-
     </div>
 </div>
 

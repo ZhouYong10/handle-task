@@ -189,6 +189,25 @@ app.get('/sign/in', function (req, res) {
   res.render('signIn', {title: '用户注册'});
 });
 
+app.post('/check/username', function (req, res) {
+    User.open().findOne({username: req.body.username})
+    .then(function(user) {
+        if(user) {
+            res.send(true);
+        }else{
+            res.send(false);
+        }
+    })
+});
+
+app.post('/check/securityCode', function (req, res) {
+    if(req.body.securityCode != req.session.securityCode) {
+        res.send(false);
+    }else{
+        res.send(true);
+    }
+});
+
 app.post('/sign/in', function(req, res, next) {
   if(req.body.securityCode != req.session.securityCode) {
     res.send({
@@ -198,7 +217,7 @@ app.post('/sign/in', function(req, res, next) {
     return;
   }
 
-  User.open().findOne({username: req.body.username})
+  User.open().findOne({username: req.body.username.replace(/(^\s*)|(\s*$)/g, "")})
       .then(function (user) {
         if (user) {
           res.send({
@@ -366,8 +385,9 @@ app.get('/hander/home', function (req, res) {
 
 
 app.use('/user', require('./router/user.js'));
-app.use('/task', require('./router/task.js'));
-app.use('/artificial', require('./router/artificial.js'));
+app.use('/hander', require('./router/hander.js'));
+app.use('/tasker', require('./router/tasker.js'));
+
 app.use('/forum', require('./router/forum.js'));
 app.use('/flow', require('./router/flow.js'));
 app.use('/WX', require('./router/WX.js'));

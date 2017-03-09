@@ -7,63 +7,71 @@
     <title><%=title%></title>
 
     <link rel="import" href="../../components/head/head.html?__inline">
-
-    <link rel="stylesheet" href="./adminFeedbackWait.scss?__inline">
 </head>
-<body>
 
-<div id="app">
+<body data-type="adminFeedbackWait">
 
+<div class="am-g tpl-g">
+    <!-- 头部 -->
     <link rel="import" href="../../components/adminHeader/adminHeader.html?__inline">
+    <!-- 风格切换 -->
+    <link rel="import" href="../../components/changeStyle/changeStyle.html?__inline">
+    <!-- 侧边导航栏 -->
     <link rel="import" href="../../components/adminMenu/adminMenu.html?__inline">
 
-    <div class="app-content am-g">
 
-        <div class="am-hide-sm am-u-lg-2 am-u-md-3">
-            <link rel="import" href="../../components/adminMenuContent/adminMenuContent.html?__inline">
-        </div>
+    <!-- 内容区域 -->
+    <div class="tpl-content-wrapper">
+        <div class="row-content am-cf">
+            <div class="row">
+                <div class="am-u-sm-12 am-u-md-12 am-u-lg-12">
+                    <div class="widget am-cf">
+                        <div class="widget-head am-cf">
+                            <div class="widget-title  am-cf"><%=title%></div>
+                        </div>
+                        <div class="widget-body  am-fr">
+                            <div class="am-u-sm-12 am-scrollable-horizontal">
+                                <table width="100%" class="am-table am-text-nowrap am-table-striped tpl-table-black">
+                                    <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>用户</th>
+                                        <th>提交日期</th>
+                                        <th>反馈内容</th>
+                                        <th>处理人意见</th>
+                                        <th>操作</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
 
-        <div class="am-u-lg-10 am-u-md-9">
-            <div class="am-panel am-panel-primary">
-                <div class="am-panel-hd"><%= title %></div>
-                <div class="am-panel-bd am-scrollable-horizontal am-text-center">
+                                    <% for(var i = 0; i < feedbacks.length; i++){ %>
+                                    <tr>
+                                        <td><%= i + 1 %></td>
+                                        <td><%= feedbacks[i].user %></td>
+                                        <td><%= feedbacks[i].createTime %></td>
+                                        <td class="feedback-content"><%= feedbacks[i].content %></td>
+                                        <td>
+                                            <form id="<%= feedbacks[i]._id %>" method="post" action="/admin/feedback/wait/handle">
+                                                <input type="hidden" value="<%= feedbacks[i]._id %>" name="id">
+                                                <textarea rows="1" cols="30" placeholder="处理意见"
+                                                          name="treatAdvice" style="color:black;"></textarea>
+                                            </form>
+                                        </td>
+                                        <td>
+                                            <button form="<%= feedbacks[i]._id %>" type="submit" class="am-btn am-btn-primary am-radius am-btn-xs">处理</button>
+                                        </td>
+                                    </tr>
+                                    <% } %>
 
-                    <table class="am-table am-table-bordered am-table-radius am-table-striped am-text-nowrap am-table-hover">
-                        <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>用户</th>
-                            <th>提交日期</th>
-                            <th>反馈内容</th>
-                            <th>处理人意见</th>
-                            <th>操作</th>
-                        </tr>
-                        </thead>
-                        <tbody>
+                                    </tbody>
+                                </table>
 
-                        <% for(var i = 0; i < feedbacks.length; i++){ %>
-                        <tr>
-                            <td><%= i + 1 %></td>
-                            <td><%= feedbacks[i].user %></td>
-                            <td><%= feedbacks[i].createTime %></td>
-                            <td class="feedback-content"><%= feedbacks[i].content %></td>
-                            <td>
-                                <form id="<%= feedbacks[i]._id %>" method="post" action="/admin/feedback/wait/handle">
-                                    <input type="hidden" value="<%= feedbacks[i]._id %>" name="id">
-                                    <textarea rows="1" cols="30" placeholder="处理意见" name="treatAdvice"></textarea>
-                                </form>
-                            </td>
-                            <td>
-                                <button form="<%= feedbacks[i]._id %>" type="submit" class="am-btn am-btn-primary am-radius am-btn-xs">处理</button>
-                            </td>
-                        </tr>
-                        <% } %>
+                                <input type="hidden" value="<%= pages %>" id="pages">
+                                <div id="laypage"></div>
+                            </div>
 
-                        </tbody>
-                    </table>
-
-                    <input type="hidden" value="<%= pages %>" id="pages">
-                    <div id="laypage"></div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -76,7 +84,7 @@
 <script src="/static/plugins/laypage/laypage.js"></script>
 
 <script>
-    require('adminMenuContent');
+    require('adminMenu');
 
     laypage({
         cont: 'laypage',

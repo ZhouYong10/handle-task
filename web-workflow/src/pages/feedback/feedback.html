@@ -7,59 +7,110 @@
     <title><%=title%></title>
 
     <link rel="import" href="../../components/head/head.html?__inline">
-
-    <link rel="stylesheet" href="feedback.scss?__inline">
 </head>
-<body>
 
-<div id="app">
+<body data-type="feedback">
 
+<div class="am-g tpl-g">
+    <!-- 头部 -->
     <link rel="import" href="../../components/header/header.html?__inline">
+    <!-- 风格切换 -->
+    <link rel="import" href="../../components/changeStyle/changeStyle.html?__inline">
+    <!-- 侧边导航栏 -->
     <link rel="import" href="../../components/menu/menu.html?__inline">
 
-    <div id="app-content" class="app-content am-g">
 
-        <div class="am-panel am-panel-primary">
-            <div class="am-panel-hd"><%= title %></div>
-            <div class="am-panel-bd">
+    <!-- 内容区域 -->
+    <div class="tpl-content-wrapper">
+        <div class="row-content am-cf">
+            <div class="row">
+                <div class="am-u-sm-12 am-u-md-12 am-u-lg-12">
+                    <div class="widget am-cf">
+                        <div class="widget-head am-cf">
+                            <div class="widget-title  am-cf">文章列表</div>
+                        </div>
+                        <div class="widget-body  am-fr">
+                            <div id="searchForm" class="am-form am-form-inline">
+                                <a class="am-btn am-btn-primary am-radius am-btn-sm" href="/user/feedback/add">
+                                    <i class="am-icon-plus-circle"></i>
+                                    我要提意见
+                                </a>
+                            </div>
 
-                <a class="am-btn am-btn-success am-radius" href="/user/feedback/add">
-                    <i class="am-icon-plus-circle"></i>
-                    我要提意见
-                </a>
-                <div class="am-scrollable-horizontal am-text-center feedback-content">
-                    <table class="am-table am-table-bordered am-table-radius am-table-striped am-text-nowrap am-table-hover">
-                        <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>提交日期</th>
-                            <th>反馈内容</th>
-                            <th>状态</th>
-                            <th>处理人意见</th>
-                        </tr>
-                        </thead>
-                        <tbody>
+                            <div class="am-u-sm-12 am-scrollable-horizontal">
+                                <table width="100%" class="am-table am-text-nowrap am-table-striped tpl-table-black">
+                                    <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>提交日期</th>
+                                        <th>反馈内容</th>
+                                        <th>状态</th>
+                                        <th>处理人意见</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
 
-                        <% for(var i = 0; i < feedbacks.length; i++){ %>
-                        <tr>
-                            <td><%= i + 1 %></td>
-                            <td><%= feedbacks[i].createTime %></td>
-                            <td><%= feedbacks[i].content %></td>
-                            <td><%= feedbacks[i].status %></td>
-                            <td><%= feedbacks[i].treatAdvice %></td>
-                        </tr>
-                        <% } %>
+                                    <% for(var i = 0; i < feedbacks.length; i++){ %>
+                                    <tr>
+                                        <td><%= i + 1 %></td>
+                                        <td><%= feedbacks[i].createTime %></td>
+                                        <td><%= feedbacks[i].content %></td>
+                                        <td><%= feedbacks[i].status %></td>
+                                        <td><%= feedbacks[i].treatAdvice %></td>
+                                    </tr>
+                                    <% } %>
 
-                        </tbody>
-                    </table>
+                                    <tr class="gradeX">
+                                        <td>张鹏飞</td>
+                                        <td>2016-09-26</td>
+                                        <td>2016-09-26</td>
+                                        <td>2016-09-26</td>
+                                        <td>
+                                            <div class="tpl-table-black-operation">
+                                                <a href="javascript:;">
+                                                    <i class="am-icon-pencil"></i> 接手任务
+                                                </a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr class="gradeX">
+                                        <td>Amaze UI 模式窗口</td>
+                                        <td>张鹏飞</td>
+                                        <td>2016-09-26</td>
+                                        <td>2016-09-26</td>
+                                        <td>
+                                            <div class="tpl-table-black-operation">
+                                                <a href="javascript:;">
+                                                    <i class="am-icon-pencil"></i> 接手任务
+                                                </a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr class="gradeX">
+                                        <td>张鹏飞</td>
+                                        <td>2016-09-26</td>
+                                        <td>2016-09-26</td>
+                                        <td>2016-09-26</td>
+                                        <td>
+                                            <div class="tpl-table-black-operation">
+                                                <a href="javascript:;">
+                                                    <i class="am-icon-pencil"></i> 接手任务
+                                                </a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
 
-                    <input type="hidden" value="<%= pages %>" id="pages">
-                    <div id="laypage"></div>
+                                <input type="hidden" value="<%= pages %>" id="pages">
+                                <div id="laypage"></div>
+                            </div>
+
+                        </div>
+                    </div>
                 </div>
-
             </div>
         </div>
-
     </div>
 </div>
 

@@ -7,70 +7,77 @@
     <title><%=title%></title>
 
     <link rel="import" href="../../components/head/head.html?__inline">
-
-    <link rel="stylesheet" href="./adminWithdrawWait.scss?__inline">
 </head>
-<body>
 
-<div id="app">
+<body data-type="adminWithdrawWait">
 
+<div class="am-g tpl-g">
+    <!-- 头部 -->
     <link rel="import" href="../../components/adminHeader/adminHeader.html?__inline">
+    <!-- 风格切换 -->
+    <link rel="import" href="../../components/changeStyle/changeStyle.html?__inline">
+    <!-- 侧边导航栏 -->
     <link rel="import" href="../../components/adminMenu/adminMenu.html?__inline">
 
-    <div id="app-content" class="app-content am-g">
 
-        <div class="am-hide-sm am-u-lg-2 am-u-md-3">
-            <link rel="import" href="../../components/adminMenuContent/adminMenuContent.html?__inline">
-        </div>
+    <!-- 内容区域 -->
+    <div class="tpl-content-wrapper">
+        <div class="row-content am-cf">
+            <div class="row">
+                <div class="am-u-sm-12 am-u-md-12 am-u-lg-12">
+                    <div class="widget am-cf">
+                        <div class="widget-head am-cf">
+                            <div class="widget-title  am-cf"><%=title%></div>
+                        </div>
+                        <div class="widget-body  am-fr">
+                            <div class="am-u-sm-12 am-scrollable-horizontal">
+                                <table width="100%" class="am-table am-text-nowrap am-table-striped tpl-table-black">
+                                    <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>用户</th>
+                                        <th>申请日期</th>
+                                        <th>提现金额</th>
+                                        <th>账户余额</th>
+                                        <th>支付宝账户</th>
+                                        <th>支付宝昵称</th>
+                                        <th>操作</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
 
-        <div class="am-u-lg-10 am-u-md-9">
-            <div class="am-panel am-panel-primary">
-                <div class="am-panel-hd"><%= title %></div>
-                <div class="am-panel-bd am-scrollable-horizontal am-text-center">
+                                    <% for(var i = 0; i < withdraws.length; i++){ %>
+                                    <tr>
+                                        <td><%= i + 1 %></td>
+                                        <td><%= withdraws[i].user %></td>
+                                        <td><%= withdraws[i].createTime %></td>
+                                        <td><%= withdraws[i].funds %></td>
+                                        <td><%= withdraws[i].userFunds %></td>
+                                        <td>
+                                            <input type="text" value="<%= withdraws[i].alipayCount %>" style="width: 56px;"><br/>
+                                            <a class="clipboard am-btn am-btn-primary am-radius am-btn-xs"
+                                               title="<%= withdraws[i].alipayCount %>"
+                                               data-clipboard-text="<%= withdraws[i].alipayCount %>">复制</a>
+                                        </td>
+                                        <td><%= withdraws[i].alipayName %></td>
+                                        <td>
+                                            <a class="am-btn am-btn-primary am-radius am-btn-xs"
+                                               href="/admin/withdraw/complete?id=<%= withdraws[i]._id %>&url=<%= path %>">完成 </a>
+                                            <a class="am-btn am-btn-primary am-radius am-btn-xs refused"
+                                               href="/admin/withdraw/refused?id=<%= withdraws[i]._id %>&userId=<%= withdraws[i].userId %>&funds=<%= withdraws[i].funds %>&url=<%= path %>">拒绝</a>
+                                        </td>
+                                    </tr>
+                                    <% } %>
 
-                    <table class="am-table am-table-bordered am-table-radius am-table-striped am-text-nowrap am-table-hover">
-                        <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>用户</th>
-                            <th>申请日期</th>
-                            <th>提现金额</th>
-                            <th>账户余额</th>
-                            <th>支付宝账户</th>
-                            <th>支付宝昵称</th>
-                            <th>操作</th>
-                        </tr>
-                        </thead>
-                        <tbody>
+                                    </tbody>
+                                </table>
 
-                        <% for(var i = 0; i < withdraws.length; i++){ %>
-                        <tr>
-                            <td><%= i + 1 %></td>
-                            <td><%= withdraws[i].user %></td>
-                            <td><%= withdraws[i].createTime %></td>
-                            <td><%= withdraws[i].funds %></td>
-                            <td><%= withdraws[i].userFunds %></td>
-                            <td>
-                                <input type="text" value="<%= withdraws[i].alipayCount %>" style="width: 56px;"><br/>
-                                <a class="clipboard am-btn am-btn-primary am-radius am-btn-xs"
-                                   title="<%= withdraws[i].alipayCount %>"
-                                   data-clipboard-text="<%= withdraws[i].alipayCount %>">复制</a>
-                            </td>
-                            <td><%= withdraws[i].alipayName %></td>
-                            <td>
-                                <a class="am-btn am-btn-primary am-radius am-btn-xs"
-                                   href="/admin/withdraw/complete?id=<%= withdraws[i]._id %>&url=<%= path %>">完成 </a>
-                                <a class="am-btn am-btn-primary am-radius am-btn-xs refused"
-                                   href="/admin/withdraw/refused?id=<%= withdraws[i]._id %>&userId=<%= withdraws[i].userId %>&funds=<%= withdraws[i].funds %>&url=<%= path %>">拒绝</a>
-                            </td>
-                        </tr>
-                        <% } %>
+                                <input type="hidden" value="<%= pages %>" id="pages">
+                                <div id="laypage"></div>
+                            </div>
 
-                        </tbody>
-                    </table>
-
-                    <input type="hidden" value="<%= pages %>" id="pages">
-                    <div id="laypage"></div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

@@ -7,111 +7,184 @@
     <title><%=title%></title>
 
     <link rel="import" href="../../components/head/head.html?__inline">
-
-    <link rel="stylesheet" href="userInfo.scss?__inline">
+    <style>
+        .user-info{
+            padding: 5px 0 0;
+            margin: 0;
+        }
+    </style>
 </head>
-<body>
 
-<div id="app">
-
+<body data-type="widgets">
+<div class="am-g tpl-g">
+    <!-- 头部 -->
     <link rel="import" href="../../components/header/header.html?__inline">
+    <!-- 风格切换 -->
+    <link rel="import" href="../../components/changeStyle/changeStyle.html?__inline">
+    <!-- 侧边导航栏 -->
     <link rel="import" href="../../components/menu/menu.html?__inline">
 
-    <div id="app-content" class="app-content am-g">
 
-        <div class="am-panel am-panel-primary">
-            <div class="am-panel-hd"><%= title %></div>
-            <div class="am-panel-bd">
+    <!-- 内容区域 -->
+    <div class="tpl-content-wrapper">
 
-                <form class="am-form am-form-horizontal" id="userInfo" method="post" action="/user/info">
-                    <div class="am-form-group">
-                        <label class="am-u-sm-4 am-u-lg-2 am-form-label">用户账号</label>
-                        <div class="am-u-sm-8 am-u-lg-10">
-                            <p class="disable"><%= user.username %></p>
-                        </div>
+        <div class="container-fluid am-cf">
+            <div class="row">
+                <div class="am-u-sm-12 am-u-md-12 am-u-lg-9">
+                    <div class="page-header-heading">
+                        <span class="am-icon-home page-header-heading-icon"></span>
+                        表单 <small>Amaze UI</small>
                     </div>
-                    <div class="am-form-group">
-                        <label class="am-u-sm-4 am-u-lg-2 am-form-label">账户余额</label>
-                        <div class="am-u-sm-8 am-u-lg-10">
-                            <p class="disable">￥ <%= user.funds %></p>
-                        </div>
-                    </div>
-                    <div class="am-form-group">
-                        <label class="am-u-sm-4 am-u-lg-2 am-form-label">下级返利</label>
-                        <div class="am-u-sm-8 am-u-lg-10">
-                            <p class="disable"><a href="/user/lowerUser/profit" title="显示下级返利详情">￥ <%= user.profit %></a></p>
-                        </div>
-                    </div>
-                    <div class="am-form-group">
-                        <label class="am-u-sm-4 am-u-lg-2 am-form-label">账号状态</label>
-                        <div class="am-u-sm-8 am-u-lg-10">
-                            <p class="disable"><%= user.status %></p>
-                        </div>
-                    </div>
-                    <div class="am-form-group">
-                        <label class="am-u-sm-4 am-u-lg-2 am-form-label">用户级别</label>
-                        <div class="am-u-sm-8 am-u-lg-10">
-                            <p class="disable"><%= user.role %></p>
-                        </div>
-                    </div>
-                    <div class="am-form-group">
-                        <label class="am-u-sm-4 am-u-lg-2 am-form-label">上级</label>
-                        <div class="am-u-sm-8 am-u-lg-10">
-                            <p class="disable"><%= user.parent %></p>
-                        </div>
-                    </div>
-                    <div class="am-form-group">
-                        <label class="am-u-sm-4 am-u-lg-2 am-form-label">下级/人</label>
-                        <div class="am-u-sm-8 am-u-lg-10">
-                            <p class="disable"><%= user.childNum %></p>
-                        </div>
-                    </div>
-                    <div class="am-form-group">
-                        <label class="am-u-sm-4 am-u-lg-2 am-form-label">注册时间</label>
-                        <div class="am-u-sm-8 am-u-lg-10">
-                            <p class="disable"><%= user.createTime %></p>
-                        </div>
-                    </div>
-                    <div class="am-form-group">
-                        <label class="am-u-sm-4 am-u-lg-2 am-form-label">最后登陆时间</label>
-                        <div class="am-u-sm-8 am-u-lg-10">
-                            <p class="disable"><%= user.lastLoginTime %></p>
-                        </div>
-                    </div>
-                    <div class="am-form-group">
-                        <label for="five" class="am-u-sm-4 am-u-lg-2 am-form-label">ＱＱ号码</label>
-                        <div class="am-u-sm-8 am-u-lg-10">
-                            <input class="am-radius am-input-sm" type="text" id="five" name="QQ" value="<%= user.QQ %>" v-if="isEdit">
-                            <p class="disable" v-if="!isEdit"><%= user.QQ %></p>
-                        </div>
-                    </div>
-                    <div class="am-form-group">
-                        <label for="six" class="am-u-sm-4 am-u-lg-2 am-form-label">电话号码</label>
-                        <div class="am-u-sm-8 am-u-lg-10">
-                            <input class="am-radius am-input-sm" type="text" id="six" name="phone" value="<%= user.phone %>" v-if="isEdit">
-                            <p class="disable" v-if="!isEdit"><%= user.phone %></p>
-                        </div>
-                    </div>
-                    <div class="am-form-group">
-                        <label for="seven" class="am-u-sm-4 am-u-lg-2 am-form-label">电子邮件</label>
-                        <div class="am-u-sm-8 am-u-lg-10">
-                            <input class="am-radius am-input-sm" type="email" id="seven" name="email" value="<%= user.email %>" v-if="isEdit">
-                            <p class="disable" v-if="!isEdit"><%= user.email %></p>
-                        </div>
-                    </div>
-
-                    <div class="am-form-group">
-                        <div class="am-u-sm-8 am-u-sm-offset-4 am-u-lg-10 am-u-lg-offset-2">
-                            <button class="am-btn am-btn-primary am-radius am-btn-sm" @click.stop.prevent="edit" v-if="!isEdit">编辑</button>
-                            <button type="submit" class="am-btn am-btn-primary am-radius am-btn-sm" v-if="isEdit">保存</button>
-                            <button class="am-btn am-btn-default am-radius am-btn-sm" @click.stop.prevent="cancel" v-if="isEdit">取消</button>
-                        </div>
-                    </div>
-                </form>
-
+                    <p class="page-header-description">Amaze UI 有许多不同的表格可用。</p>
+                </div>
             </div>
         </div>
 
+        <div class="row-content am-cf">
+            <div class="row">
+                <div class="am-u-sm-12 am-u-md-12 am-u-lg-12">
+                    <div class="widget am-cf">
+                        <div class="widget-head am-cf">
+                            <div class="widget-title am-fl">边框表单</div>
+                        </div>
+                        <div class="widget-body am-fr">
+
+                            <form id="userInfo" class="am-form tpl-form-border-form tpl-form-border-br"
+                                  method="post" action="/user/info">
+
+                                <div class="am-form-group">
+                                    <label class="am-u-sm-4 am-form-label">
+                                        账户名 <span class="tpl-form-line-small-title">Username</span>
+                                    </label>
+                                    <div class="am-u-sm-8">
+                                        <p class="user-info"><%= user.username %></p>
+                                    </div>
+                                </div>
+
+                                <div class="am-form-group">
+                                    <label class="am-u-sm-4 am-form-label">
+                                        账户余额 <span class="tpl-form-line-small-title">Account Balance</span>
+                                    </label>
+                                    <div class="am-u-sm-8">
+                                        <p class="user-info">￥ <%= user.funds %></p>
+                                    </div>
+                                </div>
+
+                                <div class="am-form-group">
+                                    <label class="am-u-sm-4 am-form-label">
+                                        下级返利 <span class="tpl-form-line-small-title">Subordinate Rebate</span>
+                                    </label>
+                                    <div class="am-u-sm-8">
+                                        <p class="user-info">
+                                            <a href="/user/lowerUser/profit" title="显示下级返利详情">￥ <%= user.profit %></a>
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div class="am-form-group">
+                                    <label class="am-u-sm-4 am-form-label">
+                                        账户状态 <span class="tpl-form-line-small-title">Account Status</span>
+                                    </label>
+                                    <div class="am-u-sm-8">
+                                        <p class="user-info"><%= user.status %></p>
+                                    </div>
+                                </div>
+
+                                <div class="am-form-group">
+                                    <label class="am-u-sm-4 am-form-label">
+                                        账户角色 <span class="tpl-form-line-small-title">Account Role</span>
+                                    </label>
+                                    <div class="am-u-sm-8">
+                                        <p class="user-info"><%= user.roleName %></p>
+                                    </div>
+                                </div>
+
+                                <div class="am-form-group">
+                                    <label class="am-u-sm-4 am-form-label">
+                                        上级 <span class="tpl-form-line-small-title">Superior</span>
+                                    </label>
+                                    <div class="am-u-sm-8">
+                                        <p class="user-info"><%= user.parent %></p>
+                                    </div>
+                                </div>
+
+                                <div class="am-form-group">
+                                    <label  class="am-u-sm-4 am-form-label">
+                                        下级/人 <span class="tpl-form-line-small-title">Subordinate</span>
+                                    </label>
+                                    <div class="am-u-sm-8">
+                                        <p class="user-info"><%= user.childNum %></p>
+                                    </div>
+                                </div>
+
+                                <div class="am-form-group">
+                                    <label class="am-u-sm-4 am-form-label">
+                                        注册时间 <span class="tpl-form-line-small-title">Registration Time</span>
+                                    </label>
+                                    <div class="am-u-sm-8">
+                                        <p class="user-info"><%= user.createTime %></p>
+                                    </div>
+                                </div>
+
+                                <div class="am-form-group">
+                                    <label class="am-u-sm-4 am-form-label">
+                                        最后登陆时间 <span class="tpl-form-line-small-title">Last Login Time</span>
+                                    </label>
+                                    <div class="am-u-sm-8">
+                                        <p class="user-info"><%= user.lastLoginTime %></p>
+                                    </div>
+                                </div>
+
+                                <div class="am-form-group">
+                                    <label class="am-u-sm-4 am-form-label">
+                                        ＱＱ账户 <span class="tpl-form-line-small-title">QQ Account</span>
+                                    </label>
+                                    <div class="am-u-sm-8">
+                                        <p class="user-info disable" v-if="!isEdit"><%= user.qq %></p>
+                                        <input type="text" class="tpl-form-input" id="five" name="qq"
+                                               value="<%= user.qq %>" v-if="isEdit">
+                                    </div>
+                                </div>
+
+                                <div class="am-form-group">
+                                    <label class="am-u-sm-4 am-form-label">
+                                        电话号码 <span class="tpl-form-line-small-title">Telephone Number</span>
+                                    </label>
+                                    <div class="am-u-sm-8">
+                                        <p class="user-info disable" v-if="!isEdit"><%= user.phone %></p>
+                                        <input type="text" class="tpl-form-input" id="six" name="phone"
+                                               value="<%= user.phone %>" v-if="isEdit">
+                                    </div>
+                                </div>
+
+                                <div class="am-form-group">
+                                    <label class="am-u-sm-4 am-form-label">
+                                        邮箱 <span class="tpl-form-line-small-title">Email</span>
+                                    </label>
+                                    <div class="am-u-sm-8">
+                                        <p class="user-info disable" v-if="!isEdit"><%= user.email %></p>
+                                        <input type="text" class="tpl-form-input" id="seven" name="email"
+                                               value="<%= user.email %>" v-if="isEdit">
+                                    </div>
+                                </div>
+
+                                <div class="am-form-group">
+                                    <div class="am-u-sm-8 am-u-sm-push-4">
+                                        <button type="button" class="am-btn am-btn-primary am-radius am-btn-sm"
+                                                @click.stop.prevent="edit" v-if="!isEdit">编辑</button>
+                                        <button type="submit" class="am-btn am-btn-primary am-radius am-btn-sm"
+                                                v-if="isEdit">保存</button>
+                                        <button type="button" class="am-btn am-btn-default am-radius am-btn-sm"
+                                                @click.stop.prevent="cancel" v-if="isEdit">取消</button>
+                                    </div>
+                                </div>
+
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 

@@ -7,58 +7,72 @@
     <title><%=title%></title>
 
     <link rel="import" href="../../components/head/head.html?__inline">
-
-    <link rel="stylesheet" href="./adminPlacardHistory.scss?__inline">
 </head>
-<body>
 
-<div id="app">
+<body data-type="adminPlacardHistory">
 
+<div class="am-g tpl-g">
+    <!-- 头部 -->
     <link rel="import" href="../../components/adminHeader/adminHeader.html?__inline">
+    <!-- 风格切换 -->
+    <link rel="import" href="../../components/changeStyle/changeStyle.html?__inline">
+    <!-- 侧边导航栏 -->
     <link rel="import" href="../../components/adminMenu/adminMenu.html?__inline">
 
-    <div id="app-content" class="app-content am-g">
 
-        <div class="am-hide-sm am-u-lg-2 am-u-md-3">
-            <link rel="import" href="../../components/adminMenuContent/adminMenuContent.html?__inline">
-        </div>
+    <!-- 内容区域 -->
+    <div class="tpl-content-wrapper">
+        <div class="row-content am-cf">
+            <div class="row">
+                <div class="am-u-sm-12 am-u-md-12 am-u-lg-12">
+                    <div class="widget am-cf">
+                        <div class="widget-head am-cf">
+                            <div class="widget-title  am-cf"><%=title%></div>
+                        </div>
+                        <div class="widget-body  am-fr">
+                            <div class="am-u-sm-12 am-scrollable-horizontal">
+                                <table width="100%" class="am-table am-text-nowrap am-table-striped tpl-table-black">
+                                    <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>类型</th>
+                                        <th>发布时间</th>
+                                        <th>内容</th>
+                                        <th>操作</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
 
-        <div class="am-u-lg-10 am-u-md-9">
-            <div class="am-panel am-panel-primary">
-                <div class="am-panel-hd"><%= title %></div>
-                <div class="am-panel-bd am-scrollable-horizontal am-text-center">
+                                    <% for(var i = 0; i < placards.length; i++){ %>
+                                    <tr>
+                                        <td><%= i+1 %></td>
+                                        <td><%= placards[i].typeName %></td>
+                                        <td><%= placards[i].sendTime %></td>
+                                        <td>
+                                            <a class="am-text-truncate text-break" title="<%= placards[i].placardContent %>">
+                                                <%= placards[i].placardContent %>
+                                            </a>
+                                        </td>
+                                        <td>
+                                            <div class="tpl-table-black-operation">
+                                                <a href="/admin/placard/history/del?id=<%= placards[i]._id%>"
+                                                   class="tpl-table-black-operation-del">
+                                                    <i class="am-icon-trash"></i> 删除
+                                                </a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <% } %>
 
-                    <table class="am-table am-table-bordered am-table-radius am-table-striped am-text-nowrap am-table-hover">
-                        <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>类型</th>
-                            <th>发布时间</th>
-                            <th>内容</th>
-                            <th>操作</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <% for(var i = 0; i < placards.length; i++){ %>
-                        <tr>
-                            <td><%= i+1 %></td>
-                            <td><%= placards[i].typeName %></td>
-                            <td><%= placards[i].sendTime %></td>
-                            <td>
-                                <a class="am-text-truncate text-break" title="<%= placards[i].placardContent %>">
-                                    <%= placards[i].placardContent %>
-                                </a>
-                            </td>
-                            <td>
-                                <a type="button" href="/admin/placard/history/del?id=<%= placards[i]._id%>" class="am-btn am-btn-primary am-radius am-btn-xs">删除</a>
-                            </td>
-                        </tr>
-                        <% } %>
-                        </tbody>
-                    </table>
+                                    </tbody>
+                                </table>
 
-                    <input type="hidden" value="<%= pages %>" id="pages">
-                    <div id="laypage"></div>
+                                <input type="hidden" value="<%= pages %>" id="pages">
+                                <div id="laypage"></div>
+                            </div>
+
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

@@ -1,66 +1,135 @@
-<link rel="stylesheet" href="header.scss?__inline">
+<!-- 头部 -->
+<header>
+    <!-- logo -->
+    <div class="am-fl tpl-header-logo">
+        <a href="javascript:;"><img src="/static/images/logo.png" alt=""></a>
+    </div>
+    <!-- 右侧内容 -->
+    <div class="tpl-header-fluid">
+        <!-- 侧边切换 -->
+        <div class="am-fl tpl-header-switch-button am-icon-list" style="cursor: pointer"></div>
 
-<header data-am-widget="header" class="am-header am-header-default">
-    <div class="am-u-lg-10 am-u-lg-centered">
-        <div class="am-header-left am-header-nav">
-            <a href="/client/home">
-                <i class="am-header-icon am-icon-home"></i>
-                <h1 class="am-hide-sm">
-                    广告营销系统
-                </h1>
-                &nbsp;&nbsp;
-                <div class="am-hide-lg-only" style="font-size: 1.5em;">
-                    ￥<span class="userCash am-hide-lg-only"><%= user.funds %></span>
-                </div>
-            </a>
-        </div>
+        <!-- 其它功能-->
+        <div class="am-fr tpl-header-navbar">
+            <ul>
+                <!-- 欢迎语 -->
+                <li class="am-text-sm tpl-header-navbar-welcome">
+                    <a href="javascript:;">欢迎你, <span><%= user.username %></span> </a>
+                </li>
 
-        <h1 class="am-header-title am-show-lg-only">
-            可用余额: ￥<span class="userCash"><%= user.funds %></span>
-            <input id="userStatus" type="hidden" value="<%= user.status %>">
-        </h1>
+                <!-- 新邮件 -->
+                <li class="am-dropdown tpl-dropdown" data-am-dropdown>
+                    <a href="javascript:;" class="am-dropdown-toggle tpl-dropdown-toggle" data-am-dropdown-toggle>
+                        <i class="am-icon-envelope"></i>
+                        <span class="am-badge am-badge-success am-round item-feed-badge">4</span>
+                    </a>
+                    <!-- 弹出列表 -->
+                    <ul class="am-dropdown-content tpl-dropdown-content">
+                        <li class="tpl-dropdown-menu-messages">
+                            <a href="javascript:;" class="tpl-dropdown-menu-messages-item am-cf">
+                                <div class="menu-messages-ico">
+                                    <img src="" alt="">
+                                </div>
+                                <div class="menu-messages-time">
+                                    3小时前
+                                </div>
+                                <div class="menu-messages-content">
+                                    <div class="menu-messages-content-title">
+                                        <i class="am-icon-circle-o am-text-success"></i>
+                                        <span>夕风色</span>
+                                    </div>
+                                    <div class="am-text-truncate"> Amaze UI 的诞生，依托于 GitHub 及其他技术社区上一些优秀的资源；Amaze UI 的成长，则离不开用户的支持。 </div>
+                                    <div class="menu-messages-content-time">2016-09-21 下午 16:40</div>
+                                </div>
+                            </a>
+                        </li>
 
-        <div class="am-header-right am-header-nav">
-            <% if(user.role == 'tasker'){ %>
-            <div class="am-dropdown" data-am-dropdown>
-                <button class="am-btn am-btn-primary am-dropdown-toggle" data-am-dropdown-toggle>
-                    <span class="am-show-sm">￥ </span>
-                    <span class="am-hide-sm">资金管理 </span>
-                    <span class="am-icon-caret-down"></span>
-                </button>
-                <ul class="am-dropdown-content header-dropdown-content">
-                    <li><a href="/user/recharge">在线充值</a></li>
-                    <li><a href="/user/recharge/history">充值记录</a></li>
-                    <li><a href="/user/consume/history">消费记录</a></li>
-                    <li><a href="/user/withdraw">申请提现</a></li>
-                </ul>
-            </div>
-            <% } %>
+                        <li class="tpl-dropdown-menu-messages">
+                            <a href="javascript:;" class="tpl-dropdown-menu-messages-item am-cf">
+                                <div class="menu-messages-ico">
+                                    <img src="" alt="">
+                                </div>
+                                <div class="menu-messages-time">
+                                    5天前
+                                </div>
+                                <div class="menu-messages-content">
+                                    <div class="menu-messages-content-title">
+                                        <i class="am-icon-circle-o am-text-warning"></i>
+                                        <span>禁言小张</span>
+                                    </div>
+                                    <div class="am-text-truncate"> 为了能最准确的传达所描述的问题， 建议你在反馈时附上演示，方便我们理解。 </div>
+                                    <div class="menu-messages-content-time">2016-09-16 上午 09:23</div>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="tpl-dropdown-menu-messages">
+                            <a href="javascript:;" class="tpl-dropdown-menu-messages-item am-cf">
+                                <i class="am-icon-circle-o"></i> 进入列表…
+                            </a>
+                        </li>
+                    </ul>
+                </li>
 
-            <div class="am-dropdown" data-am-dropdown>
-                <button class="am-btn am-btn-primary am-dropdown-toggle" data-am-dropdown-toggle>
-                    <i class="am-icon-user am-show-sm"> </i>
-                    <span class="am-hide-sm"><%= user.username %> (<%= user.roleName %>)</span>
-                    <input id="username" type="hidden" value="<%= user.username %>">
-                    <span class="am-icon-caret-down"></span>
-                </button>
-                <ul class="am-dropdown-content header-dropdown-content">
-                    <li><a href="/user/changePwd">修改密码</a></li>
-                    <li><a href="/user/info">我的详情</a></li>
-                    <li><a href="/user/lowerUser">我的下级用户</a></li>
-                    <li><a href="/user/lowerUser/profit">下级返利</a></li>
-                    <li><a href="/user/my/price">我的价格</a></li>
-                    <li><a href="/user/feedback">问题反馈</a></li>
-                    <li><a href="/user/errorSummary">错误信息汇总</a></li>
-                    <li><a id="removeAutoLogin" href="/user/logout">退出登陆</a></li>
-                </ul>
-            </div>
+                <!-- 新提示 -->
+                <li class="am-dropdown" data-am-dropdown>
+                    <a href="javascript:;" class="am-dropdown-toggle" data-am-dropdown-toggle>
+                        <i class="am-icon-bell"></i>
+                        <span class="am-badge am-badge-warning am-round item-feed-badge">5</span>
+                    </a>
 
-            <a href="#cart-link"></a>
+                    <!-- 弹出列表 -->
+                    <ul class="am-dropdown-content tpl-dropdown-content">
+                        <li class="tpl-dropdown-menu-notifications">
+                            <a href="javascript:;" class="tpl-dropdown-menu-notifications-item am-cf">
+                                <div class="tpl-dropdown-menu-notifications-title">
+                                    <i class="am-icon-line-chart"></i>
+                                    <span> 有6笔新的销售订单</span>
+                                </div>
+                                <div class="tpl-dropdown-menu-notifications-time">
+                                    12分钟前
+                                </div>
+                            </a>
+                        </li>
+                        <li class="tpl-dropdown-menu-notifications">
+                            <a href="javascript:;" class="tpl-dropdown-menu-notifications-item am-cf">
+                                <div class="tpl-dropdown-menu-notifications-title">
+                                    <i class="am-icon-star"></i>
+                                    <span> 有3个来自人事部的消息</span>
+                                </div>
+                                <div class="tpl-dropdown-menu-notifications-time">
+                                    30分钟前
+                                </div>
+                            </a>
+                        </li>
+                        <li class="tpl-dropdown-menu-notifications">
+                            <a href="javascript:;" class="tpl-dropdown-menu-notifications-item am-cf">
+                                <div class="tpl-dropdown-menu-notifications-title">
+                                    <i class="am-icon-folder-o"></i>
+                                    <span> 上午开会记录存档</span>
+                                </div>
+                                <div class="tpl-dropdown-menu-notifications-time">
+                                    1天前
+                                </div>
+                            </a>
+                        </li>
+
+
+                        <li class="tpl-dropdown-menu-notifications">
+                            <a href="javascript:;" class="tpl-dropdown-menu-notifications-item am-cf">
+                                <i class="am-icon-bell"></i> 进入列表…
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <!-- 退出 -->
+                <li class="am-text-sm">
+                    <a id="removeAutoLogin" href="/user/logout">
+                        <span class="am-icon-sign-out"></span> 退出
+                    </a>
+                </li>
+            </ul>
         </div>
     </div>
+
 </header>
-
-
-
-
