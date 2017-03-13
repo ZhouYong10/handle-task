@@ -210,13 +210,13 @@ router.get('/search/user/recharge', function (req, res) {
     }
     Recharge.findRechargeByUserId(req.session.searchRecharge, (req.query.page ? req.query.page : 1))
         .then(function (obj) {
-            res.render('adminRechargeHistory', {
+            res.render('adminRecharge', {
                 title: '资金管理 / 充值记录',
                 money: req.session.systemFunds,
                 freezeFunds: req.session.freezeFunds,
                 recharges: obj.results,
                 pages: obj.pages,
-                path: '/admin/recharge/history'
+                path: '/admin/recharge'
             });
         }, function (error) {
             res.send('查询充值记录失败： ' + error);
