@@ -388,11 +388,6 @@ app.use('/user', require('./router/user.js'));
 app.use('/hander', require('./router/hander.js'));
 app.use('/tasker', require('./router/tasker.js'));
 
-app.use('/forum', require('./router/forum.js'));
-app.use('/flow', require('./router/flow.js'));
-app.use('/WX', require('./router/WX.js'));
-app.use('/MP', require('./router/MP.js'));
-app.use('/WB', require('./router/WB.js'));
 app.use('/parse', require('./router/parse-address.js'));
 
 app.use('/admin', require('./router/admin.js'));

@@ -12,8 +12,7 @@ var router = require('express').Router();
 
 router.get('/WX/fans', function (req, res) {
     var obj = {
-        type: 'handle',
-        smallType: 'WXfans'
+        type: 'WXfans'
     };
     if(req.query.account) {
         obj.account = new RegExp(req.query.account);
@@ -37,14 +36,17 @@ router.get('/WX/fans', function (req, res) {
 router.get('/WX/fans/add', function (req, res) {
     User.open().findById(req.session.passport.user)
         .then(function (user) {
-            Product.open().findOne({type: 'handle', smallType: 'WXfans'})
-                .then(function(result) {
-                    var fans = Product.wrapToInstance(result);
-                    var fansPrice = fans.getPriceByRole(user.role);
-                    Product.open().findOne({type: 'handle', smallType: 'WXfansReply'})
-                        .then(function(result) {
-                            var reply = Product.wrapToInstance(result);
-                            var replyPrice = reply.getPriceByRole(user.role);
+            console.log(user, '1111111111111111');
+            Product.open().findOne({type: 'WXfans'})
+                .then(function(fansP) {
+                    console.log(fansP, '222222222222222222');
+                    var fans = Product.wrapToInstance(fansP);
+                    var fansPrice = fans.getPriceByUser(user);
+                    Product.open().findOne({type: 'WXfansReply'})
+                        .then(function(replyP) {
+                            console.log(replyP, '33333333333333333');
+                            var reply = Product.wrapToInstance(replyP);
+                            var replyPrice = reply.getPriceByUser(user);
                             Order.getRandomStr(req).then(function(orderFlag) {
                                 res.render('taskerWXfansAdd', {
                                     title: '添加人工微信粉丝(回复)任务',

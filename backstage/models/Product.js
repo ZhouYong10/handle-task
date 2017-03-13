@@ -19,41 +19,23 @@ Product.open = function() {
 };
 
 Product.include({
-    getPriceByRole: function(role) {
+    getPriceByUser: function(user) {
         var price ;
-        switch (role) {
-            case '管理员':
-                price = this.adminPrice;
-                break;
-            case '顶级代理':
-                price = this.topPrice;
-                break;
-            case '超级代理':
-                price = this.superPrice;
-                break;
-            case '金牌代理':
-                price = this.goldPrice;
-                break;
+        if(user.parent) {
+            price = this.childPrice;
+        }else{
+            price = this.superPrice;
         }
         return price;
     },
-    getPerByRole: function(role) {
-        var per ;
-        switch (role) {
-            case '管理员':
-                per = this.adminPer;
-                break;
-            case '顶级代理':
-                per = this.topPer;
-                break;
-            case '超级代理':
-                per = this.superPer;
-                break;
-            case '金牌代理':
-                per = this.goldPer;
-                break;
+    getPerByUser: function(user) {
+        var price ;
+        if(user.parent) {
+            price = this.childPer;
+        }else{
+            price = this.superPer;
         }
-        return per;
+        return price;
     }
 });
 
