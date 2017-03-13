@@ -7,6 +7,11 @@
     <title><%=title%></title>
 
     <link rel="import" href="../../components/head/head.html?__inline">
+    <style>
+        select{
+            color: black;
+        }
+    </style>
 </head>
 
 <body data-type="adminPriceManage">
@@ -44,14 +49,12 @@
                                         <th>#</th>
                                         <th>小类</th>
                                         <th>名称</th>
-                                        <th>发A</th>
-                                        <th>发B</th>
-                                        <th>发C</th>
-                                        <th>发D</th>
-                                        <th>投A</th>
-                                        <th>投B</th>
-                                        <th>投C</th>
-                                        <th>投D</th>
+                                        <th>平台</th>
+                                        <th>父级</th>
+                                        <th>子级</th>
+                                        <th>平台</th>
+                                        <th>父级</th>
+                                        <th>子级</th>
                                         <th>操作</th>
                                     </tr>
                                     </thead>
@@ -65,13 +68,11 @@
                                         </td>
                                         <td class="name"><%= products[i].name %></td>
                                         <td class="adminPrice"><%= products[i].adminPrice %></td>
-                                        <td class="topPrice"><%= products[i].topPrice %></td>
                                         <td class="superPrice"><%= products[i].superPrice %></td>
-                                        <td class="goldPrice"><%= products[i].goldPrice %></td>
+                                        <td class="childPrice"><%= products[i].childPrice %></td>
                                         <td class="adminPer"><%= products[i].adminPer %></td>
-                                        <td class="topPer"><%= products[i].topPer %></td>
                                         <td class="superPer"><%= products[i].superPer %></td>
-                                        <td class="goldPer"><%= products[i].goldPer %></td>
+                                        <td class="childPer"><%= products[i].childPer %></td>
                                         <td class="operation">
                                             <button type="button" class="am-btn am-btn-primary am-radius am-btn-xs edit">修改</button>
                                             <button type="button" class="am-btn am-btn-primary am-radius am-btn-xs delete">删除</button>

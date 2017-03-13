@@ -1,7 +1,6 @@
 /**
  * Created by ubuntu64 on 3/5/16.
  */
-console.log('加载执行价格管理ｊｓ文件了');
 var smallType = '<td> ' +
     '<select class="am-form-group am-form-select smallType"> ' +
     '<option value="WXfans">微信公众粉丝</option> ' +
@@ -25,13 +24,11 @@ var priceItem = '<tr> ' +
     smallType+
     '<td> <input class="am-form-field am-input-sm name" type="text" placeholder="名称"> </td> ' +
     '<td> <input class="am-form-field am-input-sm adminPrice" type="text" placeholder="管理员价格"> </td> ' +
-    '<td> <input class="am-form-field am-input-sm topPrice" type="text" placeholder="顶级代理价格"> </td> ' +
-    '<td> <input class="am-form-field am-input-sm superPrice" type="text" placeholder="超级代理价格"> </td> ' +
-    '<td> <input class="am-form-field am-input-sm goldPrice" type="text" placeholder="金牌代理价格"> </td> ' +
+    '<td> <input class="am-form-field am-input-sm superPrice" type="text" placeholder="父级价格"> </td> ' +
+    '<td> <input class="am-form-field am-input-sm childPrice" type="text" placeholder="子级价格"> </td> ' +
     '<td> <input class="am-form-field am-input-sm adminPer" type="text" placeholder="管理员占比"> </td> ' +
-    '<td> <input class="am-form-field am-input-sm topPer" type="text" placeholder="顶级占比"> </td> ' +
-    '<td> <input class="am-form-field am-input-sm superPer" type="text" placeholder="超级占比"> </td> ' +
-    '<td> <input class="am-form-field am-input-sm goldPer" type="text" placeholder="金牌占比"> </td> ' +
+    '<td> <input class="am-form-field am-input-sm superPer" type="text" placeholder="父级占比"> </td> ' +
+    '<td> <input class="am-form-field am-input-sm childPer" type="text" placeholder="子级占比"> </td> ' +
     '<td> ' +
     saveBtn +
     cancelBtn +
@@ -42,13 +39,11 @@ var priceItemText = '<tr> ' +
     '<td class="smallType"><span></span> <input type="hidden" value=""></td> ' +
     '<td class="name"> </td> ' +
     '<td class="adminPrice"> </td> ' +
-    '<td class="topPrice"> </td> ' +
     '<td class="superPrice"> </td> ' +
-    '<td class="goldPrice"> </td> ' +
+    '<td class="childPrice"> </td> ' +
     '<td class="adminPer"> </td> ' +
-    '<td class="topPer"> </td> ' +
     '<td class="superPer"> </td> ' +
-    '<td class="goldPer"> </td> ' +
+    '<td class="childPer"> </td> ' +
     '<td class="operation"> </td> ' +
     '</tr>';
 var $changeItemTr ;
@@ -90,13 +85,11 @@ function registerEditDelete($tbody) {
         $newParentTr.find('.smallType').val($parentTr.find('.smallType input').val());
         $newParentTr.find('.name').val($parentTr.find('.name').text());
         $newParentTr.find('.adminPrice').val($parentTr.find('.adminPrice').text());
-        $newParentTr.find('.topPrice').val($parentTr.find('.topPrice').text());
         $newParentTr.find('.superPrice').val($parentTr.find('.superPrice').text());
-        $newParentTr.find('.goldPrice').val($parentTr.find('.goldPrice').text());
+        $newParentTr.find('.childPrice').val($parentTr.find('.childPrice').text());
         $newParentTr.find('.adminPer').val($parentTr.find('.adminPer').text());
-        $newParentTr.find('.topPer').val($parentTr.find('.topPer').text());
         $newParentTr.find('.superPer').val($parentTr.find('.superPer').text());
-        $newParentTr.find('.goldPer').val($parentTr.find('.goldPer').text());
+        $newParentTr.find('.childPer').val($parentTr.find('.childPer').text());
 
         var $aim ;
         if(num == 1) {
@@ -117,7 +110,7 @@ function registerEditDelete($tbody) {
         var $parentTr = $parentTd.parent();
         var id = $parentTd.find('input').val();
         var index = layer.confirm('您确定要删除么？', function(){
-            $.post('/admin/price/handle/delete', {id: id}, function (result) {
+            $.post('/admin/price/manage/delete', {id: id}, function (result) {
                 $parentTr.remove();
                 resortNum($tbody);
                 layer.close(index);
@@ -137,15 +130,13 @@ function registerChangeSaveGiveUp($tbody) {
             smallTypeName: $tr.find('.smallType').find('option:selected').text(),
             name: $tr.find('.name').val(),
             adminPrice: $tr.find('.adminPrice').val(),
-            topPrice: $tr.find('.topPrice').val(),
             superPrice: $tr.find('.superPrice').val(),
-            goldPrice: $tr.find('.goldPrice').val(),
+            childPrice: $tr.find('.childPrice').val(),
             adminPer: $tr.find('.adminPer').val(),
-            topPer: $tr.find('.topPer').val(),
             superPer: $tr.find('.superPer').val(),
-            goldPer: $tr.find('.goldPer').val()
+            childPer: $tr.find('.childPer').val()
         };
-        $.post('/admin/price/handle/update', product, function() {
+        $.post('/admin/price/manage/update', product, function() {
             var $priceItemText = $(priceItemText);
             var num = $tr.find('.num').text();
 
@@ -154,13 +145,11 @@ function registerChangeSaveGiveUp($tbody) {
             $priceItemText.find('.smallType input').val(product.smallType);
             $priceItemText.find('.name').text(product.name);
             $priceItemText.find('.adminPrice').text(product.adminPrice);
-            $priceItemText.find('.topPrice').text(product.topPrice);
             $priceItemText.find('.superPrice').text(product.superPrice);
-            $priceItemText.find('.goldPrice').text(product.goldPrice);
+            $priceItemText.find('.childPrice').text(product.childPrice);
             $priceItemText.find('.adminPer').text(product.adminPer);
-            $priceItemText.find('.topPer').text(product.topPer);
             $priceItemText.find('.superPer').text(product.superPer);
-            $priceItemText.find('.goldPer').text(product.goldPer);
+            $priceItemText.find('.childPer').text(product.childPer);
             $priceItemText.find('.operation').append($(changeBtn + deleteBtn + '<input type="hidden" value="' + product.id + '">'));
             var $aim ;
             if($tr.prev().length > 0) {
@@ -205,15 +194,13 @@ function registerSaveCancel($tbody) {
             smallTypeName: $tr.find('.smallType').find('option:selected').text(),
             name: $tr.find('.name').val(),
             adminPrice: $tr.find('.adminPrice').val(),
-            topPrice: $tr.find('.topPrice').val(),
             superPrice: $tr.find('.superPrice').val(),
-            goldPrice: $tr.find('.goldPrice').val(),
+            childPrice: $tr.find('.childPrice').val(),
             adminPer: $tr.find('.adminPer').val(),
-            topPer: $tr.find('.topPer').val(),
             superPer: $tr.find('.superPer').val(),
-            goldPer: $tr.find('.goldPer').val()
+            childPer: $tr.find('.childPer').val()
         };
-        $.post('/admin/price/handle', product, function(result) {
+        $.post('/admin/price/manage', product, function(result) {
             var $priceItemText = $(priceItemText);
             var num = $tr.find('.num').text();
 
@@ -222,13 +209,11 @@ function registerSaveCancel($tbody) {
             $priceItemText.find('.smallType input').val(result.smallType);
             $priceItemText.find('.name').text(result.name);
             $priceItemText.find('.adminPrice').text(result.adminPrice);
-            $priceItemText.find('.topPrice').text(result.topPrice);
             $priceItemText.find('.superPrice').text(result.superPrice);
-            $priceItemText.find('.goldPrice').text(result.goldPrice);
+            $priceItemText.find('.childPrice').text(result.childPrice);
             $priceItemText.find('.adminPer').text(result.adminPer);
-            $priceItemText.find('.topPer').text(result.topPer);
             $priceItemText.find('.superPer').text(result.superPer);
-            $priceItemText.find('.goldPer').text(result.goldPer);
+            $priceItemText.find('.childPer').text(result.childPer);
             $priceItemText.find('.operation').append($(changeBtn + deleteBtn + '<input type="hidden" value="' + result._id + '">'));
 
             var $aim ;
