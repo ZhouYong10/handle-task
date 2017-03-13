@@ -426,14 +426,13 @@ router.get('/lowerUsers/of/user', function (req, res) {
  * manage price
  * */
 router.get('/price/manage', function (req, res) {
-    Product.open().findPages({type: 'handle'}, (req.query.page ? req.query.page : 1))
+    Product.open().find()
         .then(function (obj) {
             res.render('adminPriceManage', {
                 title: '价格管理',
                 money: req.session.systemFunds,
                 freezeFunds: req.session.freezeFunds,
-                products: obj.results,
-                pages: obj.pages
+                products: obj
             });
         });
 });

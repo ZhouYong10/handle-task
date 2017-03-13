@@ -1,8 +1,8 @@
 /**
  * Created by ubuntu64 on 3/5/16.
  */
-var smallType = '<td> ' +
-    '<select class="am-form-group am-form-select smallType"> ' +
+var type = '<td> ' +
+    '<select class="am-form-group am-form-select type"> ' +
     '<option value="WXfans">微信公众粉丝</option> ' +
     '<option value="WXfansReply">微信粉丝回复</option> ' +
     '<option value="WXfriend">微信个人好友</option> ' +
@@ -21,7 +21,7 @@ var changeBtn = '<button type="button" class="am-btn am-btn-primary am-radius am
 var deleteBtn = '<button type="button" class="am-btn am-btn-primary am-radius am-btn-xs delete">删除</button> ';
 var priceItem = '<tr> ' +
     '<td class="num"></td> ' +
-    smallType+
+    type+
     '<td> <input class="am-form-field am-input-sm name" type="text" placeholder="名称"> </td> ' +
     '<td> <input class="am-form-field am-input-sm adminPrice" type="text" placeholder="管理员价格"> </td> ' +
     '<td> <input class="am-form-field am-input-sm superPrice" type="text" placeholder="父级价格"> </td> ' +
@@ -36,7 +36,7 @@ var priceItem = '<tr> ' +
     '</tr>';
 var priceItemText = '<tr> ' +
     '<td class="num"></td> ' +
-    '<td class="smallType"><span></span> <input type="hidden" value=""></td> ' +
+    '<td class="type"><span></span> <input type="hidden" value=""></td> ' +
     '<td class="name"> </td> ' +
     '<td class="adminPrice"> </td> ' +
     '<td class="superPrice"> </td> ' +
@@ -82,7 +82,7 @@ function registerEditDelete($tbody) {
         $newBtnParent.append($(changeSaveBtn + giveUpBtn + '<input type="hidden" value="'+$parentTr.find('.operation input').val()+'">'));
 
         $newParentTr.find('.num').text(num);
-        $newParentTr.find('.smallType').val($parentTr.find('.smallType input').val());
+        $newParentTr.find('.type').val($parentTr.find('.type input').val());
         $newParentTr.find('.name').val($parentTr.find('.name').text());
         $newParentTr.find('.adminPrice').val($parentTr.find('.adminPrice').text());
         $newParentTr.find('.superPrice').val($parentTr.find('.superPrice').text());
@@ -126,8 +126,8 @@ function registerChangeSaveGiveUp($tbody) {
         var $tr = $parentTd.parent();
         var product = {
             id: $tr.find('.giveUp').next().val(),
-            smallType: $tr.find('.smallType').val(),
-            smallTypeName: $tr.find('.smallType').find('option:selected').text(),
+            type: $tr.find('.type').val(),
+            typeName: $tr.find('.type').find('option:selected').text(),
             name: $tr.find('.name').val(),
             adminPrice: $tr.find('.adminPrice').val(),
             superPrice: $tr.find('.superPrice').val(),
@@ -141,8 +141,8 @@ function registerChangeSaveGiveUp($tbody) {
             var num = $tr.find('.num').text();
 
             $priceItemText.find('.num').text(num);
-            $priceItemText.find('.smallType span').text(product.smallTypeName);
-            $priceItemText.find('.smallType input').val(product.smallType);
+            $priceItemText.find('.type span').text(product.typeName);
+            $priceItemText.find('.type input').val(product.type);
             $priceItemText.find('.name').text(product.name);
             $priceItemText.find('.adminPrice').text(product.adminPrice);
             $priceItemText.find('.superPrice').text(product.superPrice);
@@ -188,10 +188,8 @@ function registerSaveCancel($tbody) {
         var $parentTd = $(this).parent();
         var $tr = $parentTd.parent();
         var product = {
-            type: 'handle',
-            typeName: '人工平台',
-            smallType: $tr.find('.smallType').val(),
-            smallTypeName: $tr.find('.smallType').find('option:selected').text(),
+            type: $tr.find('.type').val(),
+            typeName: $tr.find('.type').find('option:selected').text(),
             name: $tr.find('.name').val(),
             adminPrice: $tr.find('.adminPrice').val(),
             superPrice: $tr.find('.superPrice').val(),
@@ -205,8 +203,8 @@ function registerSaveCancel($tbody) {
             var num = $tr.find('.num').text();
 
             $priceItemText.find('.num').text(num);
-            $priceItemText.find('.smallType span').text(result.smallTypeName);
-            $priceItemText.find('.smallType input').val(result.smallType);
+            $priceItemText.find('.type span').text(result.typeName);
+            $priceItemText.find('.type input').val(result.type);
             $priceItemText.find('.name').text(result.name);
             $priceItemText.find('.adminPrice').text(result.adminPrice);
             $priceItemText.find('.superPrice').text(result.superPrice);
