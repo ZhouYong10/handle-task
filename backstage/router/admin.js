@@ -399,7 +399,7 @@ router.get('/lowerUsers/of/user', function (req, res) {
                 User.open().find({_id: {$in: parent.children}})
                     .then(function(obj) {
                         res.render('adminLowerUserOfUser', {
-                            title: '设置 / 用户管理 / ' + parent.username + '的下级用户',
+                            title: '用户管理 / ' + parent.username + '的下级用户',
                             money: req.session.systemFunds,
                             freezeFunds: req.session.freezeFunds,
                             users: obj
@@ -409,7 +409,7 @@ router.get('/lowerUsers/of/user', function (req, res) {
                     })
             }else {
                 res.render('adminLowerUserOfUser', {
-                    title: '设置 / 用户管理 / ' + parent.username + '的下级用户',
+                    title: '用户管理 / ' + parent.username + '的下级用户',
                     money: req.session.systemFunds,
                     freezeFunds: req.session.freezeFunds,
                     users: []
