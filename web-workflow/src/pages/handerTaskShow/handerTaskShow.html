@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <title><%= order.title %></title>
+
+    <link rel="import" href="../../components/head/head.html?__inline">
+    <link rel="stylesheet" href="/static/plugins/fancybox/css/jquery.fancybox.css">
+
+    <link rel="stylesheet" href="handerTaskShow.scss?__inline">
+</head>
+
+<body data-type="handerAll">
+<div class="am-g tpl-g">
+    <!-- 头部 -->
+    <link rel="import" href="../../components/header/header.html?__inline">
+    <!-- 风格切换 -->
+    <link rel="import" href="../../components/changeStyle/changeStyle.html?__inline">
+    <!-- 侧边导航栏 -->
+    <link rel="import" href="../../components/menu/menu.html?__inline">
+
+
+    <!-- 内容区域 -->
+    <div class="tpl-content-wrapper">
+        <div class="row-content am-cf">
+            <div class="row">
+                <div class="am-u-sm-12 am-u-md-12 am-u-lg-12">
+                    <div class="widget am-cf">
+                        <div class="widget-head am-cf">
+                            <div class="widget-title am-fl"><%= order.title %></div>
+                        </div>
+                        <div id="wxFans" class="widget-body am-fr">
+
+                            <form class="am-form am-form-horizontal" enctype="multipart/form-data" method="post" action="/hander/show" >
+                                <input type="hidden" value="<%= orderFlag %>" name="orderFlag">
+                                <input type="hidden" name="orderId" value="<%= order._id %>">
+                                <div class="am-form-group no-margin">
+                                    <label class="am-u-sm-4 am-u-lg-2 am-form-label">价格</label>
+                                    <div class="am-u-sm-8 am-u-lg-10">
+                                        <p class="order-content">
+                                            <% if(user.parent){ %>
+                                            <%= order.handerChildPrice %>
+                                            <% }else{ %>
+                                            <%= order.handerParentPrice %>
+                                            <% } %>
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <% if(order.address){ %>
+                                <div class="am-form-group am-form-file no-margin">
+                                    <label class="am-u-sm-4 am-u-lg-2 am-form-label">任务地址</label>
+                                    <div class="am-u-sm-8 am-u-lg-10 am-g-collapse">
+                                        <p class="order-content">
+                                            <a href="<%= order.address %>">手机上长按复制地址</a><br>
+                                            <%= order.address %>
+                                        </p>
+                                    </div>
+                                </div>
+                                <% } %>
+
+                                <% if(order.account){ %>
+                                <div class="am-form-group am-form-file no-margin">
+                                    <label class="am-u-sm-4 am-u-lg-2 am-form-label">任务账号</label>
+                                    <div class="am-u-sm-8 am-u-lg-10 am-g-collapse">
+                                        <p class="order-content">
+                                            <a href="<%= order.account %>">手机上长按复制账号</a><br>
+                                            <%= order.account %>
+                                        </p>
+                                    </div>
+                                </div>
+                                <% } %>
+
+                                <div class="am-form-group no-margin">
+                                    <label class="am-u-sm-4 am-u-lg-2 am-form-label">任务说明</label>
+                                    <div class="am-u-sm-8 am-u-lg-10">
+                                        <p class="order-content"><%= order.remark %></p>
+                                    </div>
+                                </div>
+
+                                <% if(order.codePhoto){ %>
+                                <div class="am-form-group am-form-file no-margin">
+                                    <label class="am-u-sm-4 am-u-lg-2 am-form-label">二维码</label>
+                                    <div class="am-u-sm-8 am-u-lg-10 am-g-collapse">
+                                        <div class="am-u-sm-12 am-u-lg-4">
+                                            <a class="fancybox" href="<%= order.codePhoto %>"
+                                               data-fancybox-group="gallery" title="任务样图">
+                                                <img class="am-img-responsive order-content" src="<%= order.codePhoto %>" width="100">
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <% } %>
+
+                                <div class="am-form-group am-form-file">
+                                    <label class="am-u-sm-4 am-u-lg-2 am-form-label">样图</label>
+                                    <div class="am-u-sm-8 am-u-lg-10 am-g-collapse">
+                                        <div class="am-u-sm-12 am-u-lg-5">
+                                            <a class="fancybox" href="<%= order.photo %>"
+                                               data-fancybox-group="gallery" title="任务样图">
+                                                <img class="am-img-responsive order-content" src="<%= order.photo %>" width="200">
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="am-form-group am-form-file no-margin">
+                                    <label for="doc-ipt-file-2" class="am-u-sm-4 am-u-lg-2 am-form-label">任务图片</label>
+                                    <div class="am-u-sm-8 am-u-lg-10 am-g-collapse">
+                                        <button type="button" class="am-btn am-btn-default am-btn-sm">
+                                            <i class="am-icon-cloud-upload"></i>上传任务图片</button>
+                                        <span class="tips" id="photoTip" style="display: none">请上传任务验收图片!</span>
+                                        <input type="file" id="doc-ipt-file-2" @change="viewImg" name="taskPhoto">
+                                    </div>
+                                </div>
+
+                                <div class="am-form-group">
+                                    <label class="am-u-sm-4 am-u-lg-2 am-form-label"></label>
+                                    <div class="am-u-sm-8 am-u-lg-10 am-g-collapse">
+                                        <div class="am-u-sm-12 am-u-lg-5">
+                                            <img id="preview" class="am-img-responsive">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="am-form-group">
+                                    <div class="am-u-sm-8 am-u-sm-offset-4 am-u-lg-10 am-u-lg-offset-2">
+                                        <button type="submit" class="am-btn am-btn-primary am-radius" @click="check">提交任务</button>
+                                    </div>
+                                </div>
+
+                            </form>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<link rel="import" href="../../components/foot/foot.html?__inline">
+
+<!--import plugin-->
+<!--<script src="/static/js/city.js"></script>-->
+<script src="/static/plugins/laydate/laydate.js"></script>
+<script src="/static/plugins/fancybox/js/jquery.fancybox.js"></script>
+
+
+<script>
+    require('handerTaskShow');
+    //    init();
+</script>
+
+</body>
+</html>
+

@@ -1924,3 +1924,10 @@ ul.tpl-dropdown-content .tpl-dropdown-menu-messages-item .menu-messages-content 
   margin: 0;
   padding-top: 8px;
 }
+
+.text-break {
+  color: inherit;
+  display: inline-block;
+  max-width: 120px;
+  cursor: pointer;
+}

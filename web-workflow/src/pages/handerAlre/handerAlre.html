@@ -88,15 +88,15 @@
 
                                     <% for(var i = 0; i < orders.length; i++){ %>
                                     <tr>
-                                        <td class="am-text-middle"><%= i + 1  %></td>
-                                        <td class="am-text-middle"><%= orders[i].taskCreateTime %></td>
-                                        <td class="am-text-middle"><%= orders[i].smallTypeName %></td>
-                                        <td class="am-text-middle">
+                                        <td><%= i + 1  %></td>
+                                        <td><%= orders[i].taskCreateTime %></td>
+                                        <td><%= orders[i].typeName %></td>
+                                        <td>
                                             <a class="am-text-truncate text-break" title="<%= orders[i].title %>">
                                                 <%= orders[i].title %>
                                             </a>
                                         </td>
-                                        <td class="am-text-middle">
+                                        <td>
                                             <% if(orders[i].account){ %>
                                             <a class="am-text-truncate text-break" title="<%= orders[i].account %>">
                                                 <%= orders[i].account %>
@@ -109,29 +109,19 @@
                                             </a>
                                             <% } %>
                                         </td>
-                                        <td class="am-text-middle">
-                                            <% if(role == '管理员'){ %>
-                                            <%= orders[i].adminPerPrice %>
-                                            <% } %>
-
-                                            <% if(role == '顶级代理'){ %>
-                                            <%= orders[i].topPerPrice %>
-                                            <% } %>
-
-                                            <% if(role == '超级代理'){ %>
-                                            <%= orders[i].superPerPrice %>
-                                            <% } %>
-
-                                            <% if(role == '金牌代理'){ %>
-                                            <%= orders[i].goldPerPrice %>
+                                        <td>
+                                            <% if(user.parent){ %>
+                                            <%= orders[i].handerChildPrice %>
+                                            <% }else{ %>
+                                            <%= orders[i].handerParentPrice %>
                                             <% } %>
                                         </td>
-                                        <td class="am-text-middle">
+                                        <td>
                                             <a class="am-text-truncate text-break" title="<%= orders[i].remark %>">
                                                 <%= orders[i].remark %>
                                             </a>
                                         </td>
-                                        <td class="am-text-middle">
+                                        <td>
                                             <% if(orders[i].codePhoto){ %>
                                             <a class="fancybox" href="<%= orders[i].codePhoto %>"
                                                data-fancybox-group="gallery" title="二维码">
@@ -139,19 +129,19 @@
                                             </a>
                                             <% } %>
                                         </td>
-                                        <td class="am-text-middle">
+                                        <td>
                                             <a class="fancybox" href="<%= orders[i].photo %>"
                                                data-fancybox-group="gallery" title="任务样图">
                                                 <img class="am-img-responsive" src="<%= orders[i].photo %>" width="36" height="80">
                                             </a>
                                         </td>
-                                        <td class="am-text-middle">
+                                        <td>
                                             <a class="fancybox" href="<%= orders[i].taskPhoto %>"
                                                data-fancybox-group="gallery" title="任务图">
                                                 <img class="am-img-responsive" src="<%= orders[i].taskPhoto %>" width="36" height="80">
                                             </a>
                                         </td>
-                                        <td class="am-text-middle">
+                                        <td>
                                             <% if(orders[i].taskStatus == '完成'){ %>
                                             <span class="am-badge-success"><%= orders[i].taskStatus %></span> <br/>
 
@@ -160,6 +150,7 @@
 
                                             <% }else if(orders[i].taskStatus == '被投诉'){ %>
                                             <span class="am-badge-warning"><%= orders[i].taskStatus %></span> <br/>
+
                                             <% }else{ %>
                                             <%= orders[i].taskStatus %> <br/>
 
@@ -168,63 +159,6 @@
                                     </tr>
                                     <% } %>
 
-                                    <tr class="gradeX">
-                                        <td>Amaze UI 模式窗口</td>
-                                        <td>张鹏飞</td>
-                                        <td>2016-09-26fasdfasdfaaaaaaaaaaaaaaaaaa</td>
-                                        <td>2016-09-26fasdfasdfaaaaaaaaaaaaaaaaaa</td>
-                                        <td>2016-09-26fasdfasdfaaaaaaaaaaaaaaaaaa</td>
-                                        <td>2016-09-26fasdfasdfaaaaaaaaaaaaaaaaaa</td>
-                                        <td>2016-09-26fasdfasdfaaaaaaaaaaaaaaaaaa</td>
-                                        <td>2016-09-26</td>
-                                        <td>2016-09-26</td>
-                                        <td>2016-09-26</td>
-                                        <td>
-                                            <div class="tpl-table-black-operation">
-                                                <a href="javascript:;">
-                                                    <i class="am-icon-pencil"></i> 接手任务
-                                                </a>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr class="gradeX">
-                                        <td>Amaze UI 模式窗口</td>
-                                        <td>张鹏飞</td>
-                                        <td>2016-09-26fasdfasdfaaaaaaaaaaaaaaaaaa</td>
-                                        <td>2016-09-26fasdfasdfaaaaaaaaaaaaaaaaaa</td>
-                                        <td>2016-09-26fasdfasdfaaaaaaaaaaaaaaaaaa</td>
-                                        <td>2016-09-26fasdfasdfaaaaaaaaaaaaaaaaaa</td>
-                                        <td>2016-09-26fasdfasdfaaaaaaaaaaaaaaaaaa</td>
-                                        <td>2016-09-26</td>
-                                        <td>2016-09-26</td>
-                                        <td>2016-09-26</td>
-                                        <td>
-                                            <div class="tpl-table-black-operation">
-                                                <a href="javascript:;">
-                                                    <i class="am-icon-pencil"></i> 接手任务
-                                                </a>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr class="gradeX">
-                                        <td>Amaze UI 模式窗口</td>
-                                        <td>张鹏飞</td>
-                                        <td>2016-09-26fasdfasdfaaaaaaaaaaaaaaaaaa</td>
-                                        <td>2016-09-26fasdfasdfaaaaaaaaaaaaaaaaaa</td>
-                                        <td>2016-09-26fasdfasdfaaaaaaaaaaaaaaaaaa</td>
-                                        <td>2016-09-26fasdfasdfaaaaaaaaaaaaaaaaaa</td>
-                                        <td>2016-09-26fasdfasdfaaaaaaaaaaaaaaaaaa</td>
-                                        <td>2016-09-26</td>
-                                        <td>2016-09-26</td>
-                                        <td>2016-09-26</td>
-                                        <td>
-                                            <div class="tpl-table-black-operation">
-                                                <a href="javascript:;">
-                                                    <i class="am-icon-pencil"></i> 接手任务
-                                                </a>
-                                            </div>
-                                        </td>
-                                    </tr>
                                     </tbody>
                                 </table>
 

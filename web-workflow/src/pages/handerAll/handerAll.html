@@ -74,79 +74,28 @@
 
                                     <% for(var i = 0; i < orders.length; i++){ %>
                                     <tr>
-                                        <td class="am-text-middle"><%= i + 1  %></td>
-                                        <td class="am-text-middle"><%= orders[i].smallTypeName %></td>
-                                        <td class="am-text-middle">
+                                        <td><%= i + 1  %></td>
+                                        <td><%= orders[i].typeName %></td>
+                                        <td>
                                             <%= orders[i].title %>
                                         </td>
-                                        <td class="am-text-middle">
-                                            <% if(role == '管理员'){ %>
-                                            <%= orders[i].adminPerPrice %>
-                                            <% } %>
-
-                                            <% if(role == '顶级代理'){ %>
-                                            <%= orders[i].topPerPrice %>
-                                            <% } %>
-
-                                            <% if(role == '超级代理'){ %>
-                                            <%= orders[i].superPerPrice %>
-                                            <% } %>
-
-                                            <% if(role == '金牌代理'){ %>
-                                            <%= orders[i].goldPerPrice %>
+                                        <td>
+                                            <% if(user.parent){ %>
+                                            <%= orders[i].handerChildPrice %>
+                                            <% }else{ %>
+                                            <%= orders[i].handerParentPrice %>
                                             <% } %>
                                         </td>
-                                        <td class="am-text-middle">
+                                        <td>
                                             <%= orders[i].num - (orders[i].taskNum ? orders[i].taskNum : 0) %> / <%= orders[i].num %>
                                         </td>
-                                        <td class="am-text-middle">
+                                        <td>
                                             <a class="am-btn am-btn-primary am-radius am-btn-xs"
-                                               href="/task/show?id=<%= orders[i]._id %>">接手任务</a>
+                                               href="/hander/show?id=<%= orders[i]._id %>">接手任务</a>
                                         </td>
                                     </tr>
                                     <% } %>
-                                    <tr class="gradeX">
-                                        <td>Amaze UI 模式窗口</td>
-                                        <td>张鹏飞</td>
-                                        <td>2016-09-26fasdfasdfaaaaaaaaaaaaaaaaaa</td>
-                                        <td>2016-09-26</td>
-                                        <td>2016-09-26</td>
-                                        <td>
-                                            <div class="tpl-table-black-operation">
-                                                <a href="javascript:;">
-                                                    <i class="am-icon-pencil"></i> 接手任务
-                                                </a>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr class="gradeX">
-                                        <td>Amaze UI 模式窗口</td>
-                                        <td>张鹏飞dfafff3333333333333333333333333333333</td>
-                                        <td>2016-09-26</td>
-                                        <td>2016-09-26</td>
-                                        <td>2016-09-26</td>
-                                        <td>
-                                            <div class="tpl-table-black-operation">
-                                                <a href="javascript:;">
-                                                    <i class="am-icon-pencil"></i> 接手任务
-                                                </a>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr class="gradeX">
-                                        <td>Amaze UI 模式窗口</td>
-                                        <td>张鹏飞</td>
-                                        <td>2016-09-26</td>
-                                        <td>2016-09-26</td>
-                                        <td>2016-09-26</td>
-                                        <td>
-                                            <div class="tpl-table-black-operation">
-                                                <a href="javascript:;">
-                                                    <i class="am-icon-pencil"></i> 接手任务
-                                                </a>
-                                            </div>
-                                        </td>
-                                    </tr>
+                                    
                                     </tbody>
                                 </table>
 

@@ -10,6 +10,14 @@ var moment = require('moment');
 var path = require('path');
 var router = require('express').Router();
 
+
+
+Object.defineProperty(global, 'handleExam', {
+    value: path.join(__dirname, '../public/handle_example/'),
+    writable: false,
+    configurable: false
+});
+
 router.get('/WX/fans', function (req, res) {
     var obj = {
         type: 'WXfans'
@@ -36,20 +44,17 @@ router.get('/WX/fans', function (req, res) {
 router.get('/WX/fans/add', function (req, res) {
     User.open().findById(req.session.passport.user)
         .then(function (user) {
-            console.log(user, '1111111111111111');
             Product.open().findOne({type: 'WXfans'})
                 .then(function(fansP) {
-                    console.log(fansP, '222222222222222222');
                     var fans = Product.wrapToInstance(fansP);
                     var fansPrice = fans.getPriceByUser(user);
                     Product.open().findOne({type: 'WXfansReply'})
                         .then(function(replyP) {
-                            console.log(replyP, '33333333333333333');
                             var reply = Product.wrapToInstance(replyP);
                             var replyPrice = reply.getPriceByUser(user);
                             Order.getRandomStr(req).then(function(orderFlag) {
                                 res.render('taskerWXfansAdd', {
-                                    title: '添加人工微信粉丝(回复)任务',
+                                    title: '添加微信粉丝(回复)任务',
                                     user: user,
                                     fansPrice: fansPrice,
                                     replyPrice: replyPrice,
@@ -61,21 +66,14 @@ router.get('/WX/fans/add', function (req, res) {
         });
 });
 
-Object.defineProperty(global, 'handleExam', {
-    value: path.join(__dirname, '../public/handle_example/'),
-    writable: false,
-    configurable: false
-});
-
 router.post('/WX/fans/add', function (req, res) {
     Order.getOrder(req).then(function (order) {
-        order.num2 = order.num;
         User.open().findById(req.session.passport.user)
             .then(function (user) {
                 var orderIns = Order.wrapToInstance(order);
                 orderIns.checkRandomStr(req).then(function() {
                     if(orderIns.isTow) {
-                        orderIns.handleCreateAndSaveTwo(user, {type: 'handle', smallType: 'WXfans'}, {type: 'handle', smallType: 'WXfansReply'})
+                        orderIns.createTwo(user, {type: 'WXfans'}, {type: 'WXfansReply'})
                             .then(function () {
                                 socketIO.emit('updateNav', {'waitHT': 1});
                                 res.redirect('/tasker/WX/fans');
@@ -84,7 +82,7 @@ router.post('/WX/fans/add', function (req, res) {
                             });
                     }else {
                         delete orderIns.price2;
-                        orderIns.handleCreateAndSave(user, {type: 'handle', smallType: 'WXfans'})
+                        orderIns.createOne(user, {type: 'WXfans'})
                             .then(function () {
                                 socketIO.emit('updateNav', {'waitHT': 1});
                                 res.redirect('/tasker/WX/fans');
@@ -104,8 +102,7 @@ router.post('/WX/fans/add', function (req, res) {
 
 router.get('/WX/friend', function (req, res) {
     var obj = {
-        type: 'handle',
-        smallType: 'WXfriend'
+        type: 'WXfriend'
     };
     if(req.query.account) {
         obj.account = new RegExp(req.query.account);
@@ -116,7 +113,7 @@ router.get('/WX/friend', function (req, res) {
             Order.open().findPages(obj, (req.query.page ? req.query.page : 1))
                 .then(function(obj) {
                     res.render('taskerWXfriend', {
-                        title: '人工微信个人好友',
+                        title: '微信个人好友',
                         user: user,
                         orders: obj.results,
                         pages: obj.pages,
@@ -129,13 +126,13 @@ router.get('/WX/friend', function (req, res) {
 router.get('/WX/friend/add', function (req, res) {
     User.open().findById(req.session.passport.user)
         .then(function (user) {
-            Product.open().findOne({type: 'handle', smallType: 'WXfriend'})
+            Product.open().findOne({type: 'WXfriend'})
                 .then(function(result) {
                     var fans = Product.wrapToInstance(result);
-                    var fansPrice = fans.getPriceByRole(user.role);
+                    var fansPrice = fans.getPriceByUser(user);
                     Order.getRandomStr(req).then(function(orderFlag) {
-                        res.render('handleWXfriendAdd', {
-                            title: '添加人工微信个人好友任务',
+                        res.render('taskerWXfriendAdd', {
+                            title: '添加微信个人好友任务',
                             user: user,
                             fansPrice: fansPrice,
                             orderFlag: orderFlag
@@ -151,7 +148,7 @@ router.post('/WX/friend/add', function (req, res) {
             .then(function (user) {
                 var orderIns = Order.wrapToInstance(order);
                 orderIns.checkRandomStr(req).then(function() {
-                    orderIns.handleCreateAndSave(user, {type: 'handle', smallType: 'WXfriend'})
+                    orderIns.createOne(user, {type: 'WXfriend'})
                         .then(function () {
                             socketIO.emit('updateNav', {'waitHT': 1});
                             res.redirect('/tasker/WX/friend');
@@ -169,8 +166,7 @@ router.post('/WX/friend/add', function (req, res) {
 
 router.get('/WX/vote', function (req, res) {
     var obj = {
-        type: 'handle',
-        smallType: 'WXvote'
+        type: 'WXvote'
     };
     if(req.query.address) {
         obj.address = new RegExp(req.query.address);
@@ -182,7 +178,7 @@ router.get('/WX/vote', function (req, res) {
                 .then(function(obj) {
                     Order.addSchedule(obj.results, 10);
                     res.render('taskerWXvote', {
-                        title: '人工微信投票',
+                        title: '微信投票',
                         user: user,
                         orders: obj.results,
                         pages: obj.pages,
@@ -195,13 +191,13 @@ router.get('/WX/vote', function (req, res) {
 router.get('/WX/vote/add', function (req, res) {
     User.open().findById(req.session.passport.user)
         .then(function (user) {
-            Product.open().findOne({type: 'handle', smallType: 'WXvote'})
+            Product.open().findOne({type: 'WXvote'})
                 .then(function(result) {
                     var fans = Product.wrapToInstance(result);
-                    var fansPrice = fans.getPriceByRole(user.role);
+                    var fansPrice = fans.getPriceByUser(user);
                     Order.getRandomStr(req).then(function(orderFlag) {
                         res.render('taskerWXvoteAdd', {
-                            title: '添加人工微信投票任务',
+                            title: '添加微信投票任务',
                             user: user,
                             fansPrice: fansPrice,
                             orderFlag: orderFlag
@@ -217,7 +213,7 @@ router.post('/WX/vote/add', function (req, res) {
             .then(function (user) {
                 var orderIns = Order.wrapToInstance(order);
                 orderIns.checkRandomStr(req).then(function() {
-                    orderIns.handleCreateAndSave(user, {type: 'handle', smallType: 'WXvote'})
+                    orderIns.createOne(user, {type: 'WXvote'})
                         .then(function () {
                             socketIO.emit('updateNav', {'waitHT': 1});
                             res.redirect('/tasker/WX/vote');
@@ -236,8 +232,7 @@ router.post('/WX/vote/add', function (req, res) {
 
 router.get('/WX/code', function (req, res) {
     var obj = {
-        type: 'handle',
-        smallType: 'WXcode'
+        type: 'WXcode'
     };
     if(req.query.account) {
         obj.account = new RegExp(req.query.account);
@@ -248,7 +243,7 @@ router.get('/WX/code', function (req, res) {
             Order.open().findPages(obj, (req.query.page ? req.query.page : 1))
                 .then(function(obj) {
                     res.render('taskerWXcode', {
-                        title: '人工微信扫码(回复)',
+                        title: '微信扫码(回复)',
                         user: user,
                         orders: obj.results,
                         pages: obj.pages,
@@ -261,17 +256,17 @@ router.get('/WX/code', function (req, res) {
 router.get('/WX/code/add', function (req, res) {
     User.open().findById(req.session.passport.user)
         .then(function (user) {
-            Product.open().findOne({type: 'handle', smallType: 'WXcode'})
+            Product.open().findOne({type: 'WXcode'})
                 .then(function(result) {
                     var fans = Product.wrapToInstance(result);
-                    var fansPrice = fans.getPriceByRole(user.role);
-                    Product.open().findOne({type: 'handle', smallType: 'WXcodeReply'})
+                    var fansPrice = fans.getPriceByUser(user);
+                    Product.open().findOne({type: 'WXcodeReply'})
                         .then(function(result) {
                             var reply = Product.wrapToInstance(result);
-                            var replyPrice = reply.getPriceByRole(user.role);
+                            var replyPrice = reply.getPriceByUser(user);
                             Order.getRandomStr(req).then(function(orderFlag) {
                                 res.render('taskerWXcodeAdd', {
-                                    title: '添加人工微信扫码(回复)任务',
+                                    title: '添加微信扫码(回复)任务',
                                     user: user,
                                     fansPrice: fansPrice,
                                     replyPrice: replyPrice,
@@ -285,13 +280,12 @@ router.get('/WX/code/add', function (req, res) {
 
 router.post('/WX/code/add', function (req, res) {
     Order.getOrder(req).then(function (order) {
-        order.num2 = order.num;
         User.open().findById(req.session.passport.user)
             .then(function (user) {
                 var orderIns = Order.wrapToInstance(order);
                 orderIns.checkRandomStr(req).then(function() {
                     if(orderIns.isTow) {
-                        orderIns.handleCreateAndSaveTwo(user, {type: 'handle', smallType: 'WXcode'}, {type: 'handle', smallType: 'WXcodeReply'})
+                        orderIns.createTwo(user, {type: 'WXcode'}, {type: 'WXcodeReply'})
                             .then(function () {
                                 socketIO.emit('updateNav', {'waitHT': 1});
                                 res.redirect('/tasker/WX/code');
@@ -300,7 +294,7 @@ router.post('/WX/code/add', function (req, res) {
                             });
                     }else {
                         delete orderIns.price2;
-                        orderIns.handleCreateAndSave(user, {type: 'handle', smallType: 'WXcode'})
+                        orderIns.createOne(user, {type: 'WXcode'})
                             .then(function () {
                                 socketIO.emit('updateNav', {'waitHT': 1});
                                 res.redirect('/tasker/WX/code');
@@ -320,8 +314,7 @@ router.post('/WX/code/add', function (req, res) {
 
 router.get('/WX/article', function (req, res) {
     var obj = {
-        type: 'handle',
-        smallType: 'WXarticleShare'
+        type: 'WXarticleShare'
     };
     if(req.query.address) {
         obj.address = new RegExp(req.query.address);
@@ -332,7 +325,7 @@ router.get('/WX/article', function (req, res) {
             Order.open().findPages(obj, (req.query.page ? req.query.page : 1))
                 .then(function(obj) {
                     res.render('taskerWXarticle', {
-                        title: '人工微信原文/收藏/分享',
+                        title: '微信原文/收藏/分享',
                         user: user,
                         orders: obj.results,
                         pages: obj.pages,
@@ -345,17 +338,17 @@ router.get('/WX/article', function (req, res) {
 router.get('/WX/article/add', function (req, res) {
     User.open().findById(req.session.passport.user)
         .then(function (user) {
-            Product.open().findOne({type: 'handle', smallType: 'WXarticleShare'})
+            Product.open().findOne({type: 'WXarticleShare'})
                 .then(function(result) {
                     var fans = Product.wrapToInstance(result);
-                    var fansPrice = fans.getPriceByRole(user.role);
-                    Product.open().findOne({type: 'handle', smallType: 'WXarticleHide'})
+                    var fansPrice = fans.getPriceByUser(user);
+                    Product.open().findOne({type: 'WXarticleHide'})
                         .then(function(result) {
                             var reply = Product.wrapToInstance(result);
-                            var replyPrice = reply.getPriceByRole(user.role);
+                            var replyPrice = reply.getPriceByUser(user);
                             Order.getRandomStr(req).then(function(orderFlag) {
                                 res.render('taskerWXarticleAdd', {
-                                    title: '添加人工微信原文/收藏/分享任务',
+                                    title: '添加微信原文/收藏/分享任务',
                                     user: user,
                                     fansPrice: fansPrice,
                                     replyPrice: replyPrice,
@@ -375,7 +368,7 @@ router.post('/WX/article/add', function (req, res) {
                 var orderIns = Order.wrapToInstance(order);
                 orderIns.checkRandomStr(req).then(function() {
                     if(orderIns.isTow) {
-                        orderIns.handleCreateAndSaveTwo(user, {type: 'handle', smallType: 'WXarticleShare'}, {type: 'handle', smallType: 'WXarticleHide'})
+                        orderIns.createTwo(user, {type: 'WXarticleShare'}, {type: 'WXarticleHide'})
                             .then(function () {
                                 socketIO.emit('updateNav', {'waitHT': 1});
                                 res.redirect('/tasker/WX/article');
@@ -384,7 +377,7 @@ router.post('/WX/article/add', function (req, res) {
                             });
                     }else {
                         delete orderIns.price2;
-                        orderIns.handleCreateAndSave(user, {type: 'handle', smallType: 'WXarticleShare'})
+                        orderIns.createOne(user, {type: 'WXarticleShare'})
                             .then(function () {
                                 socketIO.emit('updateNav', {'waitHT': 1});
                                 res.redirect('/tasker/WX/article');

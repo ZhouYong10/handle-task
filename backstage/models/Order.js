@@ -126,41 +126,6 @@ Order.extend({
             }
         }
         return orders;
-    },
-    openWXReadQuickAuto: function(cookie) {
-        cookieInfoQuick = cookie;
-        wxReadIsOpenQuick = 'yes';
-        valIndexQuick = startIntervalQuick();
-        //getOrderStartNum();
-    },
-    closeWXReadQuickAuto: function() {
-        wxReadIsOpenQuick = 'no';
-        //clearInterval(valIndex);
-    },
-    wxReadQuickIsOpen: function() {
-        return wxReadIsOpenQuick;
-    },
-    openWXReadAuto: function(cookie) {
-        wxReadIsOpen = 'yes';
-        startInterval();
-    },
-    closeWXReadAuto: function() {
-        wxReadIsOpen = 'no';
-    },
-    wxReadIsOpen: function() {
-        return wxReadIsOpen;
-    },
-    openWXFansAuto: function(cookie) {
-        wxFansCookieInfo = cookie;
-        wxFansIsOpen = 'yes';
-        wxSetIntIndex = startFans();
-    },
-    closeWXFansAuto: function() {
-        wxFansIsOpen = 'no';
-        stopFans();
-    },
-    wxFansIsOpen: function() {
-        return wxFansIsOpen;
     }
 });
 
@@ -177,23 +142,34 @@ Order.include({
             }
         })
     },
-    save: function(callback) {
+    save: function() {
         var self = this;
-        Order.open().insert(self)
-            .then(function () {
-                User.open().updateById(self.userId, {$set: {funds: self.funds}})
-                    .then(function () {
-                        callback(self);
-                    });
-            });
+        var sourcePath = path.join(global.handleExam, '../' + self.photo);
+        var waterPath = path.join(global.handleExam, '../static/images/waterImg.jpg');
+        var sourceImg = images(sourcePath);
+        var waterImg = images(waterPath);
+        waterImg.resize(sourceImg.width() / 5 * 2);
+        images(sourceImg)
+            .draw(waterImg, sourceImg.width() - waterImg.width() -20, sourceImg.height() -waterImg.height() - 20)
+            .save(sourcePath);
+        return new Promise(function (resolve) {
+            Order.open().insert(self)
+                .then(function () {
+                    User.open().updateById(self.userId, {$set: {funds: self.funds}})
+                        .then(function () {
+                            resolve(self);
+                        });
+                });
+        });
     },
-    handleCreateAndSave: function(user, info) {
+    createOne: function(user, info) {
         var self = this;
         return new Promise(function(resolve, reject) {
             Product.open().findOne(info)
                 .then(function(result) {
                     var product = Product.wrapToInstance(result);
-                    var myPrice = product.getPriceByRole(user.role);
+                    //设定发布者提交的价格不能低于平台控制价格，并验证发布者有足够的金额发布任务
+                    var myPrice = product.getPriceByUser(user);
                     if(!self.price || parseFloat(self.price) < parseFloat(myPrice)) {
                         self.price = myPrice;
                     }
@@ -201,29 +177,57 @@ Order.include({
                     if((self.totalPrice - user.funds) > 0) {
                         return reject();
                     }
-                    self.realPrice = self.price;
-                    self.surplus = self.totalPrice;
-                    self.releasePrice = (parseFloat(self.price) + parseFloat(self.price2 ? self.price2 : 0)).toFixed(2);
+
+                    if(user.parent) {
+                        //计算发布者给上级的返利
+                        var taskerProfit = parseFloat(product.childPrice - product.superPrice);
+                        self.taskerParentProfit = taskerProfit.toFixed(4);
+                    }
+                    //计算发布者给平台的返利
+                    var adminProfit = parseFloat(product.superPrice - product.adminPrice);
+                    self.taskerAdminProfit = adminProfit.toFixed(4);
+
+                    //计算得到发布方返利后的价格
+                    var releasePrice = parseFloat(self.price - adminProfit -
+                            (taskerProfit ? taskerProfit : 0));
+                    self.taskerReleasePrice = releasePrice.toFixed(4);
+
+                    //计算做任务者为子级的价格
+                    var childPrice = parseFloat(releasePrice * product.childPer);
+                    self.handerChildPrice = childPrice.toFixed(4);
+                    //计算做任务者为父级的价格
+                    var superPrice = parseFloat(releasePrice * product.superPer);
+                    self.handerParentPrice = superPrice.toFixed(4);
+                    //计算做任务者给父级的返利
+                    var superProfit = parseFloat(releasePrice * (product.superPer - product.childPer));
+                    self.handerParentProfit = superProfit.toFixed(4);
+                    //计算做任务者给平台的返利
+                    var handerAdminProfit = parseFloat(releasePrice * (product.adminPer - product.superPer));
+                    self.handerAdminProfit = handerAdminProfit.toFixed(4);
+                    //给订单添加关联用户信息
+                    self.surplus = self.totalPrice;  //任务结余金额
                     self.user = user.username;
                     self.userId = user._id;
+                    self.userParent = user.parent;
+                    self.userParentId = user.parentID;
+
                     self.name = product.name;
                     self.type = product.type;
                     self.typeName = product.typeName;
-                    self.smallType = product.smallType;
-                    self.smallTypeName = product.smallTypeName;
-                    self.status = '审核中';
+                    self.status = '已发布';
                     self.createTime = moment().format('YYYY-MM-DD HH:mm:ss');
                     self.funds = (user.funds - self.totalPrice).toFixed(4);
-                    self.description = self.typeName + self.smallTypeName + '执行' + self.num;
+                    self.description = self.typeName + '执行' + self.num;
                     self.taskNum = 0;
                     self.taskUsers = [];
-                    self.handleCountParentProfit(user, product, function(obj) {
-                        resolve(obj);
-                    });
+
+                    self.save().then(function(order) {
+                        resolve(order);
+                    })
                 });
         });
     },
-    handleCreateAndSaveTwo: function(user, info1, info2) {
+    createTwo: function(user, info1, info2) {
         var self = this;
         return new Promise(function(resolve, reject) {
             Product.open().findOne(info1)
@@ -232,40 +236,74 @@ Order.include({
                     Product.open().findOne(info2)
                         .then(function (result2) {
                             var product2 = Product.wrapToInstance(result2);
-                            var myPrice1 = product1.getPriceByRole(user.role);
-                            var myPrice2 = product2.getPriceByRole(user.role);
+                            //设定发布者提交的价格不能低于平台控制价格，并验证发布者有足够的金额发布任务
+                            var myPrice1 = product1.getPriceByUser(user);
+                            var myPrice2 = product2.getPriceByUser(user);
                             if(!self.price || parseFloat(self.price) < parseFloat(myPrice1)) {
                                 self.price = myPrice1;
                             }
                             if(!self.price2 || parseFloat(self.price2) < parseFloat(myPrice2)) {
                                 self.price2 = myPrice2;
                             }
-                            self.totalPrice = (self.price * self.num + self.price2 * self.num2).toFixed(4);
+                            self.totalPrice = ((parseFloat(self.price) + parseFloat(self.price2)) * self.num).toFixed(4);
                             if ((self.totalPrice - user.funds) > 0) {
                                 return reject();
                             }
-                            self.realPrice = self.price;
-                            self.realPrice2 = self.price2;
-                            self.surplus = self.totalPrice;
-                            self.releasePrice = (parseFloat(self.price) + parseFloat(self.price2 ? self.price2 : 0)).toFixed(2);
+
+                            if(user.parent) {
+                                //计算发布者给上级的返利
+                                var taskerProfit = parseFloat(product1.childPrice - product1.superPrice),
+                                    taskerProfit2 = parseFloat(product2.childPrice - product2.superPrice);
+                                self.taskerParentProfit = (taskerProfit + taskerProfit2).toFixed(4);
+                            }
+                            //计算发布者给平台的返利
+                            var adminProfit = parseFloat(product1.superPrice - product1.adminPrice),
+                                adminProfit2 = parseFloat(product2.superPrice - product2.adminPrice);
+                            self.taskerAdminProfit = (adminProfit + adminProfit2).toFixed(4);
+
+                            //计算得到发布方返利后的价格
+                            var releasePrice = parseFloat(self.price - adminProfit -
+                                (taskerProfit ? taskerProfit : 0)),
+                                releasePrice2 = parseFloat(self.price2 - adminProfit2 -
+                                (taskerProfit2 ? taskerProfit2 : 0));
+                            self.taskerReleasePrice = (releasePrice + releasePrice2).toFixed(4);
+
+                            //计算做任务者为子级的价格
+                            var childPrice = parseFloat(releasePrice * product1.childPer),
+                                childPrice2 = parseFloat(releasePrice2 * product2.childPer);
+                            self.handerChildPrice = (childPrice + childPrice2).toFixed(4);
+                            //计算做任务者为父级的价格
+                            var superPrice = parseFloat(releasePrice * product1.superPer),
+                                superPrice2 = parseFloat(releasePrice2 * product2.superPer);
+                            self.handerParentPrice = (superPrice + superPrice2).toFixed(4);
+                            //计算做任务者给父级的返利
+                            var superProfit = parseFloat(releasePrice * (product1.superPer - product1.childPer)),
+                                superProfit2 = parseFloat(releasePrice2 * (product2.superPer - product2.childPer));
+                            self.handerParentProfit = (superProfit + superProfit2).toFixed(4);
+                            //计算做任务者给平台的返利
+                            var handerAdminProfit = parseFloat(releasePrice * (product1.adminPer - product1.superPer)),
+                                handerAdminProfit2 = parseFloat(releasePrice2 * (product2.adminPer - product2.superPer));
+                            self.handerAdminProfit = (handerAdminProfit + handerAdminProfit2).toFixed(4);
+                            //给订单添加关联用户信息
+                            self.surplus = self.totalPrice; //任务结余金额
                             self.user = user.username;
                             self.userId = user._id;
+                            self.userParent = user.parent;
+                            self.userParentId = user.parentID;
                             self.name = product1.name;
                             self.type = product1.type;
                             self.typeName = product1.typeName;
-                            self.smallType = product1.smallType;
-                            self.smallTypeName = product1.smallTypeName;
-                            self.status = '审核中';
+                            self.status = '已发布';
                             self.createTime = moment().format('YYYY-MM-DD HH:mm:ss');
                             self.funds = (user.funds - self.totalPrice).toFixed(4);
-                            self.description = self.typeName + self.smallTypeName + '执行' + self.num + '; ' +
-                                product2.typeName + product2.smallTypeName + '执行' + self.num2;
+                            self.description = self.typeName + '执行' + self.num + '; ' +
+                                product2.typeName + '执行' + self.num2;
                             self.taskNum = 0;
                             self.taskUsers = [];
 
-                            self.handleCountParentProfitTwo(user, product1, product2, function(obj) {
-                                resolve(obj);
-                            });
+                            self.save().then(function(order) {
+                                resolve(order);
+                            })
                         });
                 });
         });

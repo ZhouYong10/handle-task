@@ -12,29 +12,26 @@ router.get('/all', function (req, res) {
     User.open().findById(req.session.passport.user)
         .then(function (user) {
             Order.open().findPages({
-                    type: 'handle',
                     status: '已发布',
                     taskUsers: {$not: {$all: [user._id]}}
                 }, (req.query.page ? req.query.page : 1))
                 .then(function (obj) {
+                    console.log(obj, '=================');
                     res.render('handerAll', {
                         title: '任务大厅',
                         user: user,
                         orders: obj.results,
-                        pages: obj.pages,
-                        path: '/forum/taskHistory'
+                        pages: obj.pages
                     });
                 });
         });
 });
 
 router.get('/type', function (req, res) {
-    var smallType = req.query.type;
     User.open().findById(req.session.passport.user)
         .then(function (user) {
             Order.open().findPages({
-                    type: 'handle',
-                    smallType: smallType,
+                    type: req.query.type,
                     status: '已发布',
                     taskUsers: {$not: {$all: [user._id]}}
                 }, (req.query.page ? req.query.page : 1))
@@ -43,8 +40,7 @@ router.get('/type', function (req, res) {
                         title: '任务大厅',
                         user: user,
                         orders: obj.results,
-                        pages: obj.pages,
-                        path: '/forum/taskHistory'
+                        pages: obj.pages
                     });
                 });
         });
@@ -58,7 +54,7 @@ router.get('/show', function (req, res) {
                 Order.open().findById(orderId)
                     .then(function(order) {
                         Task.getRandomStr(req).then(function(orderFlag) {
-                            res.render('handleTaskShow', {
+                            res.render('handerTaskShow', {
                                 user: user,
                                 order: order,
                                 orderFlag: orderFlag
@@ -67,7 +63,7 @@ router.get('/show', function (req, res) {
                     })
             }else{
                 req.session.msg = '请填写您做任务的微信账户信息!';
-                res.redirect('/task/account');
+                res.redirect('/hander/account');
             }
         });
 });
@@ -78,12 +74,12 @@ router.post('/show', function (req, res) {
         Task.checkRandomStr(req, info).then(function() {
             Task.createTask(info).then(function(task) {
                 socketIO.emit('navUpdateNum', {'checks': 1, 'orderUser': task.user});
-                res.redirect('/task/all');
+                res.redirect('/hander/all');
             }, function(err) {
                 res.send('<h1>'+err+'</h1>'); //各种错误
             })
         }, function(msg) {
-            res.redirect('/task/all');
+            res.redirect('/hander/all');
         })
     }, function(err) {
         res.send('<h1>'+err+'</h1>'); //各种错误
@@ -97,6 +93,7 @@ router.get('/alre', function (req, res) {
                     taskUserId: user._id
                 }, (req.query.page ? req.query.page : 1))
                 .then(function (obj) {
+                    console.log(obj, '========================');
                     res.render('handerAlre', {
                         title: '我做过的任务',
                         user: user,

@@ -559,7 +559,6 @@ router.get('/check/wait', function (req, res) {
 
 router.get('/check/already', function (req, res) {
     Order.open().findPages({
-            type: 'handle',
             status: '已发布'
         }, (req.query.page ? req.query.page : 1))
         .then(function (obj) {

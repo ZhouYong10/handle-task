@@ -52,6 +52,7 @@ Task.extend({
                         _id: db.toObjectID(info.orderId),
                         status: '已发布'
                     }).then(function(order) {
+                        console.log(order, '==================');
                         if(order) {
                             var flag = true;
                             for(var i = 0; i < order.taskUsers.length; i++) {
