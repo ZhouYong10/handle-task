@@ -35,6 +35,7 @@ User.extend({
     createUser: function(user, resolve, reject) {
         user.password = bcrypt.hashSync(user.password, bcrypt.genSaltSync(10));
         user.funds = 0;
+        user.freezeFunds = 0;
         user.status = '正常';
         user.createTime = moment().format('YYYY-MM-DD HH:mm:ss');
 
