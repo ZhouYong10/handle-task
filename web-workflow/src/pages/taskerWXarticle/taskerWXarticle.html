@@ -80,54 +80,52 @@
                                     <tbody>
 
                                     <% for(var i = 0; i < orders.length; i++){ %>
-                                    <tr class="<% if((orders[i].status == '已发布' || orders[i].status == '已完成') && orders[i].error == undefined){ %> am-primary
-                        <% }else if(orders[i].status == '已退款'){ %> am-danger
-                        <% }else if((orders[i].status == '已发布' || orders[i].status == '已完成') && orders[i].error != undefined){ %> am-active <% } %>">
-                                        <td class="am-text-middle"><%= i + 1 %></td>
-                                        <td class="am-text-middle"><%= orders[i].createTime %></td>
-                                        <td class="am-text-middle">
+                                    <tr>
+                                        <td><%= i + 1 %></td>
+                                        <td><%= orders[i].createTime %></td>
+                                        <td>
                                             <a class="am-text-truncate text-break" title="<%= orders[i].title %>">
                                                 <%= orders[i].title %>
                                             </a>
                                         </td>
-                                        <td class="am-text-middle">
+                                        <td>
                                             <a class="am-text-truncate text-break" title="<%= orders[i].address %>">
                                                 <%= orders[i].address %>
                                             </a>
                                         </td>
-                                        <td class="am-text-middle">
+                                        <td>
                                             分享: <%= orders[i].price %> <br/>
                                             收藏: <%= orders[i].price2 %>
                                         </td>
-                                        <td class="am-text-middle">
+                                        <td>
                                             <% if(orders[i].isTow){ %>
                                             是
                                             <% }else{ %>
                                             否
                                             <% } %>
                                         </td>
-                                        <td class="am-text-middle">
+                                        <td>
                                             <a href="/tasker/task/details?orderId=<%= orders[i]._id %>" title="点击查看任务">
                                                 <%= orders[i].taskNum %>/<%= orders[i].num %>
                                             </a>
                                         </td>
-                                        <td class="am-text-middle">
+                                        <td>
                                             <%= orders[i].totalPrice %> <br/>
                                             <%= orders[i].surplus %>
                                         </td>
-                                        <td class="am-text-middle">
+                                        <td>
                                             <a class="fancybox" href="<%= orders[i].photo %>"
                                                data-fancybox-group="gallery" title="任务样图">
                                                 <img class="am-img-responsive" src="<%= orders[i].photo %>" width="20" height="40">
                                             </a>
                                         </td>
-                                        <td class="am-text-middle">
+                                        <td>
                                             <a class="am-text-truncate text-break" title="<%= orders[i].remark %>">
                                                 <%= orders[i].remark %>
                                             </a>
                                         </td>
-                                        <td class="am-text-middle"><%= orders[i].status %></td>
-                                        <td class="am-text-middle">
+                                        <td><%= orders[i].status %></td>
+                                        <td>
                                             <% if(orders[i].status == '已发布'){ %>
                                             <a class="am-btn am-btn-primary am-radius am-btn-xs orderPause"
                                                href="/tasker/order/pause?id=<%= orders[i]._id %>&path=/tasker/WX/article"
@@ -146,66 +144,6 @@
                                     </tr>
                                     <% } %>
 
-                                    <tr class="gradeX">
-                                        <td>Amaze UI 模式窗口</td>
-                                        <td>张鹏飞</td>
-                                        <td>2016-09-26fasdfasdfaaaaaaaaaaaaaaaaaa</td>
-                                        <td>2016-09-26fasdfasdfaaaaaaaaaaaaaaaaaa</td>
-                                        <td>2016-09-26fasdfasdfaaaaaaaaaaaaaaaaaa</td>
-                                        <td>2016-09-26fasdfasdfaaaaaaaaaaaaaaaaaa</td>
-                                        <td>2016-09-26fasdfasdfaaaaaaaaaaaaaaaaaa</td>
-                                        <td>2016-09-26fasdfasdfaaaaaaaaaaaaaaaaaa</td>
-                                        <td>2016-09-26</td>
-                                        <td>2016-09-26</td>
-                                        <td>2016-09-26</td>
-                                        <td>
-                                            <div class="tpl-table-black-operation">
-                                                <a href="javascript:;">
-                                                    <i class="am-icon-pencil"></i> 接手任务
-                                                </a>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr class="gradeX">
-                                        <td>Amaze UI 模式窗口</td>
-                                        <td>张鹏飞</td>
-                                        <td>2016-09-26fasdfasdfaaaaaaaaaaaaaaaaaa</td>
-                                        <td>2016-09-26fasdfasdfaaaaaaaaaaaaaaaaaa</td>
-                                        <td>2016-09-26fasdfasdfaaaaaaaaaaaaaaaaaa</td>
-                                        <td>2016-09-26fasdfasdfaaaaaaaaaaaaaaaaaa</td>
-                                        <td>2016-09-26fasdfasdfaaaaaaaaaaaaaaaaaa</td>
-                                        <td>2016-09-26fasdfasdfaaaaaaaaaaaaaaaaaa</td>
-                                        <td>2016-09-26</td>
-                                        <td>2016-09-26</td>
-                                        <td>2016-09-26</td>
-                                        <td>
-                                            <div class="tpl-table-black-operation">
-                                                <a href="javascript:;">
-                                                    <i class="am-icon-pencil"></i> 接手任务
-                                                </a>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr class="gradeX">
-                                        <td>Amaze UI 模式窗口</td>
-                                        <td>张鹏飞</td>
-                                        <td>2016-09-26fasdfasdfaaaaaaaaaaaaaaaaaa</td>
-                                        <td>2016-09-26fasdfasdfaaaaaaaaaaaaaaaaaa</td>
-                                        <td>2016-09-26fasdfasdfaaaaaaaaaaaaaaaaaa</td>
-                                        <td>2016-09-26fasdfasdfaaaaaaaaaaaaaaaaaa</td>
-                                        <td>2016-09-26fasdfasdfaaaaaaaaaaaaaaaaaa</td>
-                                        <td>2016-09-26fasdfasdfaaaaaaaaaaaaaaaaaa</td>
-                                        <td>2016-09-26</td>
-                                        <td>2016-09-26</td>
-                                        <td>2016-09-26</td>
-                                        <td>
-                                            <div class="tpl-table-black-operation">
-                                                <a href="javascript:;">
-                                                    <i class="am-icon-pencil"></i> 接手任务
-                                                </a>
-                                            </div>
-                                        </td>
-                                    </tr>
                                     </tbody>
                                 </table>
 

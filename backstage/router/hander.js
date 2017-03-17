@@ -174,7 +174,7 @@ router.post('/account', function (req, res) {
         }
     }).then(function (user) {
         delete req.session.msg;
-        res.redirect('/task/account');
+        res.redirect('/hander/account');
     }, function (error) {
         res.send('更新用户信息失败： ' + error);
     });

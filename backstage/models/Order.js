@@ -142,7 +142,7 @@ Order.include({
             }
         })
     },
-    save: function() {
+    save: function(user) {
         var self = this;
         var sourcePath = path.join(global.handleExam, '../' + self.photo);
         var waterPath = path.join(global.handleExam, '../static/images/waterImg.jpg');
@@ -155,8 +155,10 @@ Order.include({
         return new Promise(function (resolve) {
             Order.open().insert(self)
                 .then(function () {
-                    User.open().updateById(self.userId, {$set: {funds: self.funds}})
-                        .then(function () {
+                    User.open().updateById(user._id, {$set: {
+                        funds: (parseFloat(user.funds) - parseFloat(self.totalPrice)).toFixed(4),
+                        freezeFunds: (parseFloat(user.freezeFunds) + parseFloat(self.surplus)).toFixed(4)
+                    }}).then(function () {
                             resolve(self);
                         });
                 });
@@ -210,18 +212,16 @@ Order.include({
                     self.userId = user._id;
                     self.userParent = user.parent;
                     self.userParentId = user.parentID;
-
                     self.name = product.name;
                     self.type = product.type;
                     self.typeName = product.typeName;
                     self.status = '已发布';
                     self.createTime = moment().format('YYYY-MM-DD HH:mm:ss');
-                    self.funds = (user.funds - self.totalPrice).toFixed(4);
                     self.description = self.typeName + '执行' + self.num;
                     self.taskNum = 0;
                     self.taskUsers = [];
 
-                    self.save().then(function(order) {
+                    self.save(user).then(function(order) {
                         resolve(order);
                     })
                 });
@@ -295,13 +295,12 @@ Order.include({
                             self.typeName = product1.typeName;
                             self.status = '已发布';
                             self.createTime = moment().format('YYYY-MM-DD HH:mm:ss');
-                            self.funds = (user.funds - self.totalPrice).toFixed(4);
                             self.description = self.typeName + '执行' + self.num + '; ' +
-                                product2.typeName + '执行' + self.num2;
+                                product2.typeName + '执行' + self.num;
                             self.taskNum = 0;
                             self.taskUsers = [];
 
-                            self.save().then(function(order) {
+                            self.save(user).then(function(order) {
                                 resolve(order);
                             })
                         });
