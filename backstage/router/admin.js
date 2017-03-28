@@ -298,7 +298,7 @@ router.get('/manage/user', function (req, res) {
             });
         }, function (error) {
             res.send('获取用户列表失败： ' + error);
-        });
+        }); 
 });
 
 router.get('/search/user', function (req, res) {

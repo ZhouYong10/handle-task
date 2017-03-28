@@ -9,6 +9,7 @@ var initUsers = [{
     username: 'admin',
     password: bcrypt.hashSync('admin', bcrypt.genSaltSync(10)),
     funds: 0,
+    freezeFunds: 0,
     role: 'admin',
     roleName: '管理员',
     status: '正常',
