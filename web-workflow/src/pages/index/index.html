@@ -21,20 +21,20 @@
             <form class="am-form tpl-form-line-form">
                 <div class="am-form-group">
                     <input id="username" type="text" class="tpl-form-input" placeholder="请输入账号"
-                    v-model="username" @keyup="checkUsername(username)"
+                    v-model="username" @keyup="checkUsername(username)" @change="checkUsername(username)"
                            @focus="closeTips" @blur="checkUsername(username)">
                 </div>
 
                 <div class="am-form-group">
                     <input id="password" type="password" class="tpl-form-input" placeholder="请输入密码"
-                    v-model="password" @keyup="checkPassword(password)"
+                    v-model="password" @keyup="checkPassword(password)" @change="checkPassword(password)"
                            @focus="closeTips" @blur="checkPassword(password)">
                 </div>
 
                 <div class="am-form-group am-g-collapse">
                     <div class="am-u-sm-5">
                         <input id="securityCode" type="text" class="am-form-field" placeholder="不区分大小写"
-                        v-model="securityCode"  @keyup="checkSecurityCode(securityCode)"
+                        v-model="securityCode"  @keyup="checkSecurityCode(securityCode)" @change="checkSecurityCode(securityCode)"
                                @focus="closeTips" @blur="checkSecurityCode(securityCode)">
                     </div>
                     <div class="am-u-sm-7">

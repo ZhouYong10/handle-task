@@ -52,7 +52,6 @@ Task.extend({
                         _id: db.toObjectID(info.orderId),
                         status: '已发布'
                     }).then(function(order) {
-                        console.log(order, '==================');
                         if(order) {
                             var flag = true;
                             for(var i = 0; i < order.taskUsers.length; i++) {
@@ -69,28 +68,19 @@ Task.extend({
                                 order.taskName = user.taskName;
                                 order.taskUserId = user._id;
                                 order.taskUser = user.username;
-                                if(user.parentID) {
-                                    order.taskUserParentId = user.parentID;
-                                }
                                 order.taskPhoto = info.taskPhoto;
                                 order.taskCreateTime = moment().format('YYYY-MM-DD HH:mm:ss');
                                 order.taskStatus = '待审核';
-
-
-
+                                order.taskUserParentId = user.parentID;
+                                profitFreezeFunds(order);
                                 Task.open().insert(order).then(function(tasks) {
-                                    var updateInfo ;
-                                    if((order.num - (order.taskNum ? order.taskNum : 0)) > 1) {
-                                        updateInfo = {
-                                            $inc: {taskNum: 1},
-                                            $push: {taskUsers: user._id}
-                                        };
-                                    }else {
-                                        updateInfo = {
-                                            $set: {status: '已完成'},
-                                            $inc: {taskNum: 1},
-                                            $push: {taskUsers: user._id}
-                                        };
+                                    var updateInfo = {
+                                        $set: {surplus: (order.surplus - order.price - (order.price2 ? order.price2 : 0)).toFixed(4)},
+                                        $inc: {taskNum: 1},
+                                        $push: {taskUsers: user._id}
+                                    };
+                                    if((order.num - (order.taskNum ? order.taskNum : 0)) == 1) {
+                                        updateInfo[$set].status = '已完成';
                                     }
                                     Order.open().updateById(info.orderId, updateInfo)
                                         .then(function(result) {
@@ -107,164 +97,220 @@ Task.extend({
     }
 });
 
+function profitFreezeFunds(task) {
+    User.open().findOne({username: 'admin'})
+        .then(function (admin) {
+            var price;
+            //做任务者的父级
+            if(task.taskUserParentId) {
+                price = task.handerChildPrice;
+                User.open().findById(task.taskUserParentId)
+                    .then(function (taskUserParent) {
+                        if(taskUserParent) {
+                            User.open().updateById(taskUserParent._id, {
+                                $set: {
+                                    freezeFunds: (parseFloat(taskUserParent.freezeFunds) +
+                                    parseFloat(task.handerParentProfit)).toFixed(4)
+                                }
+                            });
+                        }else{
+                            User.open().updateById(admin._id, {
+                                $set: {
+                                    freezeFunds: (parseFloat(admin.freezeFunds) +
+                                    parseFloat(task.handerParentProfit)).toFixed(4)
+                                }
+                            });
+                        }
+                    });
+            }else{
+                price = task.handerParentPrice;
+            }
+            //做任务者自己
+            User.open().findById(task.taskUserId)
+                .then(function (taskUser) {
+                    if(taskUser) {
+                        User.open().updateById(taskUser._id, {
+                            $set: {
+                                freezeFunds: (parseFloat(taskUser.freezeFunds) + parseFloat(price)).toFixed(4)
+                            }
+                        });
+                    }else{
+                        User.open().updateById(admin._id, {
+                            $set: {
+                                freezeFunds: (parseFloat(admin.freezeFunds) + parseFloat(price)).toFixed(4)
+                            }
+                        });
+                    }
+                });
+            //发布任务者的父级
+            if(task.userParentId) {
+                User.open().findById(task.userParentId)
+                    .then(function (orderUserParent) {
+                        if(orderUserParent) {
+                            User.open().updateById(orderUserParent._id, {
+                                $set: {
+                                    freezeFunds: (parseFloat(orderUserParent.freezeFunds) +
+                                    parseFloat(task.taskerParentProfit)).toFixed(4)
+                                }
+                            });
+                        }else{
+                            User.open().updateById(admin._id, {
+                                $set: {
+                                    freezeFunds: (parseFloat(admin.freezeFunds) +
+                                    parseFloat(task.taskerParentProfit)).toFixed(4)
+                                }
+                            });
+                        }
+                    });
+            }
+            //发布任务者自己
+            User.open().findById(task.userId)
+                .then(function (orderUser) {
+                    if(orderUser) {
+                        User.open().updateById(orderUser._id, {
+                            $set: {
+                                freezeFunds: (parseFloat(orderUser.freezeFunds) -
+                                (parseFloat(task.price) + parseFloat(task.price2 ? task.price2 : 0))).toFixed(4)
+                            }
+                        });
+                    }else{
+                        User.open().updateById(admin._id, {
+                            $set: {
+                                freezeFunds: (parseFloat(admin.freezeFunds) -
+                                (parseFloat(task.price) + parseFloat(task.price2 ? task.price2 : 0))).toFixed(4)
+                            }
+                        });
+                    }
+                });
+            //平台管理员
+            User.open().updateById(admin._id, {
+                $set: {
+                    freezeFunds: (parseFloat(admin.freezeFunds) + parseFloat(task.taskerAdminProfit) +
+                    parseFloat(task.handerAdminProfit)).toFixed(4)
+                }
+            });
+        });
+}
+
+function profitFunds(task) {
+    User.open().findOne({username: 'admin'})
+        .then(function (admin) {
+            var price;
+            //做任务者的父级
+            if(task.taskUserParentId) {
+                price = task.handerChildPrice;
+                User.open().findById(task.taskUserParentId)
+                    .then(function (taskUserParent) {
+                        if(taskUserParent) {
+                            User.open().updateById(taskUserParent._id, {
+                                $set: {
+                                    freezeFunds: (parseFloat(taskUserParent.freezeFunds) -
+                                    parseFloat(task.handerParentProfit)).toFixed(4),
+                                    funds: (parseFloat(taskUserParent.funds) +
+                                    parseFloat(task.handerParentProfit)).toFixed(4)
+                                }
+                            });
+                        }else{
+                            User.open().updateById(admin._id, {
+                                $set: {
+                                    freezeFunds: (parseFloat(admin.freezeFunds) -
+                                    parseFloat(task.handerParentProfit)).toFixed(4),
+                                    funds: (parseFloat(admin.funds) +
+                                    parseFloat(task.handerParentProfit)).toFixed(4)
+                                }
+                            });
+                        }
+                    });
+            }else{
+                price = task.handerParentPrice;
+            }
+            //做任务者自己
+            User.open().findById(task.taskUserId)
+                .then(function (taskUser) {
+                    if(taskUser) {
+                        User.open().updateById(taskUser._id, {
+                            $set: {
+                                freezeFunds: (parseFloat(taskUser.freezeFunds) - parseFloat(price)).toFixed(4),
+                                funds: (parseFloat(taskUser.funds) + parseFloat(price)).toFixed(4)
+                            }
+                        });
+                    }else{
+                        User.open().updateById(admin._id, {
+                            $set: {
+                                freezeFunds: (parseFloat(admin.freezeFunds) - parseFloat(price)).toFixed(4),
+                                funds: (parseFloat(admin.funds) + parseFloat(price)).toFixed(4)
+                            }
+                        });
+                    }
+                });
+            //发布任务者的父级
+            if(task.userParentId) {
+                User.open().findById(task.userParentId)
+                    .then(function (orderUserParent) {
+                        if(orderUserParent) {
+                            User.open().updateById(orderUserParent._id, {
+                                $set: {
+                                    freezeFunds: (parseFloat(orderUserParent.freezeFunds) -
+                                    parseFloat(task.taskerParentProfit)).toFixed(4),
+                                    funds: (parseFloat(orderUserParent.funds) +
+                                    parseFloat(task.taskerParentProfit)).toFixed(4)
+                                }
+                            });
+                        }else{
+                            User.open().updateById(admin._id, {
+                                $set: {
+                                    freezeFunds: (parseFloat(admin.freezeFunds) -
+                                    parseFloat(task.taskerParentProfit)).toFixed(4),
+                                    funds: (parseFloat(admin.funds) +
+                                    parseFloat(task.taskerParentProfit)).toFixed(4)
+                                }
+                            });
+                        }
+                    });
+            }
+            //发布任务者自己不需要操作
+            //平台管理员
+            User.open().updateById(admin._id, {
+                $set: {
+                    freezeFunds: (parseFloat(admin.freezeFunds) -
+                    (parseFloat(task.taskerAdminProfit) + parseFloat(task.handerAdminProfit))).toFixed(4),
+                    funds: (parseFloat(admin.funds) + parseFloat(task.taskerAdminProfit) +
+                    parseFloat(task.handerAdminProfit)).toFixed(4)
+                }
+            });
+        });
+}
+
 Task.open = function() {
     return Task.openCollection('Task');
 };
 
 Task.include({
     success: function() {
-            var self = this;
-        return new Promise(function(resolve, reject) {
-            Task.open().updateById(self._id, {$set: {
-                taskStatus: '完成',
-                successTime: moment().format('YYYY-MM-DD HH:mm:ss')
-            }}).then(function() {
-                Order.open().findById(self.orderId).then(function(order) {
-                    var surplus = (parseFloat(order.surplus) - parseFloat(self.releasePrice)).toFixed(4);
-                    Order.open().updateById(order._id, {$set: {
-                        surplus: surplus
-                    }}).then(function() {
-                        User.open().findById(self.taskUserId).then(function(user) {
-                            if(user) {
-                                User.open().updateById(self.taskUserId, {
-                                    $set: {
-                                        funds: (parseFloat(self.getPriceByRole(user.role)) + parseFloat(user.funds)).toFixed(4)
-                                    }
-                                }).then(function() {
-                                    self.profitToTaskUser(user, function() {
-                                        console.log('self.userId:   ', self.userId);
-                                        User.open().findById(self.userId).then(function(orderUser) {
-                                            self.profitToOrderUser(orderUser, function() {
-                                                resolve();
-                                            })
-                                        })
-                                    })
-                                })
-                            }else{
-                                Task.open().removeById(self._id).then(function() {
-                                    console.log('订单用户已不存在。。。。,已删除该订单。。。');
-                                    Order.open().updateById(self.orderId, {
-                                        $set: {status: '已发布'},
-                                        $inc: {taskNum: -1}
-                                    }).then(function() {
-                                        console.log('任务已做数量减1.。。。。。。。。。。。');
-                                        resolve();
-                                    })
-                                })
-                            }
-                        })
-                    })
-                })
-            })
-        })
-    },
-    profitToTaskUser: function(user, cb) {
         var self = this;
-        if(user.parentID) {
-            User.open().findById(user.parentID).then(function(parent) {
-                    var userPrice = self.getPriceByRole(user.role);
-                    var parentPrice = self.getPriceByRole(parent.role);
-                    var profit = (parseFloat(parentPrice) - parseFloat(userPrice)).toFixed(2);
-                    var funds = (parseFloat(profit) + parseFloat(parent.funds)).toFixed(4);
-                    User.open().updateById(parent._id, {$set: {funds: funds}})
-                        .then(function () {
-                            Profit.open().insert({
-                                userId: parent._id,
-                                username: parent.username,
-                                orderUserId: self.taskUserId,
-                                orderUsername: self.taskUser,
-                                typeName: self.typeName,
-                                smallTypeName: self.smallTypeName,
-                                profit: profit,
-                                orderId: self._id + '',
-                                status: 'success',
-                                createTime: self.createTime
-                            }).then(function (profit) {
-                                self.profitToTaskUser(parent, cb);
-                            })
-                        });
-                })
-        }else {
-            cb();
-        }
-    },
-    profitToOrderUser: function(user, cb) {
-        var self = this;
-        if(user.parentID) {
-            User.open().findById(user.parentID)
-                .then(function(parent) {
-                    var profit = self.getProfitByRole(parent.role);
-                    var funds = (parseFloat(profit) + parseFloat(parent.funds)).toFixed(4);
-                    User.open().updateById(parent._id, {$set: {funds: funds}})
-                        .then(function () {
-                            Profit.open().insert({
-                                userId: parent._id,
-                                username: parent.username,
-                                orderUserId: self.taskUserId,
-                                orderUsername: self.taskUser,
-                                typeName: self.typeName,
-                                smallTypeName: self.smallTypeName,
-                                profit: profit,
-                                orderId: self._id + '',
-                                status: 'success',
-                                createTime: self.createTime
-                            }).then(function (profit) {
-                                self.profitToOrderUser(parent, cb);
-                            })
-                        });
-                })
-        }else {
-            cb();
-        }
-    },
-    getProfitByRole: function(role) {
-        var profit ;
-        switch (role) {
-            case '管理员':
-                profit = this.adminProfit;
-                break;
-            case '顶级代理':
-                profit = this.topProfit;
-                break;
-            case '超级代理':
-                profit = this.superProfit;
-                break;
-            case '金牌代理':
-                profit = this.goldProfit;
-                break;
-        }
-        return profit;
-    },
-    getPriceByRole: function(role) {
-        var price ;
-        switch (role) {
-            case '管理员':
-                price = this.adminPerPrice;
-                break;
-            case '顶级代理':
-                price = this.topPerPrice;
-                break;
-            case '超级代理':
-                price = this.superPerPrice;
-                break;
-            case '金牌代理':
-                price = this.goldPerPrice;
-                break;
-        }
-        return price;
+        return new Promise(function (resolve, reject) {
+            Task.open().updateById(self._id, {
+                $set: {
+                    taskStatus: '完成',
+                    successTime: moment().format('YYYY-MM-DD HH:mm:ss')
+                }
+            });
+            profitFunds(self);
+            resolve();
+        });
     }
 });
 
-(function() {
-    setInterval(function() {
-        console.log(moment().format('YYYY-MM-DD HH:mm:ss') + ': 扫描了一次人工任务审核。');
-        Task.open().find({
-            taskStatus: '待审核'
-        }).then(function(tasks) {
-            followedByPayment(tasks);
-        })
-    }, 1000 * 30);
-})();
+//(function() {
+//    setInterval(function() {
+//        console.log(moment().format('YYYY-MM-DD HH:mm:ss') + ': 扫描了一次人工任务审核。');
+//        Task.open().find({
+//            taskStatus: '待审核'
+//        }).then(function(tasks) {
+//            followedByPayment(tasks);
+//        })
+//    }, 1000 * 30);
+//})();
 
 function followedByPayment(tasks) {
     if(tasks.length > 0) {

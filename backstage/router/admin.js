@@ -34,11 +34,9 @@ router.use(function(req, res, next) {
             if(userIns.isAdmin()){
                 User.getSystemFunds().then(function (canUse) {
                     req.session.systemFunds = canUse;
-                    Order.getOrderFreezeFunds().then(function(orderFreeze) {
-                        Withdraw.getWithdrawFreezeFunds().then(function(withdrawFreeze) {
-                            req.session.freezeFunds = (parseFloat(orderFreeze) + parseFloat(withdrawFreeze)).toFixed(4);
-                            next();
-                        })
+                    User.getSystemFreezeFunds().then(function(freezeFunds) {
+                        req.session.freezeFunds = freezeFunds;
+                        next();
                     })
                 });
             }else{
@@ -611,7 +609,7 @@ router.get('/order/details', function (req, res) {
             orderId: req.query.orderId
         }, (req.query.page ? req.query.page : 1))
         .then(function (obj) {
-            res.render('adminHandleOrderTasks', {
+            res.render('adminOrderDetails', {
                 title: '人工任务管理 / 任务进度详情',
                 money: req.session.systemFunds,
                 freezeFunds: req.session.freezeFunds,

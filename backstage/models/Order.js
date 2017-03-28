@@ -251,6 +251,8 @@ Order.include({
                             }
 
                             if(user.parent) {
+                                self.userParent = user.parent;
+                                self.userParentId = user.parentID;
                                 //计算发布者给上级的返利
                                 var taskerProfit = parseFloat(product1.childPrice - product1.superPrice),
                                     taskerProfit2 = parseFloat(product2.childPrice - product2.superPrice);
@@ -288,8 +290,6 @@ Order.include({
                             self.surplus = self.totalPrice; //任务结余金额
                             self.user = user.username;
                             self.userId = user._id;
-                            self.userParent = user.parent;
-                            self.userParentId = user.parentID;
                             self.name = product1.name;
                             self.type = product1.type;
                             self.typeName = product1.typeName;
