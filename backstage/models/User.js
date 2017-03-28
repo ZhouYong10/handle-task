@@ -58,52 +58,47 @@ User.extend({
     },
     removeUser: function(id) {
         return new Promise(function(resolve, reject) {
-            //获取被删除用户
-            User.open().findById(id).then(function(delUser) {
-                //如果存在父用户，则获取父用户
-                if(delUser.parentID) {
-                    User.open().findById(delUser.parentID).then(function(parentUser) {
-                        //将被删除用户从父用户中移除
-                        var parent = User.wrapToInstance(parentUser);
-                        parent.removeChild(id);
-                        //如果存在子用户，则将所有被删除用户的子用户添加到被删除用户的父用户中
-                        if(delUser.childNum > 0) {
-                            parent.children = parent.children.concat(delUser.children);
-                            parent.childNum = parent.children.length;
-                            for(var i = 0; i < delUser.children.length; i++) {
-                                User.open().updateById(delUser.children[i], {
-                                    $set: {
-                                        parent: parent.username,
-                                        parentID: parent._id
-                                    }
-                                });
-                            }
-                        }
-                        User.open().updateById(parent._id, {$set: parent})
-                            .then(function() {
-                                User.open().removeById(delUser._id)
-                                    .then(function() {
-                                        resolve();
-                                    })
-                            })
-                    })
-                }else {
+            User.open().findOne({username: 'admin'}).then(function (admin) {
+                //获取被删除用户
+                User.open().findById(id).then(function(delUser) {
+                    //如果存在父用户，则获取父用户
+                    if(delUser.parentID) {
+                        User.open().findById(delUser.parentID).then(function(parentUser) {
+                            //将被删除用户从父用户中移除
+                            var parent = User.wrapToInstance(parentUser);
+                            parent.removeChild(id);
+                        })
+                    }
+                    //如果存在子用户，则将被删除用户的所有子用户添加到平台管理员中
                     if(delUser.childNum > 0) {
+                        if(!admin.children) {
+                            admin.children = [];
+                        }
+                        admin.children = admin.children.concat(delUser.children);
+                        admin.childNum = admin.children.length;
                         for(var i = 0; i < delUser.children.length; i++) {
                             User.open().updateById(delUser.children[i], {
-                                $unset: {
-                                    parent:'',
-                                    parentID: ''
+                                $set: {
+                                    parent: admin.username,
+                                    parentID: admin._id
                                 }
                             });
                         }
                     }
+                    User.open().updateById(admin._id, {
+                        $set: {
+                            funds: (parseFloat(admin.funds) + parseFloat(delUser.funds)).toFixed(4),
+                            freezeFunds: (parseFloat(admin.freezeFunds) + parseFloat(delUser.freezeFunds)).toFixed(4),
+                            children: admin.children,
+                            childNum: admin.childNum
+                        }
+                    });
                     User.open().removeById(delUser._id)
                         .then(function() {
                             resolve();
                         })
-                }
-            })
+                })
+            });
         })
     },
     resetPassword: function(id) {
@@ -145,15 +140,16 @@ User.include({
         this.childNum = this.children.length;
     },
     removeChild: function(id) {
-        var index = -1;
-        for(var i = 0; i < this.children.length; i++) {
-            if(this.children[i] == id) {
-                index = i;
+        var self = this;
+        for(var i = 0; i < self.children.length; i++) {
+            if(self.children[i] == id) {
+                User.open().updateById(self._id, {
+                    $set: {
+                        children: self.children.splice(i, 1),
+                        childNum: self.children.length
+                    }
+                });
             }
-        }
-        if(index != -1) {
-            this.children.splice(index, 1);
-            this.childNum = this.children.length;
         }
     }
 });

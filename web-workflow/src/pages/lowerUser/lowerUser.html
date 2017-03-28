@@ -70,7 +70,6 @@
                                         <th>余额</th>
                                         <th>下线/人</th>
                                         <th>最后登陆时间</th>
-                                        <th>操作</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -83,59 +82,9 @@
                                         <td>￥ <%= users[i].funds %></td>
                                         <td><%= users[i].childNum %></td>
                                         <td><%= users[i].lastLoginTime %></td>
-                                        <td  class="am-text-middle">
-                                            <a type="button" class="am-btn am-btn-primary am-radius am-btn-xs"
-                                               href="/user/removeLowerUser?id=<%= users[i]._id %>"
-                                               onclick="return confirm('确认删除该用户吗？');">删除</a>
-                                        </td>
                                     </tr>
                                     <% } %>
 
-                                    <tr class="gradeX">
-                                        <td>Amaze UI 模式窗口</td>
-                                        <td>张鹏飞</td>
-                                        <td>2016-09-26</td>
-                                        <td>2016-09-26</td>
-                                        <td>2016-09-26</td>
-                                        <td>2016-09-26</td>
-                                        <td>
-                                            <div class="tpl-table-black-operation">
-                                                <a href="javascript:;">
-                                                    <i class="am-icon-pencil"></i> 接手任务
-                                                </a>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr class="gradeX">
-                                        <td>Amaze UI 模式窗口</td>
-                                        <td>张鹏飞</td>
-                                        <td>2016-09-26</td>
-                                        <td>2016-09-26</td>
-                                        <td>2016-09-26</td>
-                                        <td>2016-09-26</td>
-                                        <td>
-                                            <div class="tpl-table-black-operation">
-                                                <a href="javascript:;">
-                                                    <i class="am-icon-pencil"></i> 接手任务
-                                                </a>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr class="gradeX">
-                                        <td>Amaze UI 模式窗口</td>
-                                        <td>张鹏飞</td>
-                                        <td>2016-09-26</td>
-                                        <td>2016-09-26</td>
-                                        <td>2016-09-26</td>
-                                        <td>2016-09-26</td>
-                                        <td>
-                                            <div class="tpl-table-black-operation">
-                                                <a href="javascript:;">
-                                                    <i class="am-icon-pencil"></i> 接手任务
-                                                </a>
-                                            </div>
-                                        </td>
-                                    </tr>
                                     </tbody>
                                 </table>
 
