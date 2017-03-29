@@ -602,7 +602,6 @@ router.get('/check/refund', function (req, res) {
 
 router.get('/order/complete', function (req, res) {
     Order.open().findPages({
-            type: 'handle',
             status: '已完成'
         }, (req.query.page ? req.query.page : 1))
         .then(function(obj) {

@@ -72,20 +72,21 @@ Task.extend({
                                 order.taskCreateTime = moment().format('YYYY-MM-DD HH:mm:ss');
                                 order.taskStatus = '待审核';
                                 order.taskUserParentId = user.parentID;
-                                profitFreezeFunds(order);
-                                Task.open().insert(order).then(function(tasks) {
-                                    var updateInfo = {
-                                        $set: {surplus: (order.surplus - order.price - (order.price2 ? order.price2 : 0)).toFixed(4)},
-                                        $inc: {taskNum: 1},
-                                        $push: {taskUsers: user._id}
-                                    };
-                                    if((order.num - (order.taskNum ? order.taskNum : 0)) == 1) {
-                                        updateInfo[$set].status = '已完成';
-                                    }
-                                    Order.open().updateById(info.orderId, updateInfo)
-                                        .then(function(result) {
-                                            resolve(tasks[0]);
-                                        })
+                                profitFreezeFunds(order).then(function() {
+                                    Task.open().insert(order).then(function(tasks) {
+                                        var updateInfo = {
+                                            $set: {surplus: (order.surplus - order.price - (order.price2 ? order.price2 : 0)).toFixed(4)},
+                                            $inc: {taskNum: 1},
+                                            $push: {taskUsers: user._id}
+                                        };
+                                        if((order.num - (order.taskNum ? order.taskNum : 0)) == 1) {
+                                            updateInfo[$set].status = '已完成';
+                                        }
+                                        Order.open().updateById(info.orderId, updateInfo)
+                                            .then(function(result) {
+                                                resolve(tasks[0]);
+                                            })
+                                    })
                                 })
                             }
                         }else {
@@ -98,187 +99,269 @@ Task.extend({
 });
 
 function profitFreezeFunds(task) {
-    User.open().findOne({username: 'admin'})
-        .then(function (admin) {
-            var price;
-            //做任务者的父级
-            if(task.taskUserParentId) {
-                price = task.handerChildPrice;
-                User.open().findById(task.taskUserParentId)
-                    .then(function (taskUserParent) {
-                        if(taskUserParent) {
-                            User.open().updateById(taskUserParent._id, {
-                                $set: {
-                                    freezeFunds: (parseFloat(taskUserParent.freezeFunds) +
-                                    parseFloat(task.handerParentProfit)).toFixed(4)
-                                }
+    return new Promise(function (done) {
+        User.open().findOne({username: 'admin'})
+            .then(function (admin) {
+                var adminFreezeFunds = admin.freezeFunds;
+                var price;
+
+                handerParent().then(function () {
+                    handerSelf().then(function () {
+                        taskerParent().then(function () {
+                            taskerSelf().then(function () {
+                                adminSelf().then(function () {
+                                    done();
+                                });
                             });
-                        }else{
-                            User.open().updateById(admin._id, {
-                                $set: {
-                                    freezeFunds: (parseFloat(admin.freezeFunds) +
-                                    parseFloat(task.handerParentProfit)).toFixed(4)
-                                }
-                            });
+                        });
+                    });
+                });
+
+                //做任务者的父级
+                function handerParent() {
+                    return new Promise(function (resolve) {
+                        if (task.taskUserParentId) {
+                            price = task.handerChildPrice;
+                            User.open().findById(task.taskUserParentId)
+                                .then(function (taskUserParent) {
+                                    if (taskUserParent) {
+                                        User.open().updateById(taskUserParent._id, {
+                                            $set: {
+                                                freezeFunds: (parseFloat(taskUserParent.freezeFunds) +
+                                                parseFloat(task.handerParentProfit)).toFixed(4)
+                                            }
+                                        }).then(function() {
+                                            resolve();
+                                        })
+                                    } else {
+                                        adminFreezeFunds = (parseFloat(adminFreezeFunds) +
+                                        parseFloat(task.handerParentProfit)).toFixed(4);
+                                        resolve();
+                                    }
+                                });
+                        } else {
+                            price = task.handerParentPrice;
+                            resolve();
                         }
                     });
-            }else{
-                price = task.handerParentPrice;
-            }
-            //做任务者自己
-            User.open().findById(task.taskUserId)
-                .then(function (taskUser) {
-                    if(taskUser) {
-                        User.open().updateById(taskUser._id, {
-                            $set: {
-                                freezeFunds: (parseFloat(taskUser.freezeFunds) + parseFloat(price)).toFixed(4)
-                            }
-                        });
-                    }else{
-                        User.open().updateById(admin._id, {
-                            $set: {
-                                freezeFunds: (parseFloat(admin.freezeFunds) + parseFloat(price)).toFixed(4)
-                            }
-                        });
-                    }
-                });
-            //发布任务者的父级
-            if(task.userParentId) {
-                User.open().findById(task.userParentId)
-                    .then(function (orderUserParent) {
-                        if(orderUserParent) {
-                            User.open().updateById(orderUserParent._id, {
-                                $set: {
-                                    freezeFunds: (parseFloat(orderUserParent.freezeFunds) +
-                                    parseFloat(task.taskerParentProfit)).toFixed(4)
+                }
+
+                //做任务者自己
+                function handerSelf() {
+                    return new Promise(function (resolve) {
+                        User.open().findById(task.taskUserId)
+                            .then(function (taskUser) {
+                                if (taskUser) {
+                                    User.open().updateById(taskUser._id, {
+                                        $set: {
+                                            freezeFunds: (parseFloat(taskUser.freezeFunds) + parseFloat(price)).toFixed(4)
+                                        }
+                                    }).then(function() {
+                                        resolve();
+                                    })
+                                } else {
+                                    adminFreezeFunds = (parseFloat(adminFreezeFunds) + parseFloat(price)).toFixed(4);
+                                    resolve();
                                 }
                             });
+                    });
+                }
+
+                //发布任务者的父级
+                function taskerParent() {
+                    return new Promise(function (resolve) {
+                        if(task.userParentId) {
+                            User.open().findById(task.userParentId)
+                                .then(function (orderUserParent) {
+                                    if(orderUserParent) {
+                                        User.open().updateById(orderUserParent._id, {
+                                            $set: {
+                                                freezeFunds: (parseFloat(orderUserParent.freezeFunds) +
+                                                parseFloat(task.taskerParentProfit)).toFixed(4)
+                                            }
+                                        }).then(function() {
+                                            resolve();
+                                        })
+                                    }else{
+                                        adminFreezeFunds = (parseFloat(adminFreezeFunds) +
+                                        parseFloat(task.taskerParentProfit)).toFixed(4);
+                                        resolve();
+                                    }
+                                });
                         }else{
-                            User.open().updateById(admin._id, {
-                                $set: {
-                                    freezeFunds: (parseFloat(admin.freezeFunds) +
-                                    parseFloat(task.taskerParentProfit)).toFixed(4)
-                                }
-                            });
+                            resolve();
                         }
                     });
-            }
-            //发布任务者自己
-            User.open().findById(task.userId)
-                .then(function (orderUser) {
-                    if(orderUser) {
-                        User.open().updateById(orderUser._id, {
-                            $set: {
-                                freezeFunds: (parseFloat(orderUser.freezeFunds) -
-                                (parseFloat(task.price) + parseFloat(task.price2 ? task.price2 : 0))).toFixed(4)
-                            }
-                        });
-                    }else{
+                }
+
+                //发布任务者自己
+                function taskerSelf() {
+                    return new Promise(function (resolve) {
+                        User.open().findById(task.userId)
+                            .then(function (orderUser) {
+                                if(orderUser) {
+                                    User.open().updateById(orderUser._id, {
+                                        $set: {
+                                            freezeFunds: (parseFloat(orderUser.freezeFunds) -
+                                            (parseFloat(task.price) + parseFloat(task.price2 ? task.price2 : 0))).toFixed(4)
+                                        }
+                                    }).then(function() {
+                                        resolve();
+                                    })
+                                }else{
+                                    adminFreezeFunds = (parseFloat(adminFreezeFunds) -
+                                    (parseFloat(task.price) + parseFloat(task.price2 ? task.price2 : 0))).toFixed(4);
+                                    resolve();
+                                }
+                            });
+                    });
+                }
+
+                //平台管理员
+                function adminSelf() {
+                    return new Promise(function (resolve) {
+                        adminFreezeFunds = (parseFloat(adminFreezeFunds) + parseFloat(task.taskerAdminProfit) +
+                        parseFloat(task.handerAdminProfit)).toFixed(4);
+
                         User.open().updateById(admin._id, {
                             $set: {
-                                freezeFunds: (parseFloat(admin.freezeFunds) -
-                                (parseFloat(task.price) + parseFloat(task.price2 ? task.price2 : 0))).toFixed(4)
+                                freezeFunds: adminFreezeFunds
                             }
-                        });
-                    }
-                });
-            //平台管理员
-            User.open().updateById(admin._id, {
-                $set: {
-                    freezeFunds: (parseFloat(admin.freezeFunds) + parseFloat(task.taskerAdminProfit) +
-                    parseFloat(task.handerAdminProfit)).toFixed(4)
+                        }).then(function() {
+                            resolve();
+                        })
+                    });
                 }
             });
-        });
+    });
 }
 
 function profitFunds(task) {
-    User.open().findOne({username: 'admin'})
-        .then(function (admin) {
-            var price;
-            //做任务者的父级
-            if(task.taskUserParentId) {
-                price = task.handerChildPrice;
-                User.open().findById(task.taskUserParentId)
-                    .then(function (taskUserParent) {
-                        if(taskUserParent) {
-                            User.open().updateById(taskUserParent._id, {
-                                $set: {
-                                    freezeFunds: (parseFloat(taskUserParent.freezeFunds) -
-                                    parseFloat(task.handerParentProfit)).toFixed(4),
-                                    funds: (parseFloat(taskUserParent.funds) +
-                                    parseFloat(task.handerParentProfit)).toFixed(4)
-                                }
+    return new Promise(function(done) {
+        User.open().findOne({username: 'admin'})
+            .then(function (admin) {
+                var adminFunds = admin.funds;
+                var adminFreezeFunds = admin.freezeFunds;
+                var price;
+
+                handerParent().then(function () {
+                    handerSelf().then(function () {
+                        taskerParent().then(function () {
+                            adminSelf().then(function () {
+                                done();
                             });
-                        }else{
-                            User.open().updateById(admin._id, {
-                                $set: {
-                                    freezeFunds: (parseFloat(admin.freezeFunds) -
-                                    parseFloat(task.handerParentProfit)).toFixed(4),
-                                    funds: (parseFloat(admin.funds) +
-                                    parseFloat(task.handerParentProfit)).toFixed(4)
-                                }
-                            });
+                        });
+                    });
+                });
+
+                //做任务者的父级
+                function handerParent() {
+                    return new Promise(function (resolve) {
+                        if (task.taskUserParentId) {
+                            price = task.handerChildPrice;
+                            User.open().findById(task.taskUserParentId)
+                                .then(function (taskUserParent) {
+                                    if (taskUserParent) {
+                                        User.open().updateById(taskUserParent._id, {
+                                            $set: {
+                                                freezeFunds: (parseFloat(taskUserParent.freezeFunds) -
+                                                parseFloat(task.handerParentProfit)).toFixed(4),
+                                                funds: (parseFloat(taskUserParent.funds) +
+                                                parseFloat(task.handerParentProfit)).toFixed(4)
+                                            }
+                                        }).then(function () {
+                                            resolve();
+                                        })
+                                    } else {
+                                        adminFunds = (parseFloat(adminFunds) +
+                                        parseFloat(task.handerParentProfit)).toFixed(4);
+                                        adminFreezeFunds = (parseFloat(adminFreezeFunds) -
+                                        parseFloat(task.handerParentProfit)).toFixed(4);
+                                        resolve();
+                                    }
+                                });
+                        } else {
+                            price = task.handerParentPrice;
+                            resolve();
                         }
                     });
-            }else{
-                price = task.handerParentPrice;
-            }
-            //做任务者自己
-            User.open().findById(task.taskUserId)
-                .then(function (taskUser) {
-                    if(taskUser) {
-                        User.open().updateById(taskUser._id, {
-                            $set: {
-                                freezeFunds: (parseFloat(taskUser.freezeFunds) - parseFloat(price)).toFixed(4),
-                                funds: (parseFloat(taskUser.funds) + parseFloat(price)).toFixed(4)
-                            }
-                        });
-                    }else{
+                }
+
+                //做任务者自己
+                function handerSelf() {
+                    return new Promise(function (resolve) {
+                        User.open().findById(task.taskUserId)
+                            .then(function (taskUser) {
+                                if (taskUser) {
+                                    User.open().updateById(taskUser._id, {
+                                        $set: {
+                                            freezeFunds: (parseFloat(taskUser.freezeFunds) - parseFloat(price)).toFixed(4),
+                                            funds: (parseFloat(taskUser.funds) + parseFloat(price)).toFixed(4)
+                                        }
+                                    }).then(function() {
+                                        resolve();
+                                    })
+                                } else {
+                                    adminFunds = (parseFloat(adminFunds) + parseFloat(price)).toFixed(4);
+                                    adminFreezeFunds = (parseFloat(adminFreezeFunds) - parseFloat(price)).toFixed(4);
+                                    resolve();
+                                }
+                            });
+                    });
+                }
+
+                //发布任务者的父级
+                function taskerParent() {
+                    return new Promise(function(resolve) {
+                        if(task.userParentId) {
+                            User.open().findById(task.userParentId)
+                                .then(function (orderUserParent) {
+                                    if(orderUserParent) {
+                                        User.open().updateById(orderUserParent._id, {
+                                            $set: {
+                                                freezeFunds: (parseFloat(orderUserParent.freezeFunds) -
+                                                parseFloat(task.taskerParentProfit)).toFixed(4),
+                                                funds: (parseFloat(orderUserParent.funds) +
+                                                parseFloat(task.taskerParentProfit)).toFixed(4)
+                                            }
+                                        }).then(function () {
+                                            resolve();
+                                        });
+                                    }else{
+                                        adminFunds = (parseFloat(adminFunds) +
+                                        parseFloat(task.taskerParentProfit)).toFixed(4);
+                                        adminFreezeFunds = (parseFloat(adminFreezeFunds) -
+                                        parseFloat(task.taskerParentProfit)).toFixed(4);
+                                        resolve();
+                                    }
+                                });
+                        }else{
+                            resolve();
+                        }
+                    })
+                }
+
+                //发布任务者自己不需要操作
+                //平台管理员
+                function adminSelf() {
+                    return new Promise(function (resolve) {
+                        adminFunds = (parseFloat(adminFunds) + parseFloat(task.taskerAdminProfit) +
+                        parseFloat(task.handerAdminProfit)).toFixed(4);
+                        adminFreezeFunds = (parseFloat(adminFreezeFunds) -
+                        (parseFloat(task.taskerAdminProfit) + parseFloat(task.handerAdminProfit))).toFixed(4);
+
                         User.open().updateById(admin._id, {
                             $set: {
-                                freezeFunds: (parseFloat(admin.freezeFunds) - parseFloat(price)).toFixed(4),
-                                funds: (parseFloat(admin.funds) + parseFloat(price)).toFixed(4)
+                                funds: adminFunds,
+                                freezeFunds: adminFreezeFunds
                             }
+                        }).then(function () {
+                            resolve();
                         });
-                    }
-                });
-            //发布任务者的父级
-            if(task.userParentId) {
-                User.open().findById(task.userParentId)
-                    .then(function (orderUserParent) {
-                        if(orderUserParent) {
-                            User.open().updateById(orderUserParent._id, {
-                                $set: {
-                                    freezeFunds: (parseFloat(orderUserParent.freezeFunds) -
-                                    parseFloat(task.taskerParentProfit)).toFixed(4),
-                                    funds: (parseFloat(orderUserParent.funds) +
-                                    parseFloat(task.taskerParentProfit)).toFixed(4)
-                                }
-                            });
-                        }else{
-                            User.open().updateById(admin._id, {
-                                $set: {
-                                    freezeFunds: (parseFloat(admin.freezeFunds) -
-                                    parseFloat(task.taskerParentProfit)).toFixed(4),
-                                    funds: (parseFloat(admin.funds) +
-                                    parseFloat(task.taskerParentProfit)).toFixed(4)
-                                }
-                            });
-                        }
                     });
-            }
-            //发布任务者自己不需要操作
-            //平台管理员
-            User.open().updateById(admin._id, {
-                $set: {
-                    freezeFunds: (parseFloat(admin.freezeFunds) -
-                    (parseFloat(task.taskerAdminProfit) + parseFloat(task.handerAdminProfit))).toFixed(4),
-                    funds: (parseFloat(admin.funds) + parseFloat(task.taskerAdminProfit) +
-                    parseFloat(task.handerAdminProfit)).toFixed(4)
                 }
             });
-        });
+    })
 }
 
 Task.open = function() {
@@ -289,14 +372,16 @@ Task.include({
     success: function() {
         var self = this;
         return new Promise(function (resolve, reject) {
-            Task.open().updateById(self._id, {
-                $set: {
-                    taskStatus: '完成',
-                    successTime: moment().format('YYYY-MM-DD HH:mm:ss')
-                }
+            profitFunds(self).then(function () {
+                Task.open().updateById(self._id, {
+                    $set: {
+                        taskStatus: '完成',
+                        successTime: moment().format('YYYY-MM-DD HH:mm:ss')
+                    }
+                }).then(function() {
+                    resolve();
+                })
             });
-            profitFunds(self);
-            resolve();
         });
     }
 });
