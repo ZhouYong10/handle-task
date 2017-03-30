@@ -93,10 +93,8 @@ User.extend({
                             childNum: admin.childNum
                         }
                     });
-                    User.open().removeById(delUser._id)
-                        .then(function() {
-                            resolve();
-                        })
+                    User.open().removeById(delUser._id);
+                    resolve(delUser.username);
                 })
             });
         })
@@ -143,9 +141,10 @@ User.include({
         var self = this;
         for(var i = 0; i < self.children.length; i++) {
             if(self.children[i] == id) {
+                self.children.splice(i, 1);
                 User.open().updateById(self._id, {
                     $set: {
-                        children: self.children.splice(i, 1),
+                        children: self.children,
                         childNum: self.children.length
                     }
                 });

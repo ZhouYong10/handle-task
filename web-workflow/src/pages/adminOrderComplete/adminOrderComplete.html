@@ -39,14 +39,14 @@
                                         <th>用户</th>
                                         <th>创建时间</th>
                                         <th>类型 | 标题</th>
-                                        <th>账号/地址</th>
-                                        <th>单价</th>
+                                        <th>账号 / 地址</th>
+                                        <th>价格</th>
                                         <th>已做 / 数量</th>
                                         <th>二维码</th>
                                         <th>样图</th>
                                         <th>任务说明</th>
                                         <th>总价 / 结余</th>
-                                        <th>返利 | 价格</th>
+                                        <th>返利(父级｜平台)</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -57,7 +57,7 @@
                                         <td><%= orders[i].user %></td>
                                         <td><%= orders[i].createTime %></td>
                                         <td>
-                                            <%= orders[i].smallTypeName %><br>
+                                            <%= orders[i].typeName %><br>
                                             <a class="am-text-truncate text-break" title="<%= orders[i].title %>">
                                                 <%= orders[i].title %>
                                             </a>
@@ -76,8 +76,9 @@
                                             <% } %>
                                         </td>
                                         <td>
-                                            <%= orders[i].price %><br>
-                                            <%= orders[i].price2 %>
+                                            发布价：<%= orders[i].price %> ｜ <%= orders[i].price2 %> <br>
+                                            做父级：<%= orders[i].handerParentPrice %> <br>
+                                            做子级：<%= orders[i].handerChildPrice %>
                                         </td>
                                         <td>
                                             <a href="/admin/order/details?orderId=<%= orders[i]._id %>" title="点击查看任务列表">
@@ -108,10 +109,8 @@
                                             <%= orders[i].surplus %>
                                         </td>
                                         <td>
-                                            A: <%= orders[i].adminProfit %> | <%= orders[i].adminPerPrice %><br/>
-                                            B: <%= orders[i].topProfit %> | <%= orders[i].topPerPrice %><br/>
-                                            C: <%= orders[i].superProfit %> | <%= orders[i].superPerPrice %><br/>
-                                            D: <%= orders[i].goldProfit %> | <%= orders[i].goldPerPrice %><br/>
+                                            发布方: <%= orders[i].taskerParentProfit %> | <%= orders[i].taskerAdminProfit %><br/>
+                                            任务方: <%= orders[i].handerParentProfit %> | <%= orders[i].handerAdminProfit %><br/>
                                         </td>
                                     </tr>
                                     <% } %>

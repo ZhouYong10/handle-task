@@ -286,7 +286,7 @@ router.post('/username/notrepeat', function (req, res) {
 router.get('/lowerUser', function (req, res) {
     User.open().findById(req.session.passport.user)
         .then(function (parent) {
-            var invitation = req.headers.host + '/sign/in?invitation=' + Utils.cipher(parent._id + '', Utils.invitationKey);
+            var invitation = 'http://' + req.headers.host + '/sign/in?invitation=' + Utils.cipher(parent._id + '', Utils.invitationKey);
             if(parent.children && parent.children.length > 0){
                 User.open().findPages({_id: {$in: parent.children}}, (req.query.page ? req.query.page : 1))
                     .then(function(obj) {
