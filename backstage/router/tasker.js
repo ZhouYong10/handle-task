@@ -148,6 +148,7 @@ router.post('/WX/friend/add', function (req, res) {
             .then(function (user) {
                 var orderIns = Order.wrapToInstance(order);
                 orderIns.checkRandomStr(req).then(function() {
+                    delete orderIns.price2;
                     orderIns.createOne(user, {type: 'WXfriend'})
                         .then(function () {
                             socketIO.emit('updateNav', {'waitHT': 1});
@@ -212,6 +213,7 @@ router.post('/WX/vote/add', function (req, res) {
         User.open().findById(req.session.passport.user)
             .then(function (user) {
                 var orderIns = Order.wrapToInstance(order);
+                delete orderIns.price2;
                 orderIns.checkRandomStr(req).then(function() {
                     orderIns.createOne(user, {type: 'WXvote'})
                         .then(function () {
@@ -362,7 +364,6 @@ router.get('/WX/article/add', function (req, res) {
 
 router.post('/WX/article/add', function (req, res) {
     Order.getOrder(req).then(function (order) {
-        order.num2 = order.num;
         User.open().findById(req.session.passport.user)
             .then(function (user) {
                 var orderIns = Order.wrapToInstance(order);
@@ -402,11 +403,11 @@ router.get('/order/details', function (req, res) {
                 }, (req.query.page ? req.query.page : 1))
                 .then(function (obj) {
                     res.render('taskerOrderDetails', {
-                        title: '人工平台 / 任务进度详情',
+                        title: '任务进度详情',
                         user: user,
                         orders: obj.results,
                         pages: obj.pages,
-                        msg: req.query.msg
+                        witchPage: req.query.witchPage
                     })
                 });
         });

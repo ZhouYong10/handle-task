@@ -647,16 +647,10 @@ router.get('/complaint/wait', function (req, res) {
 
 router.get('/complaint/success', function (req, res) {
     Task.open().findById(req.query.taskId).then(function(task) {
-        Task.open().updateById(task._id, {$set: {
-            taskStatus: '投诉成立'
-        }}).then(function() {
-            Order.open().updateById(task.orderId, {
-                $set: {status: '已发布'},
-                $inc: {taskNum: -1}
-            }).then(function() {
-                res.redirect('/complaint/wait');
-            })
-        })
+        var taskIns = Task.wrapToInstance(task);
+        taskIns.refuse().then(function () {
+            res.redirect('/admin/complaint/wait');
+        });
     })
 });
 
@@ -668,7 +662,7 @@ router.get('/complaint/refuse', function (req, res) {
                 taskStatus: '投诉不成立',
                 complaintRefuse: req.query.info
             }}).then(function () {
-                res.redirect('/complaint/refuse');
+                res.redirect('/admin/complaint/wait');
             });
         })
     })
