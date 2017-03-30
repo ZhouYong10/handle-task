@@ -442,19 +442,21 @@ router.get('/check/success', function (req, res) {
 
 router.get('/check/complaints', function (req, res) {
     var info = req.query;
-    Task.open().findById(info.taskId).then(function(task) {
-        Task.open().updateById(info.taskId, {$set: {
+    Task.open().updateById(info.taskId, {
+        $set: {
             taskStatus: '被投诉',
             complaintsInfo: info.info,
             complaintsTime: moment().format('YYYY-MM-DD HH:mm:ss')
-        }}).then(function() {
-            socketIO.emit('updateNav', {'complaintHT': 1});
-            res.redirect('/tasker/check');
-        })
-    })
+        }
+    }).then(function () {
+        socketIO.emit('updateNav', {'complaintHT': 1});
+        res.redirect('/tasker/check');
+    });
 });
 
-router.get('/complaint', function (req, res) {
+
+
+router.get('/complaints', function (req, res) {
     User.open().findById(req.session.passport.user)
         .then(function (user) {
             Task.open().findPages({
