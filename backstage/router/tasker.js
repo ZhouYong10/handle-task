@@ -407,6 +407,7 @@ router.get('/order/details', function (req, res) {
                         user: user,
                         orders: obj.results,
                         pages: obj.pages,
+                        msg: req.query.msg, //当发布任务者取消任务时，如果还有未审核任务存在，则显示此信息
                         witchPage: req.query.witchPage
                     })
                 });
@@ -506,8 +507,10 @@ router.get('/order/refund', function (req, res) {
                 }}).then(function() {
                     User.open().findById(order.userId).then(function(user) {
                         var funds = (parseFloat(user.funds) + parseFloat(order.surplus)).toFixed(4);
+                        var freezeFunds = (parseFloat(user.freezeFunds) - parseFloat(order.surplus)).toFixed(4);
                         User.open().updateById(user._id, {$set: {
-                            funds: funds
+                            funds: funds,
+                            freezeFunds: freezeFunds
                         }}).then(function() {
                             res.redirect(req.query.path);
                         })

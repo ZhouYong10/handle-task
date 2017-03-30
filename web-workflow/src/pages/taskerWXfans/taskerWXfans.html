@@ -124,16 +124,16 @@
                                         <td>
                                             <% if(orders[i].status == '已发布'){ %>
                                             <a class="am-btn am-btn-primary am-radius am-btn-xs orderPause"
-                                               href="/artificial/order/pause?id=<%= orders[i]._id %>&path=/artificial/WX/fans"
+                                               href="/tasker/order/pause?id=<%= orders[i]._id %>&path=/tasker/WX/fans"
                                                onclick="return confirm('确认要暂停该订单吗？');">暂停</a>
                                             <a class="am-btn am-btn-danger am-radius am-btn-xs orderRefund"
-                                               href="/artificial/order/refund?id=<%= orders[i]._id %>&path=/artificial/WX/fans"
+                                               href="/tasker/order/refund?id=<%= orders[i]._id %>&path=/tasker/WX/fans"
                                                onclick="return confirm('确认要取消该订单吗(剩余任务金额将返还)？');">取消</a>
                                             <% }else if(orders[i].status == '已暂停'){ %>
                                             <a class="am-btn am-btn-primary am-radius am-btn-xs"
-                                               href="/artificial/order/start?id=<%= orders[i]._id %>&path=/artificial/WX/fans">开始</a>
+                                               href="/tasker/order/start?id=<%= orders[i]._id %>&path=/tasker/WX/fans">开始</a>
                                             <a class="am-btn am-btn-danger am-radius am-btn-xs orderRefund"
-                                               href="/artificial/order/refund?id=<%= orders[i]._id %>&path=/artificial/WX/fans"
+                                               href="/tasker/order/refund?id=<%= orders[i]._id %>&path=/tasker/WX/fans"
                                                onclick="return confirm('确认要取消该订单吗(剩余任务金额将返还)？');">取消</a>
                                             <% } %>
                                         </td>

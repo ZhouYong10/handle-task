@@ -29,6 +29,9 @@
                     <div class="widget am-cf">
                         <div class="widget-head am-cf">
                             <div class="widget-title  am-cf"><%=title%></div>
+                            <% if(msg){ %>
+                            <span class="tips"><%= msg %></span>
+                            <% } %>
                         </div>
                         <div class="widget-body  am-fr">
                             <div class="am-u-sm-12 am-scrollable-horizontal">
