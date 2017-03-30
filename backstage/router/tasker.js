@@ -456,7 +456,7 @@ router.get('/check/complaints', function (req, res) {
 
 
 
-router.get('/complaints', function (req, res) {
+router.get('/complaint', function (req, res) {
     User.open().findById(req.session.passport.user)
         .then(function (user) {
             Task.open().findPages({
@@ -465,7 +465,7 @@ router.get('/complaints', function (req, res) {
                 }, (req.query.page ? req.query.page : 1))
                 .then(function (obj) {
                     res.render('taskerComplaints', {
-                        title: '人工平台 / 我投诉的任务',
+                        title: '我投诉的任务',
                         user: user,
                         orders: obj.results,
                         pages: obj.pages

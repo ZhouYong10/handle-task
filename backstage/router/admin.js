@@ -668,7 +668,7 @@ router.get('/complaint/refuse', function (req, res) {
                 taskStatus: '投诉不成立',
                 complaintRefuse: req.query.info
             }}).then(function () {
-                res.redirect('/complaint/wait');
+                res.redirect('/complaint/refuse');
             });
         })
     })

@@ -138,7 +138,7 @@ router.get('/complaints', function (req, res) {
         .then(function (user) {
             Task.open().findPages({
                     taskUserId: user._id,
-                    taskStatus: '被投诉'
+                    taskStatus: {$in: ['被投诉', '投诉成立', '投诉不成立']}
                 }, (req.query.page ? req.query.page : 1))
                 .then(function (obj) {
                     res.render('handerComplaints', {
