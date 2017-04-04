@@ -125,7 +125,15 @@
                                                 <%= orders[i].remark %>
                                             </a>
                                         </td>
-                                        <td><%= orders[i].status %></td>
+                                        <td>
+                                            <%= orders[i].status %>
+                                            <% if(orders[i].refundInfo){ %>
+                                            <br/>
+                                            <a class="am-text-truncate text-break" title="<%= orders[i].refundInfo %>">
+                                                <%= orders[i].refundInfo %>
+                                            </a>
+                                            <% } %>
+                                        </td>
                                         <td>
                                             <% if(orders[i].status == '已发布'){ %>
                                             <a class="am-btn am-btn-primary am-radius am-btn-xs orderPause"
