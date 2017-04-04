@@ -32,6 +32,18 @@
                         </div>
                         <div class="widget-body  am-fr">
 
+                            <div id="orderCheck" class="am-form am-form-inline">
+                                <input type="hidden" v-model="orderCheckIsOpen" value="<%= orderCheckIsOpen %>">
+                                <button class="am-btn am-btn-primary am-radius am-btn-sm"
+                                @click="orderCheckOpen" v-if="orderCheckIsOpen == 'no'">
+                                    开启审核
+                                </button>
+                                <button class="am-btn am-btn-primary am-radius am-btn-sm"
+                                @click="orderCheckClose" v-if="orderCheckIsOpen == 'yes'">
+                                    关闭审核
+                                </button>
+                            </div>
+
                             <div class="am-u-sm-12 am-scrollable-horizontal">
                                 <table width="100%" class="am-table am-text-nowrap am-table-striped tpl-table-black">
                                     <thead>
@@ -144,6 +156,7 @@
 
 <script>
     require('adminMenu');
+    require('adminCheckWait');
 
     $(function() {
         $('.fancybox').fancybox();

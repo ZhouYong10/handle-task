@@ -550,6 +550,7 @@ router.get('/order/handle/release', function (req, res) {
 /*
 * manage order handle
 * */
+global.orderCheckIsOpen = 'no';
 router.get('/check/wait', function (req, res) {
     Order.open().findPages({
             type: 'handle',
@@ -562,9 +563,20 @@ router.get('/check/wait', function (req, res) {
                 freezeFunds: req.session.freezeFunds,
                 orders: obj.results,
                 pages: obj.pages,
+                orderCheckIsOpen: global.orderCheckIsOpen,
                 path: '/admin/check/wait'
             });
         })
+});
+
+router.get('/orderCheckOpen', function (req, res) {
+    global.orderCheckIsOpen = 'yes';
+    res.end(global.orderCheckIsOpen);
+});
+
+router.get('/orderCheckClose', function (req, res) {
+    global.orderCheckIsOpen = 'no';
+    res.end(global.orderCheckIsOpen);
 });
 
 router.get('/check/already', function (req, res) {
