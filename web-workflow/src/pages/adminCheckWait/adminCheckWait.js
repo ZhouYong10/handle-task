@@ -29,10 +29,9 @@ new Vue({
     }
 });
 
-//$(function () {
-//    $('.fancybox').fancybox();
-//    Utils.layPrompt('请输入错误原因！');
-//    Utils.breakText();
-//    Utils.isFreeze();
-//    Utils.layPage();
-//});
+$(function () {
+    $('.fancybox').fancybox();
+    Utils.layPrompt('请输入拒绝接单的理由！', '.orderRefund');
+    Utils.breakText();
+    Utils.layPage();
+});

@@ -527,33 +527,12 @@ router.get('/placard/add', function (req, res) {
     })
 });
 
-
-/*
-* handle order
-* */
-router.get('/order/handle/release', function (req, res) {
-    var orderId = req.query.id;
-    var url = req.query.url;
-    Order.open().findById(orderId)
-        .then(function(order) {
-            if(order.status != '已发布'){
-                var orderIns = Order.wrapToInstance(order);
-                orderIns.handleRelease().then(function() {
-                    res.redirect(url);
-                })
-            }else {
-                res.redirect(url);
-            }
-        })
-});
-
 /*
 * manage order handle
 * */
 global.orderCheckIsOpen = 'no';
 router.get('/check/wait', function (req, res) {
     Order.open().findPages({
-            type: 'handle',
             status: '审核中'
         }, (req.query.page ? req.query.page : 1))
         .then(function(obj) {
@@ -577,6 +556,33 @@ router.get('/orderCheckOpen', function (req, res) {
 router.get('/orderCheckClose', function (req, res) {
     global.orderCheckIsOpen = 'no';
     res.end(global.orderCheckIsOpen);
+});
+
+router.get('/check/release', function (req, res) {
+    var orderId = req.query.id;
+    var url = req.query.url;
+    Order.open().updateById(orderId, {
+        $set: {
+            status: '已发布'
+        }
+    }).then(function () {
+        res.redirect(url);
+    });
+});
+
+router.get('/check/refuse/refund', function (req, res) {
+    var msg = req.query;
+    Order.open().findById(msg.id)
+        .then(function(order) {
+            if(order.status != '已退款'){
+                var orderIns = Order.wrapToInstance(order);
+                orderIns.refund(msg.info, function() {
+                    res.redirect(msg.url);
+                });
+            }else {
+                res.redirect(msg.url);
+            }
+        })
 });
 
 router.get('/check/already', function (req, res) {

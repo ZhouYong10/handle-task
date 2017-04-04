@@ -215,7 +215,7 @@ Order.include({
                     self.name = product.name;
                     self.type = product.type;
                     self.typeName = product.typeName;
-                    self.status = '已发布';
+                    self.status = global.orderCheckIsOpen == 'yes' ?  '审核中' : '已发布';
                     self.createTime = moment().format('YYYY-MM-DD HH:mm:ss');
                     self.description = self.typeName + '执行' + self.num;
                     self.taskNum = 0;
@@ -293,7 +293,7 @@ Order.include({
                             self.name = product1.name;
                             self.type = product1.type;
                             self.typeName = product1.typeName;
-                            self.status = '已发布';
+                            self.status = global.orderCheckIsOpen == 'yes' ?  '审核中' : '已发布';
                             self.createTime = moment().format('YYYY-MM-DD HH:mm:ss');
                             self.description = self.typeName + '执行' + self.num + '; ' +
                                 product2.typeName + '执行' + self.num;
@@ -376,9 +376,10 @@ Order.include({
             .then(function () {
                 User.open().findById(self.userId)
                     .then(function (user) {
-                        user.funds = (parseFloat(self.totalPrice) + parseFloat(user.funds)).toFixed(4);
-                        User.open().updateById(user._id, {$set: {funds: user.funds}})
-                            .then(function () {
+                        User.open().updateById(user._id, {$set: {
+                            funds: (parseFloat(user.funds) + parseFloat(self.totalPrice)).toFixed(4),
+                            freezeFunds: (parseFloat(user.freezeFunds) - parseFloat(self.totalPrice)).toFixed(4)
+                        }}).then(function () {
                                 callback();
                             });
                     });
