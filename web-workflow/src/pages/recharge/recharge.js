@@ -15,10 +15,10 @@ new Vue({
     },
     methods: {
         commit: function() {
-            console.log(this.num);
             this.$http.post('/user/recharge', {
                 alipayId: this.num
             }).then(function(res) {
+                console.log(res, '===========================');
                 if(res.data.isOK) {
                     $('<a href="' + res.data.path + '" ></a>').get(0).click();
                 }else{

@@ -11,6 +11,7 @@ var Product = require('../models/Product');
 var Task = require('../models/Task');
 var Utils = require('../models/Utils');
 var router = require('express').Router();
+var request = require('request');
 
 var bcrypt = require('bcryptjs');
 var moment = require('moment');
@@ -58,85 +59,57 @@ router.get('/recharge', function (req, res) {
 });
 
 router.post('/recharge', function (req, res) {
-    var alipayInfo = req.body, alipayDate = alipayInfo.alipayId.substr(0, 8),
-        today = moment().format('YYYYMMDD');
-    if(alipayDate < (today)) {
-        res.send({
-            isOK: false,
-            message: '该交易号已经过期！'
-        });
-    }else if(!(/^[0-9]*[1-9][0-9]*$/.test(alipayInfo.alipayId))){
-        res.send({
-            isOK: false,
-            message: '请输入合法的支付宝交易号!'
-        });
-    } else {
-        Recharge.open().findOne({alipayId: alipayInfo.alipayId})
-            .then(function (result) {
-                if (result) {
-                    res.send({
-                        isOK: false,
-                        message: '该交易号已充值成功，不能重复充值！'
-                    });
-                } else {
-                    User.open().findById(req.session.passport.user)
-                        .then(function (user) {
-                            alipayInfo.username = user.username;
-                            alipayInfo.userId = user._id;
-                            alipayInfo.userOldFunds = user.funds;
-                            Recharge.record(alipayInfo)
-                                .then(function(record) {
-                                    res.send({
-                                        isOK: true,
-                                        path: '/user/recharge/history'
-                                    });
-                                })
-                        });
-                }
+    User.open().findById(req.session.passport.user)
+        .then(function (user) {
+            var url = 'http://localhost:4000/handle/recharge?alipayId=' + req.body.alipayId +
+                '&type=handle' +
+                '&userId=' + user._id +
+                '&username=' + encodeURIComponent(user.username) +
+                '&userOldFunds=' + user.funds;
+            request(url, function (err, resp, body) {
+                res.send(body);
             });
-    }
+        });
 });
 
 router.get('/recharge/history', function (req, res) {
     User.open().findById(req.session.passport.user)
         .then(function (user) {
-            Recharge.open().findPages({
-                userId: user._id
-            }, (req.query.page ? req.query.page : 1))
-                .then(function (obj) {
-                    res.render('rechargeHistory', {
-                        title: '充值记录',
-                        user: user,
-                        recharges: obj.results,
-                        pages: obj.pages
-                    });
-                }, function (error) {
-                    res.send('查询充值记录失败： ' + error);
+            var url = 'http://localhost:4000/handle/recharge/history?type=handle&userId=' + user._id +
+                '&page=' + (req.query.page ? req.query.page : 1);
+            request(url, function (err, resp, body) {
+                var obj = JSON.parse(body);
+                res.render('rechargeHistory', {
+                    title: '充值记录',
+                    user: user,
+                    recharges: obj.results,
+                    pages: obj.pages
                 });
+            });
         });
 });
 
 router.get('/search/recharge', function (req, res) {
     User.open().findById(req.session.passport.user)
         .then(function (user) {
-            var query = {userId: user._id};
+            var url = 'http://localhost:4000/handle/search/recharge?type=handle&userId=' + user._id +
+                '&page=' + (req.query.page ? req.query.page : 1);
             if(req.query.funds) {
-                query.funds = req.query.funds;
+                url += '&funds=' + req.query.funds;
             }
             if(req.query.createTime) {
-                query.createTime = new RegExp(req.query.createTime);
+                url += '&createTime=' + req.query.createTime;
             }
-            Recharge.open().findPages(query, (req.query.page ? req.query.page : 1))
-                .then(function (obj) {
-                    res.render('rechargeHistory', {
-                        title: '充值记录',
-                        user: user,
-                        recharges: obj.results,
-                        pages: obj.pages
-                    });
-                }, function (error) {
-                    res.send('查询充值记录失败： ' + error);
+            request(url, function (err, resp, body) {
+                var obj = JSON.parse(body);
+                console.log(obj, '============');
+                res.render('rechargeHistory', {
+                    title: '充值记录',
+                    user: user,
+                    recharges: obj.results,
+                    pages: obj.pages
                 });
+            });
         });
 });
 
