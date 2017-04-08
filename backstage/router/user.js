@@ -61,13 +61,26 @@ router.get('/recharge', function (req, res) {
 router.post('/recharge', function (req, res) {
     User.open().findById(req.session.passport.user)
         .then(function (user) {
-            var url = 'http://localhost:4000/handle/recharge?alipayId=' + req.body.alipayId +
-                '&type=handle' +
+            var url = 'http://localhost:3000/handle/recharge?type=handle' +
+                '&alipayId=' + req.body.alipayId +
                 '&userId=' + user._id +
                 '&username=' + encodeURIComponent(user.username) +
+                '&createTime=' + moment().format('YYYY-MM-DD HH:mm:ss') +
                 '&userOldFunds=' + user.funds;
             request(url, function (err, resp, body) {
-                res.send(body);
+                var info = JSON.parse(body);
+                if(info.isOK && info.alipayFunds) {
+                    User.open().updateById(user._id, {$set: {
+                        funds: (parseFloat(user.funds) + parseFloat(info.alipayFunds)).toFixed(4)
+                    }}).then(function() {
+                        res.send({
+                            isOK: true,
+                            path: '/user/recharge/history'
+                        });
+                    })
+                }else{
+                    res.send(info);
+                }
             });
         });
 });
@@ -75,16 +88,21 @@ router.post('/recharge', function (req, res) {
 router.get('/recharge/history', function (req, res) {
     User.open().findById(req.session.passport.user)
         .then(function (user) {
-            var url = 'http://localhost:4000/handle/recharge/history?type=handle&userId=' + user._id +
+            var url = 'http://localhost:3000/handle/recharge/history?type=handle' +
+                '&userId=' + user._id +
                 '&page=' + (req.query.page ? req.query.page : 1);
             request(url, function (err, resp, body) {
                 var obj = JSON.parse(body);
-                res.render('rechargeHistory', {
-                    title: '充值记录',
-                    user: user,
-                    recharges: obj.results,
-                    pages: obj.pages
-                });
+                if(obj.results){
+                    res.render('rechargeHistory', {
+                        title: '充值记录',
+                        user: user,
+                        recharges: obj.results,
+                        pages: obj.pages
+                    });
+                }else{
+                    res.send(obj);
+                }
             });
         });
 });
@@ -92,7 +110,7 @@ router.get('/recharge/history', function (req, res) {
 router.get('/search/recharge', function (req, res) {
     User.open().findById(req.session.passport.user)
         .then(function (user) {
-            var url = 'http://localhost:4000/handle/search/recharge?type=handle&userId=' + user._id +
+            var url = 'http://localhost:3000/handle/search/recharge?type=handle&userId=' + user._id +
                 '&page=' + (req.query.page ? req.query.page : 1);
             if(req.query.funds) {
                 url += '&funds=' + req.query.funds;
@@ -102,7 +120,6 @@ router.get('/search/recharge', function (req, res) {
             }
             request(url, function (err, resp, body) {
                 var obj = JSON.parse(body);
-                console.log(obj, '============');
                 res.render('rechargeHistory', {
                     title: '充值记录',
                     user: user,

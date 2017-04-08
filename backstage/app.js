@@ -145,26 +145,6 @@ app.use(session({secret: 'need change'}));
 app.use(passport.initialize());
 app.use(passport.session());
 
-
-var Recharge = require('./models/Recharge');
-app.get('/auto/recharge', function (req, res) {
-  var caseValue = req.query.a;
-  switch (caseValue) {
-    case "getsn":
-      Recharge.getAlipayIds()
-          .then(function (ids) {
-            res.send(ids);
-          });
-      break;
-    case "report":
-      Recharge.updateRecord(req.query.result)
-          .then(function (msg) {
-            res.end(msg);
-          });
-      break;
-  }
-});
-
 app.get('/', function (req, res) {
   res.render('index', {title: '用户登陆'});
 });
@@ -261,69 +241,6 @@ app.post('/sign/in', function(req, res, next) {
 });
 
 //对外公共接口
-var Order = require('./models/Order');
-
-global.weichuanmeiOrderNum = 1;
-global.dingdingOrderNum = 3;
-
-//丁丁提单
-app.get('/wx/like/forward/remote', function (req, res) {
-//app.get('/wx/like/forward/remote/get/order', function (req, res) {  //替代丁丁接单的接口地址
-  //var num = parseInt(req.query.num);
-  //global.forwardNum = num;
-  Order.open().findOne({
-    type: 'wx',
-    smallType: 'read',
-    status: '未处理',
-    num: {$gt: global.weichuanmeiOrderNum, $lte: global.dingdingOrderNum}
-  }).then(function (obj) {
-    if(obj && !obj.remote) {
-      Order.open().updateById(obj._id, {
-        //$set: {remote: 'daiding'}
-        $set: {remote: 'dingding'}
-      }).then(function() {
-        res.send(JSON.stringify({
-          id: obj._id,
-          address: obj.address,
-          read: obj.num,
-          like: obj.num2
-        }));
-      });
-    }else{
-      res.send(null);
-    }
-  });
-});
-
-app.get('/wx/like/complete/remote', function (req, res) {
-//app.get('/wx/like/forward/complete/remote', function (req, res) {  //替代丁丁接单的接口地址
-  var status = req.query.status;
-  var msg = req.query.msg;
-  var orderId = req.query.id;
-  var startReadNum = req.query.startReadNum;
-  Order.open().findById(orderId)
-      .then(function (order) {
-        //if(order && order.status == '未处理' && order.remote == 'daiding'){
-        if(order && order.status == '未处理' && order.remote == 'dingding'){
-          var orderIns = Order.wrapToInstance(order);
-          if (status == 1) {
-            orderIns.startReadNum = startReadNum;
-            orderIns.complete(function () {
-              res.end();
-            });
-          } else {
-            orderIns.refund(msg, function() {
-              res.end();
-            });
-          }
-        }else {
-          res.end();
-        }
-      })
-});
-
-
-
 app.get('/new/placard', function (req, res) {
     User.open().findById(req.session.passport.user)
         .then(function (user) {
@@ -338,6 +255,23 @@ app.get('/new/placard', function (req, res) {
                     res.send(obj);
                 });
         });
+});
+
+app.get('/auto/recharge/to/user', function (req, res) {
+    var info = req.query;
+    User.open().findById(info.userId).then(function (user) {
+        if (user) {
+            User.open().updateById(user._id, {
+                $set: {
+                    funds: (parseFloat(user.funds) + parseFloat(info.funds)).toFixed(4)
+                }
+            }).then(function () {
+                res.send('ok');
+            })
+        } else {
+            res.send('no');
+        }
+    });
 });
 
 //拦截未登录

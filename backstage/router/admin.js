@@ -17,6 +17,7 @@ var moment = require('moment');
 var Formidable = require('formidable');
 var path = require('path');
 var fs = require('fs');
+var request = require('request');
 var router = require('express').Router();
 
 Object.defineProperty(global, 'logoDir', {
@@ -171,8 +172,11 @@ router.get('/update/header/nav', function (req, res) {
  * manage funds
  * */
 router.get('/recharge', function (req, res) {
-    Recharge.open().findPages(null, (req.query.page ? req.query.page : 1))
-        .then(function(obj) {
+    var url = 'http://localhost:3000/handle/manage/recharge?type=handle' +
+        '&page=' + (req.query.page ? req.query.page : 1);
+    request(url, function (err, resp, body) {
+        var obj = JSON.parse(body);
+        if(obj.results){
             res.render('adminRecharge', {
                 title: '资金管理 / 充值记录',
                 money: req.session.systemFunds,
@@ -181,25 +185,26 @@ router.get('/recharge', function (req, res) {
                 pages: obj.pages,
                 path: '/admin/recharge'
             });
-        }, function(error) {
-            res.send('查询充值记录失败： ' + error);
-        })
+        }else{
+            res.send(obj);
+        }
+    });
 });
 
 router.get('/search/recharge/by/alipayId', function (req, res) {
-    Recharge.open().findPages({alipayId: req.query.alipayId.replace(/(^\s*)|(\s*$)/g,"")}, (req.query.page ? req.query.page : 1))
-        .then(function(obj) {
-            res.render('adminRecharge', {
-                title: '资金管理 / 充值记录',
-                money: req.session.systemFunds,
-                freezeFunds: req.session.freezeFunds,
-                recharges: obj.results,
-                pages: obj.pages,
-                path: '/admin/recharge'
-            });
-        }, function(error) {
-            res.send('查询充值记录失败： ' + error);
-        })
+    var url = 'http://localhost:3000/handle/search/recharge/by/alipayId?type=handle' +
+        '&alipayId=' + req.query.alipayId.replace(/(^\s*)|(\s*$)/g,"");
+    request(url, function (err, resp, body) {
+        var obj = JSON.parse(body);
+        res.render('adminRecharge', {
+            title: '资金管理 / 充值记录',
+            money: req.session.systemFunds,
+            freezeFunds: req.session.freezeFunds,
+            recharges: obj,
+            pages: 0,
+            path: '/admin/recharge'
+        });
+    });
 });
 
 router.get('/search/user/recharge', function (req, res) {
@@ -226,17 +231,36 @@ router.get('/hand/recharge', function (req, res) {
     if(isNaN(msg.funds)) {
         res.send('充值金额必须是数字。。。。。。');
     }else {
-        Recharge.hand(msg.id, msg.funds).then(function(backInfo) {
-            res.redirect(msg.url + '?date=' + new Date().getTime());
-        })
+        var url = 'http://localhost:3000/handle/hand/recharge?' +
+            'alipayId=' + msg.id +
+            '&funds=' + msg.funds;
+        request(url, function (err, resp, body) {
+            var result = JSON.parse(body);
+            if(result.isOk) {
+                User.open().findById(result.userId)
+                    .then(function (user) {
+                        User.open().updateById(user._id, {
+                            $set: {
+                                funds: (parseFloat(user.funds) + parseFloat(msg.funds)).toFixed(4)
+                            }
+                        }).then(function () {
+                            res.redirect(msg.url + '?date=' + new Date().getTime());
+                        });
+                    });
+            }else{
+                res.redirect(msg.url + '?date=' + new Date().getTime());
+            }
+        });
     }
 });
 
 router.get('/hand/recharge/refuse', function (req, res) {
-    var msg = req.query;
-    Recharge.handRefuse(msg.id, msg.info).then(function() {
-        res.redirect(msg.url);
-    })
+    var url = 'http://localhost:3000/handle/hand/recharge/refuse?' +
+        'alipayId=' + req.query.id +
+        '&msg=' + encodeURIComponent(req.query.info);
+    request(url, function (err, resp, body) {
+        res.redirect(req.query.url + '?date=' + new Date().getTime());
+    });
 });
 
 router.get('/withdraw/wait', function (req, res) {
