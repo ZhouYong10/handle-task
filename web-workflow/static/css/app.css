@@ -1121,6 +1121,14 @@ ul.tpl-dropdown-content .tpl-dropdown-menu-messages-item .menu-messages-content 
   color: #ffffff;
   min-height: 174px;
 }
+.theme-white .widget-black {
+  padding: 12px 17px;
+  border: 1px solid #3f4649;
+  border-top: 2px solid #3f4649;
+  background: #3f4649;
+  color: #ffffff;
+  min-height: 174px;
+}
 .theme-white .widget-purple .widget-statistic-icon {
   color: #9956b5;
 }
@@ -1128,7 +1136,7 @@ ul.tpl-dropdown-content .tpl-dropdown-menu-messages-item .menu-messages-content 
   color: #ded5e7;
 }
 .theme-white .widget-purple .widget-statistic-description {
-  color: #ded5e7;
+  color: #fff;
 }
 .theme-white .page-header-button {
   opacity: .8;
@@ -1746,7 +1754,7 @@ ul.tpl-dropdown-content .tpl-dropdown-menu-messages-item .menu-messages-content 
   font-size: 14px;
   line-height: 14px;
   padding-top: 8px;
-  color: #9cdcf2;
+  color: #fff;
 }
 .theme-black .widget-statistic-value {
   position: relative;
@@ -1759,13 +1767,20 @@ ul.tpl-dropdown-content .tpl-dropdown-menu-messages-item .menu-messages-content 
   margin-bottom: 8px;
 }
 .theme-black .widget-statistic-header {
-  color: #9cdcf2;
+  color: #ffffff;
 }
 .theme-black .widget-purple {
   padding: 12px 17px;
   border: 1px solid #5e4578;
   border-top: 2px solid #5c4375;
   background: #785799;
+  color: #ffffff;
+}
+.theme-black .widget-black {
+  padding: 12px 17px;
+  border: 1px solid #3f4649;
+  border-top: 2px solid #3f4649;
+  background: #3f4649;
   color: #ffffff;
 }
 .theme-black .widget-purple .widget-statistic-icon {

@@ -199,8 +199,14 @@ router.post('/info', function (req, res) {
 });
 
 router.get('/logout', function(req, res){
-    req.logout();
-    res.redirect('/');
+    User.open().updateById(req.session.passport.user, {
+        $set: {
+            isLogin: false
+        }
+    }).then(function () {
+        req.logout();
+        res.redirect('/');
+    });
 });
 
 router.get('/changePwd', function (req, res) {

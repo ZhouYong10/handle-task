@@ -101,6 +101,7 @@ function login(req, res, next) {
       }
       User.open().updateById(user._id, {
         $set: {
+          isLogin: true,
           lastLoginTime: moment().format('YYYY-MM-DD HH:mm:ss')
         }
       }).then(function () {
@@ -283,38 +284,46 @@ app.use(function(req, res, next) {
   }
 });
 
+global.loginNum = 218;
+
 app.get('/tasker/home', function (req, res) {
-  User.open().findById(req.session.passport.user)
-      .then(function (user) {
-        Placard.open().findPages({type: {$ne: 'handerPlacard'}}, (req.query.page ? req.query.page : 1))
-            .then(function (obj) {
-              res.render('taskerHome', {
-                title: '系统公告',
-                placards: obj.results,
-                pages: obj.pages,
-                user: user
-              });
-            }, function (error) {
-              res.send('获取公告列表失败： ' + error);
+    User.open().find({isLogin: true}).then(function (users) {
+        User.open().findById(req.session.passport.user)
+            .then(function (user) {
+                Placard.open().findPages({type: {$ne: 'handerPlacard'}}, (req.query.page ? req.query.page : 1))
+                    .then(function (obj) {
+                        res.render('taskerHome', {
+                            title: '系统公告',
+                            placards: obj.results,
+                            pages: obj.pages,
+                            user: user,
+                            loginNum: global.loginNum + users.length * 3
+                        });
+                    }, function (error) {
+                        res.send('获取公告列表失败： ' + error);
+                    });
             });
-      });
+    });
 });
 
 app.get('/hander/home', function (req, res) {
-  User.open().findById(req.session.passport.user)
-      .then(function (user) {
-        Placard.open().findPages({type: {$ne: 'taskerPlacard'}}, (req.query.page ? req.query.page : 1))
-            .then(function (obj) {
-              res.render('handerHome', {
-                title: '系统公告',
-                placards: obj.results,
-                pages: obj.pages,
-                user: user
-              });
-            }, function (error) {
-              res.send('获取公告列表失败： ' + error);
+    User.open().find({isLogin: true}).then(function (users) {
+        User.open().findById(req.session.passport.user)
+            .then(function (user) {
+                Placard.open().findPages({type: {$ne: 'taskerPlacard'}}, (req.query.page ? req.query.page : 1))
+                    .then(function (obj) {
+                        res.render('handerHome', {
+                            title: '系统公告',
+                            placards: obj.results,
+                            pages: obj.pages,
+                            user: user,
+                            loginNum: global.loginNum + users.length * 3
+                        });
+                    }, function (error) {
+                        res.send('获取公告列表失败： ' + error);
+                    });
             });
-      });
+    });
 });
 
 

@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "supervisor ./bin/www"
+    "start": "supervisor ./bin/handle"
   },
   "dependencies": {
     "bcryptjs": "^2.3.0",
