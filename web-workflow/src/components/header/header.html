@@ -14,57 +14,46 @@
             <ul>
                 <!-- 欢迎语 -->
                 <li class="am-text-sm tpl-header-navbar-welcome">
+                    <input id="username" type="hidden" value="<%= user.username %>">
                     <a href="javascript:;">欢迎你, <span><%= user.username %></span> </a>
                 </li>
 
                 <!-- 新提示 -->
-                <li class="am-dropdown" data-am-dropdown>
-                    <a href="javascript:;" class="am-dropdown-toggle" data-am-dropdown-toggle>
+                <li class="am-dropdown">
+                    <% if(user.role == 'hander'){ %>
+                    <a href="/hander/complaints" title="被投诉任务">
                         <i class="am-icon-bell"></i>
-                        <span class="am-badge am-badge-warning am-round item-feed-badge">5</span>
+                        <span class="am-badge am-badge-warning am-round item-feed-badge updateNum complaints">0</span>
+                    </a>
+                    <% } %>
+                    <% if(user.role == 'tasker'){ %>
+                    <a href="/tasker/check" title="待审核任务">
+                        <i class="am-icon-bell"></i>
+                        <span class="am-badge am-badge-warning am-round item-feed-badge updateNum checks">0</span>
+                    </a>
+                    <% } %>
+                </li>
+
+                <!-- 新提示 -->
+                <li class="am-dropdown am-dropdown-flip am-active" data-am-dropdown="" style="z-index: 1000;">
+                    <a href="javascript:;" class="am-dropdown-toggle" data-am-dropdown-toggle="">
+                        <i class="am-icon-envelope"></i>
+                        <span class="am-badge am-badge-success am-round item-feed-badge">2</span>
                     </a>
 
                     <!-- 弹出列表 -->
-                    <ul class="am-dropdown-content tpl-dropdown-content">
+                    <ul id="popContent" class="am-dropdown-content tpl-dropdown-content">
                         <li class="tpl-dropdown-menu-notifications">
-                            <a href="javascript:;" class="tpl-dropdown-menu-notifications-item am-cf">
-                                <div class="tpl-dropdown-menu-notifications-title">
-                                    <i class="am-icon-line-chart"></i>
-                                    <span> 有6笔新的销售订单</span>
-                                </div>
-                                <div class="tpl-dropdown-menu-notifications-time">
-                                    12分钟前
-                                </div>
+                            <% if(user.role == 'hander'){ %>
+                            <a href="/hander/home" class="tpl-dropdown-menu-notifications-item am-cf">
+                                <i class="am-icon-envelope"></i>公告列表
                             </a>
-                        </li>
-                        <li class="tpl-dropdown-menu-notifications">
-                            <a href="javascript:;" class="tpl-dropdown-menu-notifications-item am-cf">
-                                <div class="tpl-dropdown-menu-notifications-title">
-                                    <i class="am-icon-star"></i>
-                                    <span> 有3个来自人事部的消息</span>
-                                </div>
-                                <div class="tpl-dropdown-menu-notifications-time">
-                                    30分钟前
-                                </div>
+                            <% } %>
+                            <% if(user.role == 'tasker'){ %>
+                            <a href="/tasker/home" class="tpl-dropdown-menu-notifications-item am-cf">
+                                <i class="am-icon-envelope"></i>公告列表
                             </a>
-                        </li>
-                        <li class="tpl-dropdown-menu-notifications">
-                            <a href="javascript:;" class="tpl-dropdown-menu-notifications-item am-cf">
-                                <div class="tpl-dropdown-menu-notifications-title">
-                                    <i class="am-icon-folder-o"></i>
-                                    <span> 上午开会记录存档</span>
-                                </div>
-                                <div class="tpl-dropdown-menu-notifications-time">
-                                    1天前
-                                </div>
-                            </a>
-                        </li>
-
-
-                        <li class="tpl-dropdown-menu-notifications">
-                            <a href="javascript:;" class="tpl-dropdown-menu-notifications-item am-cf">
-                                <i class="am-icon-bell"></i> 进入列表…
-                            </a>
+                            <% } %>
                         </li>
                     </ul>
                 </li>

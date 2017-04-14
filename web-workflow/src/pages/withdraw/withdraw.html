@@ -37,7 +37,7 @@
                                 </a>
                             </div>
 
-                            <div class="am-u-sm-12 am-scrollable-horizontal am-text-center forum-context">
+                            <div class="am-u-sm-12 am-scrollable-horizontal forum-context">
                                 <table width="100%" class="am-table am-text-nowrap am-table-striped tpl-table-black">
                                     <thead>
                                     <tr>
@@ -53,16 +53,11 @@
                                     <tbody>
 
                                     <% for(var i = 0; i < withdraws.length; i++){ %>
-                                    <tr class="<% if(withdraws[i].status ==  '成功'){ %> am-primary
-                         <% }else if(withdraws[i].status ==  '失败'){ %> am-danger <% } %>">
+                                    <tr>
                                         <td><%= i + 1 %></td>
                                         <td><%= withdraws[i].createTime %></td>
                                         <td><%= withdraws[i].funds %></td>
-                                        <td>
-                                            <a class="clipboard am-btn am-btn-primary am-radius am-btn-xs"
-                                               title="<%= withdraws[i].alipayCount %>"
-                                               data-clipboard-text="<%= withdraws[i].alipayCount %>">复制</a>
-                                        </td>
+                                        <td><%= withdraws[i].alipayCount %></td>
                                         <td><%= withdraws[i].alipayName %></td>
                                         <td><%= withdraws[i].status %></td>
                                         <td>
@@ -73,51 +68,6 @@
                                     </tr>
                                     <% } %>
 
-                                    <tr class="gradeX">
-                                        <td>Amaze UI 模式窗口</td>
-                                        <td>张鹏飞</td>
-                                        <td>2016-09-26fasdfasdfaaaaaaaaaaaaaaaaaa</td>
-                                        <td>2016-09-26</td>
-                                        <td>2016-09-26</td>
-                                        <td>2016-09-26</td>
-                                        <td>
-                                            <div class="tpl-table-black-operation">
-                                                <a href="javascript:;">
-                                                    <i class="am-icon-pencil"></i> 接手任务
-                                                </a>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr class="gradeX">
-                                        <td>Amaze UI 模式窗口</td>
-                                        <td>张鹏飞</td>
-                                        <td>2016-09-26fasdfasdfaaaaaaaaaaaaaaaaaa</td>
-                                        <td>2016-09-26</td>
-                                        <td>2016-09-26</td>
-                                        <td>2016-09-26</td>
-                                        <td>
-                                            <div class="tpl-table-black-operation">
-                                                <a href="javascript:;">
-                                                    <i class="am-icon-pencil"></i> 接手任务
-                                                </a>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr class="gradeX">
-                                        <td>Amaze UI 模式窗口</td>
-                                        <td>张鹏飞</td>
-                                        <td>2016-09-26fasdfasdfaaaaaaaaaaaaaaaaaa</td>
-                                        <td>2016-09-26</td>
-                                        <td>2016-09-26</td>
-                                        <td>2016-09-26</td>
-                                        <td>
-                                            <div class="tpl-table-black-operation">
-                                                <a href="javascript:;">
-                                                    <i class="am-icon-pencil"></i> 接手任务
-                                                </a>
-                                            </div>
-                                        </td>
-                                    </tr>
                                     </tbody>
                                 </table>
 
@@ -142,13 +92,6 @@
 
 <script>
     $(function() {
-        var clip = new Clipboard('.clipboard');
-        clip.on('success', function (e) {
-            $(e.trigger).removeClass('am-btn-primary').addClass('am-btn-danger');
-            layer.msg('复制成功！', {
-                time: 1000
-            });
-        });
 
         $('.text-break').click(function () {
             var self = this;

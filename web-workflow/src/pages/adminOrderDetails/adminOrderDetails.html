@@ -29,6 +29,9 @@
                     <div class="widget am-cf">
                         <div class="widget-head am-cf">
                             <div class="widget-title  am-cf"><%=title%></div>
+                            <% if(msg){ %>
+                            <span class="tips"><%= msg %></span>
+                            <% } %>
                         </div>
                         <div class="widget-body  am-fr">
                             <div class="am-u-sm-12 am-scrollable-horizontal">
@@ -47,6 +50,7 @@
                                         <th>任务用户</th>
                                         <th>账号/昵称</th>
                                         <th>状态</th>
+                                        <th>操作</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -125,6 +129,14 @@
                                             <% }else { %>
                                             <%= orders[i].taskStatus %>
 
+                                            <% } %>
+                                        </td>
+                                        <td>
+                                            <% if(orders[i].taskStatus == '待审核' || orders[i].taskStatus == '被投诉'){ %>
+                                            <a class="am-btn am-btn-primary am-radius am-btn-xs"
+                                               href="/admin/task/complete?id=<%= orders[i]._id %>">完成</a>
+                                            <a class="am-btn am-btn-danger am-radius am-btn-xs orderRefund"
+                                               href="/admin/task/refund?id=<%= orders[i]._id %>">退款</a>
                                             <% } %>
                                         </td>
                                     </tr>

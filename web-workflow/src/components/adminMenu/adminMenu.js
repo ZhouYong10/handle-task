@@ -15,33 +15,37 @@ $(function () {
 function updateNav(obj, isAdd) {
     for(var key in obj) {
         if(isAdd) {
-            obj[key] = parseInt(obj[key]) + parseInt($('.updateNum.' + key).text().split(' ')[2]);
+            obj[key] = parseInt(obj[key]) + parseInt($('.updateNum.' + key).text());
         }
         if(obj[key] > 0) {
-            $('.tips.' + key).css('display', 'inline');
+            $('.updateNum.' + key).text(obj[key]).css('display', 'inline');
         }else {
-            $('.tips.' + key).css('display', 'none');
+            $('.updateNum.' + key).css('display', 'none');
         }
-        $('.updateNum.' + key).text(' ( ' + obj[key] + ' ) ');
     }
 
-    var waitHT = parseInt($('.updateNum.waitHT').text().split(' ')[2]);
-    var complaintHT = parseInt($('.updateNum.complaintHT').text().split(' ')[2]);
-    var htNum = waitHT + complaintHT;
-    if(htNum > 0) {
-        $('.tips.waitHT.complaintHT').css('display', 'inline');
+    var checkOrder = parseInt($('.updateNum.checkOrder').text());
+    var complaintTask = parseInt($('.updateNum.complaintTask').text());
+    var omNum = checkOrder + complaintTask;
+    if(omNum > 0) {
+        $('.tips.checkOrder.complaintTask').css('display', 'inline');
+    }else{
+        $('.tips.checkOrder.complaintTask').css('display', 'none');
     }
 
-    //var wxArticle = parseInt($('.updateNum.wxArticle').text().split(' ')[2]);
-    var wxLikeQuick = parseInt($('.updateNum.wxLikeQuick').text().split(' ')[2]);
-    var wxLike = parseInt($('.updateNum.wxLike').text().split(' ')[2]);
-    var wxComment = parseInt($('.updateNum.wxComment').text().split(' ')[2]);
-    var wxReply = parseInt($('.updateNum.wxReply').text().split(' ')[2]);
-    var wxFriend = parseInt($('.updateNum.wxFriend').text().split(' ')[2]);
-    //var wxCode = parseInt($('.updateNum.wxCode').text().split(' ')[2]);
-    //var wxNum = wxArticle + wxLikeQuick + wxLike + wxComment + wxReply + wxFriend + wxCode;
-    var wxNum = wxLikeQuick + wxLike + wxComment + wxReply + wxFriend;
-    if(wxNum > 0) {
-        $('.tips.wxArticle.wxLikeQuick.wxLike.wxComment.wxReply.wxFriend.wxCode').css('display', 'inline');
+    var feedback = parseInt($('.updateNum.feedback').text());
+    if(feedback > 0) {
+        $('.tips.feedback').css('display', 'inline');
+    }else{
+        $('.tips.feedback').css('display', 'none');
+    }
+
+    var recharge = parseInt($('.updateNum.recharge').text());
+    var withdraw = parseInt($('.updateNum.withdraw').text());
+    var mmNum = recharge + withdraw;
+    if(mmNum > 0) {
+        $('.tips.recharge.withdraw').css('display', 'inline');
+    }else{
+        $('.tips.recharge.withdraw').css('display', 'none');
     }
 }

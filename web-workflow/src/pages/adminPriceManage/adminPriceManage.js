@@ -2,7 +2,7 @@
  * Created by ubuntu64 on 3/5/16.
  */
 var type = '<td> ' +
-    '<select class="am-form-group am-form-select type"> ' +
+    '<select class="am-form-group am-form-select type" style="color: #999;"> ' +
     '<option value="WXfans">微信公众粉丝</option> ' +
     '<option value="WXfansReply">微信粉丝回复</option> ' +
     '<option value="WXfriend">微信个人好友</option> ' +

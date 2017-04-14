@@ -371,6 +371,7 @@ Order.include({
         var self = this;
         self.status = '已退款';
         self.error = '已处理';
+        self.surplus = 0;
         self.refundInfo = info;
         Order.open().updateById(self._id, self)
             .then(function () {

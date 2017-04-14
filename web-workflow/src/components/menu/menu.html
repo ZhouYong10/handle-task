@@ -32,6 +32,7 @@
         <li class="sidebar-nav-link">
             <a href="javascript:;" class="sidebar-nav-sub-title">
                 <i class="am-icon-table sidebar-nav-link-logo"></i> 做任务
+                <span class="tips complaints"> <strong>*</strong> </span>
                 <span class="am-icon-chevron-down am-fr am-margin-right-sm sidebar-nav-sub-ico"></span>
             </a>
             <ul class="sidebar-nav sidebar-nav-sub">
@@ -48,6 +49,7 @@
                 <li class="sidebar-nav-link">
                     <a id="handerComplaints" href="/hander/complaints">
                         <i class="am-icon-calendar sidebar-nav-link-logo"></i> 被投诉任务
+                        <span class="am-badge am-badge-warning am-round item-feed-badge updateNum complaints">0</span>
                     </a>
                 </li>
                 <li class="sidebar-nav-link">
@@ -102,12 +104,14 @@
         <li class="sidebar-nav-link">
             <a href="javascript:;" class="sidebar-nav-sub-title">
                 <i class="am-icon-table sidebar-nav-link-logo"></i> 任务处理
+                <span class="tips checks"> <strong>*</strong> </span>
                 <span class="am-icon-chevron-down am-fr am-margin-right-sm sidebar-nav-sub-ico"></span>
             </a>
             <ul class="sidebar-nav sidebar-nav-sub">
                 <li class="sidebar-nav-link">
                     <a id="taskerCheck" href="/tasker/check">
                         <i class="am-icon-bar-chart sidebar-nav-link-logo"></i> 待验收任务
+                        <span class="am-badge am-badge-warning am-round item-feed-badge updateNum checks">0</span>
                     </a>
                 </li>
                 <li class="sidebar-nav-link">
@@ -180,3 +184,5 @@
 
     </ul>
 </div>
+
+<script src="/socket.io/socket.io.js"></script>

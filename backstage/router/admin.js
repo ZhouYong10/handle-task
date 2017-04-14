@@ -51,18 +51,21 @@ router.use(function(req, res, next) {
 
 
 router.get('/home', function (req, res) {
-    Placard.open().findPages(null, (req.query.page ? req.query.page : 1))
-        .then(function (obj) {
-            res.render('adminHome', {
-                title: '管理员公告',
-                money: req.session.systemFunds,
-                freezeFunds: req.session.freezeFunds,
-                placards: obj.results,
-                pages: obj.pages
+    User.open().find({isLogin: true}).then(function (users) {
+        Placard.open().findPages(null, (req.query.page ? req.query.page : 1))
+            .then(function (obj) {
+                res.render('adminHome', {
+                    title: '管理员公告',
+                    money: req.session.systemFunds,
+                    freezeFunds: req.session.freezeFunds,
+                    placards: obj.results,
+                    pages: obj.pages,
+                    loginNum: users.length
+                });
+            }, function (error) {
+                return res.send('获取公告列表失败： ' + error);
             });
-        }, function (error) {
-            return res.send('获取公告列表失败： ' + error);
-        });
+    });
 });
 
 router.get('/get/system/funds', function(req, res) {
@@ -77,91 +80,25 @@ router.get('/get/system/funds', function(req, res) {
 * */
 router.get('/update/header/nav', function (req, res) {
     var updateNav = {
-        withdraw: 0,
-        waitHT: 0,
-        complaintHT: 0,
-        reply: 0,
-        flow: 0,
-        wxArticle: 0,
-        wxLikeQuick: 0,
-        wxLike: 0,
-        wxComment: 0,
-        wxReply: 0,
-        wxFriend: 0,
-        wxCode: 0,
-        mp: 0,
-        wb: 0,
-        error: 0,
-        feedback: 0
+        checkOrder: 0,
+        complaintTask: 0,
+        feedback: 0,
+        recharge: 0,
+        withdraw: 0
     };
 
-    Withdraw.open().find({status: '未处理'}).then(function (withdraws) {
-        if (withdraws) {
-            updateNav.withdraw = withdraws.length;
-        }
-        Order.open().find({error: '未处理'}).then(function (errorOrders) {
-            if (errorOrders) {
-                updateNav.error = errorOrders.length;
-            }
+    Order.open().find({status: '审核中'}).then(function (orders) {
+        updateNav.checkOrder = orders.length;
+        Task.open().find({taskStatus: '被投诉'}).then(function (tasks) {
+            updateNav.complaintTask = tasks.length;
             Feedback.open().find({status: '未处理'}).then(function (feedbacks) {
-                if (feedbacks) {
-                    updateNav.feedback = feedbacks.length;
-                }
-                Task.open().find({taskStatus: '被投诉'}).then(function(tasks) {
-                    if(tasks) {
-                        updateNav.complaintHT = tasks.length;
-                    }
-                    Order.open().find({status: {$in: ['未处理', '审核中']}})
-                        .then(function (results) {
-                            if(results) {
-                                for(var i in results) {
-                                    var result = results[i];
-                                    switch (result.type) {
-                                        case 'handle':
-                                            updateNav.waitHT += 1;
-                                            break;
-                                        case 'forum':
-                                            updateNav.reply += 1;
-                                            break;
-                                        case 'flow':
-                                            updateNav.flow += 1;
-                                            break;
-                                        case 'wx':
-                                            switch (result.smallType) {
-                                                case 'article': case 'share': case 'collect':
-                                                updateNav.wxArticle += 1;
-                                                break;
-                                                case 'read': case 'like':
-                                                updateNav.wxLike += 1;
-                                                break;
-                                                case 'readQuick': case 'likeQuick':
-                                                updateNav.wxLikeQuick += 1;
-                                                break;
-                                                case 'comment':
-                                                updateNav.wxComment += 1;
-                                                break;
-                                                case 'fans': case 'fansReply':
-                                                updateNav.wxReply += 1;
-                                                break;
-                                                case 'friend':
-                                                    updateNav.wxFriend += 1;
-                                                    break;
-                                                case 'code':
-                                                    updateNav.wxCode += 1;
-                                                    break;
-                                            }
-                                            break;
-                                        case 'mp':
-                                            updateNav.mp += 1;
-                                            break;
-                                        case 'wb':
-                                            updateNav.wb += 1;
-                                            break;
-                                    }
-                                }
-                            }
-                            res.send(updateNav);
-                        });
+                updateNav.feedback = feedbacks.length;
+                Recharge.open().find({status: '充值中'}).then(function (recharges) {
+                    updateNav.recharge = recharges.length;
+                    Withdraw.open().find({status: '未处理'}).then(function (withdraws) {
+                        updateNav.withdraw = withdraws.length;
+                        res.send(updateNav);
+                    });
                 })
             });
         });
@@ -619,15 +556,55 @@ router.get('/check/already', function (req, res) {
                 money: req.session.systemFunds,
                 freezeFunds: req.session.freezeFunds,
                 orders: obj.results,
-                pages: obj.pages,
-                path: '/admin/check/already'
+                pages: obj.pages
             });
         });
 });
 
+router.get('/order/refund', function (req, res) {
+    Task.open().find({
+        orderId: req.query.id,
+        taskStatus: {$in: ['待审核', '被投诉']}
+    }).then(function (tasks) {
+        if(tasks.length > 0) {
+            res.redirect('/admin/order/details?orderId=' + req.query.id + '&refund=true');
+        }else {
+            Order.open().findById(req.query.id).then(function(order) {
+                Order.open().updateById(order._id, {$set: {
+                    status: '已退款',
+                    surplus: 0,
+                    refundInfo: req.query.info
+                }}).then(function() {
+                    User.open().findById(order.userId).then(function(user) {
+                        if(user) {
+                            User.open().updateById(user._id, {$set: {
+                                funds: (parseFloat(user.funds) + parseFloat(order.surplus)).toFixed(4),
+                                freezeFunds: (parseFloat(user.freezeFunds) - parseFloat(order.surplus)).toFixed(4)
+                            }}).then(function() {
+                                res.redirect('/admin/check/already');
+                            })
+                        }else{
+                            User.open().findOne({username: 'admin'})
+                                .then(function (admin) {
+                                    User.open().updateById(admin._id, {
+                                        $set: {
+                                            funds: (parseFloat(admin.funds) + parseFloat(order.surplus)).toFixed(4),
+                                            freezeFunds: (parseFloat(admin.freezeFunds) - parseFloat(order.surplus)).toFixed(4)
+                                        }
+                                    }).then(function () {
+                                        res.redirect('/admin/check/already');
+                                    });
+                                });
+                        }
+                    })
+                })
+            })
+        }
+    });
+});
+
 router.get('/check/refund', function (req, res) {
     Order.open().findPages({
-            type: 'handle',
             status: '已退款'
         }, (req.query.page ? req.query.page : 1))
         .then(function(obj) {
@@ -658,18 +635,48 @@ router.get('/order/complete', function (req, res) {
 });
 
 router.get('/order/details', function (req, res) {
-    Task.open().findPages({
-            orderId: req.query.orderId
-        }, (req.query.page ? req.query.page : 1))
+    var query = {
+        orderId: req.query.orderId
+    };
+    if(req.query.refund) {
+        query = {
+            orderId: req.query.orderId,
+            taskStatus: {$in: ['待审核', '被投诉']}
+        }
+    }
+    Task.open().findPages(query, (req.query.page ? req.query.page : 1))
         .then(function (obj) {
-            res.render('adminOrderDetails', {
+            var renderInfo = {
                 title: '人工任务管理 / 任务进度详情',
                 money: req.session.systemFunds,
                 freezeFunds: req.session.freezeFunds,
                 orders: obj.results,
-                pages: obj.pages
-            });
+                pages: obj.pages,
+                msg: undefined
+            };
+            if(req.query.refund) {
+                renderInfo.msg = '该订单存在待审核或被投诉任务，清楚理后再取消！';
+            }
+            res.render('adminOrderDetails', renderInfo);
         });
+});
+
+router.get('/task/complete', function (req, res) {
+    Task.open().findById(req.query.id).then(function(task) {
+        var taskIns = Task.wrapToInstance(task);
+        taskIns.success().then(function() {
+            res.redirect('/admin/order/details?orderId=' + taskIns.orderId + '&refund=true');
+        })
+    })
+});
+
+router.get('/task/refund', function (req, res) {
+    Task.open().findById(req.query.id).then(function(task) {
+        var taskIns = Task.wrapToInstance(task);
+        taskIns.refuse().then(function () {
+            res.redirect('/admin/order/details?orderId=' + taskIns.orderId + '&refund=true');
+        });
+    })
 });
 
 router.get('/complaint/wait', function (req, res) {

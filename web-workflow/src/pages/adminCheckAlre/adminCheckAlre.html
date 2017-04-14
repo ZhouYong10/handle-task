@@ -47,6 +47,7 @@
                                         <th>任务说明</th>
                                         <th>总价 / 结余</th>
                                         <th>返利(父级｜平台)</th>
+                                        <th>操作</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -112,6 +113,10 @@
                                             发布方: <%= orders[i].taskerParentProfit %> | <%= orders[i].taskerAdminProfit %><br/>
                                             任务方: <%= orders[i].handerParentProfit %> | <%= orders[i].handerAdminProfit %><br/>
                                         </td>
+                                        <td>
+                                            <a class="am-btn am-btn-danger am-radius am-btn-xs orderRefund"
+                                               href="/admin/order/refund?id=<%= orders[i]._id %>">取消</a>
+                                        </td>
                                     </tr>
                                     <% } %>
 
@@ -144,40 +149,17 @@
     $(function() {
         $('.fancybox').fancybox();
 
-        var clip = new Clipboard('.clipboard');
-        clip.on('success', function (e) {
-            $(e.trigger).removeClass('am-btn-primary').addClass('am-btn-danger');
-            layer.msg('复制成功！', {
-                time: 1000
-            });
-        });
-
         layer.config({
             extend: 'extend/layer.ext.js'
         });
 
-        $('.dealError').click(function (e) {
+        $('.orderRefund').click(function (e) {
             e.stopPropagation();
             e.preventDefault();
             var href = $(this).attr('href');
             layer.prompt({
                 formType: 2,
-                title: '请输入错误处理信息！',
-                offset: '6%'
-            }, function (value, index) {
-                href += '&info=' + value.replace(/\r\n/g, "").replace(/\n/g, "");
-                layer.close(index);
-                $('<a href=' + href + '></a>').get(0).click();
-            });
-        });
-
-        $('.refundProfit').click(function (e) {
-            e.stopPropagation();
-            e.preventDefault();
-            var href = $(this).attr('href');
-            layer.prompt({
-                formType: 2,
-                title: '请输入退款理由！',
+                title: '请输入退单理由！',
                 offset: '6%'
             }, function (value, index) {
                 href += '&info=' + value.replace(/\r\n/g, "").replace(/\n/g, "");

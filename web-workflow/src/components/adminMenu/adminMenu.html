@@ -35,12 +35,16 @@
         <li class="sidebar-nav-link">
             <a href="javascript:;" class="sidebar-nav-sub-title">
                 <i class="am-icon-table sidebar-nav-link-logo"></i> 任务管理
+                <span class="tips checkOrder complaintTask">
+                    <strong>*</strong>
+                </span>
                 <span class="am-icon-chevron-down am-fr am-margin-right-sm sidebar-nav-sub-ico"></span>
             </a>
             <ul class="sidebar-nav sidebar-nav-sub">
                 <li class="sidebar-nav-link">
                     <a id="adminCheckWait" href="/admin/check/wait">
                         <span class="am-icon-angle-right sidebar-nav-link-logo"></span> 待发布任务
+                        <span class="am-badge am-badge-warning am-round item-feed-badge updateNum checkOrder">0</span>
                     </a>
                 </li>
                 <li class="sidebar-nav-link">
@@ -61,6 +65,7 @@
                 <li class="sidebar-nav-link">
                     <a id="adminComplaintWait" href="/admin/complaint/wait">
                         <span class="am-icon-angle-right sidebar-nav-link-logo"></span> 被投诉未处理
+                        <span class="am-badge am-badge-warning am-round item-feed-badge updateNum complaintTask">0</span>
                     </a>
                 </li>
                 <li class="sidebar-nav-link">
@@ -73,12 +78,16 @@
         <li class="sidebar-nav-link">
             <a href="javascript:;" class="sidebar-nav-sub-title">
                 <i class="am-icon-table sidebar-nav-link-logo"></i> 问题反馈
+                <span class="tips feedback">
+                    <strong>*</strong>
+                </span>
                 <span class="am-icon-chevron-down am-fr am-margin-right-sm sidebar-nav-sub-ico"></span>
             </a>
             <ul class="sidebar-nav sidebar-nav-sub">
                 <li class="sidebar-nav-link">
                     <a id="adminFeedbackWait" href="/admin/feedback/wait">
                         <span class="am-icon-angle-right sidebar-nav-link-logo"></span> 待处理
+                        <span class="am-badge am-badge-warning am-round item-feed-badge updateNum feedback">0</span>
                     </a>
                 </li>
                 <li class="sidebar-nav-link">
@@ -91,17 +100,22 @@
         <li class="sidebar-nav-link">
             <a href="javascript:;" class="sidebar-nav-sub-title">
                 <i class="am-icon-table sidebar-nav-link-logo"></i> 资金管理
+                <span class="tips recharge withdraw">
+                    <strong>*</strong>
+                </span>
                 <span class="am-icon-chevron-down am-fr am-margin-right-sm sidebar-nav-sub-ico"></span>
             </a>
             <ul class="sidebar-nav sidebar-nav-sub">
                 <li class="sidebar-nav-link">
                     <a id="adminRecharge" href="/admin/recharge">
                         <span class="am-icon-angle-right sidebar-nav-link-logo"></span> 充值记录
+                        <span class="am-badge am-badge-warning am-round item-feed-badge updateNum recharge">0</span>
                     </a>
                 </li>
                 <li class="sidebar-nav-link">
                     <a id="adminWithdrawWait" href="/admin/withdraw/wait">
                         <span class="am-icon-angle-right sidebar-nav-link-logo"></span> 待提现
+                        <span class="am-badge am-badge-warning am-round item-feed-badge updateNum withdraw">0</span>
                     </a>
                 </li>
                 <li class="sidebar-nav-link">

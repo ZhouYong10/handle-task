@@ -246,7 +246,7 @@ app.get('/new/placard', function (req, res) {
     User.open().findById(req.session.passport.user)
         .then(function (user) {
             var query;
-            if(user.role == 'taker'){
+            if(user.role == 'tasker'){
                 query = {type: {$ne: 'handerPlacard'}};
             }else if(user.role == 'hander'){
                 query = {type: {$ne: 'taskerPlacard'}};
@@ -277,11 +277,17 @@ app.get('/auto/recharge/to/user', function (req, res) {
 
 //拦截未登录
 app.use(function(req, res, next) {
-  if(req.isAuthenticated()){
-    next();
-  }else{
-    res.redirect('/');
-  }
+    if(req.isAuthenticated()){
+        User.open().findById(req.session.passport.user).then(function (user) {
+            if(user.status == '冻结') {
+                res.redirect('/');
+            }else{
+                next();
+            }
+        });
+    }else{
+        res.redirect('/');
+    }
 });
 
 global.loginNum = 218;
@@ -330,9 +336,7 @@ app.get('/hander/home', function (req, res) {
 app.use('/user', require('./router/user.js'));
 app.use('/hander', require('./router/hander.js'));
 app.use('/tasker', require('./router/tasker.js'));
-
 app.use('/parse', require('./router/parse-address.js'));
-
 app.use('/admin', require('./router/admin.js'));
 
 

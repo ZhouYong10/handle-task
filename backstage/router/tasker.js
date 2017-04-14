@@ -75,7 +75,7 @@ router.post('/WX/fans/add', function (req, res) {
                     if(orderIns.isTow) {
                         orderIns.createTwo(user, {type: 'WXfans'}, {type: 'WXfansReply'})
                             .then(function () {
-                                socketIO.emit('updateNav', {'waitHT': 1});
+                                socketIO.emit('updateNav', {checkOrder: 1});
                                 res.redirect('/tasker/WX/fans');
                             }, function() {
                                 res.send('<h1>您的余额不足，请充值！ 顺便多说一句，请不要跳过页面非法提交数据。。。不要以为我不知道哦！！</h1>')
@@ -84,7 +84,7 @@ router.post('/WX/fans/add', function (req, res) {
                         delete orderIns.price2;
                         orderIns.createOne(user, {type: 'WXfans'})
                             .then(function () {
-                                socketIO.emit('updateNav', {'waitHT': 1});
+                                socketIO.emit('updateNav', {checkOrder: 1});
                                 res.redirect('/tasker/WX/fans');
                             }, function() {
                                 res.send('<h1>您的余额不足，请充值！ 顺便多说一句，请不要跳过页面非法提交数据。。。不要以为我不知道哦！！</h1>')
@@ -151,7 +151,7 @@ router.post('/WX/friend/add', function (req, res) {
                     delete orderIns.price2;
                     orderIns.createOne(user, {type: 'WXfriend'})
                         .then(function () {
-                            socketIO.emit('updateNav', {'waitHT': 1});
+                            socketIO.emit('updateNav', {checkOrder: 1});
                             res.redirect('/tasker/WX/friend');
                         }, function() {
                             res.send('<h1>您的余额不足，请充值！ 顺便多说一句，请不要跳过页面非法提交数据。。。不要以为我不知道哦！！</h1>')
@@ -217,7 +217,7 @@ router.post('/WX/vote/add', function (req, res) {
                 orderIns.checkRandomStr(req).then(function() {
                     orderIns.createOne(user, {type: 'WXvote'})
                         .then(function () {
-                            socketIO.emit('updateNav', {'waitHT': 1});
+                            socketIO.emit('updateNav', {checkOrder: 1});
                             res.redirect('/tasker/WX/vote');
                         }, function() {
                             res.send('<h1>您的余额不足，请充值！ 顺便多说一句，请不要跳过页面非法提交数据。。。不要以为我不知道哦！！</h1>')
@@ -289,7 +289,7 @@ router.post('/WX/code/add', function (req, res) {
                     if(orderIns.isTow) {
                         orderIns.createTwo(user, {type: 'WXcode'}, {type: 'WXcodeReply'})
                             .then(function () {
-                                socketIO.emit('updateNav', {'waitHT': 1});
+                                socketIO.emit('updateNav', {checkOrder: 1});
                                 res.redirect('/tasker/WX/code');
                             }, function() {
                                 res.send('<h1>您的余额不足，请充值！ 顺便多说一句，请不要跳过页面非法提交数据。。。不要以为我不知道哦！！</h1>')
@@ -298,7 +298,7 @@ router.post('/WX/code/add', function (req, res) {
                         delete orderIns.price2;
                         orderIns.createOne(user, {type: 'WXcode'})
                             .then(function () {
-                                socketIO.emit('updateNav', {'waitHT': 1});
+                                socketIO.emit('updateNav', {checkOrder: 1});
                                 res.redirect('/tasker/WX/code');
                             }, function() {
                                 res.send('<h1>您的余额不足，请充值！ 顺便多说一句，请不要跳过页面非法提交数据。。。不要以为我不知道哦！！</h1>')
@@ -371,7 +371,7 @@ router.post('/WX/article/add', function (req, res) {
                     if(orderIns.isTow) {
                         orderIns.createTwo(user, {type: 'WXarticleShare'}, {type: 'WXarticleHide'})
                             .then(function () {
-                                socketIO.emit('updateNav', {'waitHT': 1});
+                                socketIO.emit('updateNav', {checkOrder: 1});
                                 res.redirect('/tasker/WX/article');
                             }, function() {
                                 res.send('<h1>您的余额不足，请充值！ 顺便多说一句，请不要跳过页面非法提交数据。。。不要以为我不知道哦！！</h1>')
@@ -380,7 +380,7 @@ router.post('/WX/article/add', function (req, res) {
                         delete orderIns.price2;
                         orderIns.createOne(user, {type: 'WXarticleShare'})
                             .then(function () {
-                                socketIO.emit('updateNav', {'waitHT': 1});
+                                socketIO.emit('updateNav', {checkOrder: 1});
                                 res.redirect('/tasker/WX/article');
                             }, function() {
                                 res.send('<h1>您的余额不足，请充值！ 顺便多说一句，请不要跳过页面非法提交数据。。。不要以为我不知道哦！！</h1>')
@@ -444,16 +444,20 @@ router.get('/check/success', function (req, res) {
 
 router.get('/check/complaints', function (req, res) {
     var info = req.query;
-    Task.open().updateById(info.taskId, {
-        $set: {
-            taskStatus: '被投诉',
-            complaintsInfo: info.info,
-            complaintsTime: moment().format('YYYY-MM-DD HH:mm:ss')
-        }
-    }).then(function () {
-        socketIO.emit('updateNav', {'complaintHT': 1});
-        res.redirect('/tasker/check');
-    });
+    Task.open().findById(info.taskId).then(function(task) {
+        Task.open().updateById(task._id, {
+            $set: {
+                taskStatus: '被投诉',
+                complaintsInfo: info.info,
+                complaintsTime: moment().format('YYYY-MM-DD HH:mm:ss')
+            }
+        }).then(function () {
+            socketIO.emit('updateNav', {complaintTask: 1});
+            socketIO.emit('navUpdateNum', {'complaints': 1, 'orderUser': task.taskUser});
+            res.redirect('/tasker/check');
+        });
+    })
+
 });
 
 

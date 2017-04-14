@@ -49,10 +49,14 @@ Withdraw.extend({
                     if(userFunds >= 0){
                         Withdraw.open().insert(withdraw)
                             .then(function(results) {
-                                User.open().updateById(user._id, {$set: {funds: userFunds}})
-                                    .then(function() {
-                                        resolve();
-                                    })
+                                User.open().updateById(user._id, {
+                                    $set: {
+                                        funds: userFunds,
+                                        freezeFunds: (parseFloat(user.freezeFunds) + parseFloat(withdraw.funds)).toFixed(4)
+                                    }
+                                }).then(function () {
+                                    resolve();
+                                });
                             })
                     }else {
                         resolve('请不要跳过页面验证提现，你的余额不足仍然不能提现哦。。。。');
@@ -62,12 +66,22 @@ Withdraw.extend({
     },
     complete: function(id) {
        return new Promise(function(resolve, reject) {
-           Withdraw.open().updateById(id, {$set: {
-               status: '成功',
-               endTime: moment().format('YYYY-MM-DD HH:mm:ss')
-           }}).then(function() {
-               resolve();
-           })
+           Withdraw.open().findById(id).then(function (withdraw) {
+               User.open().findById(withdraw.userId).then(function(user) {
+                   Withdraw.open().updateById(withdraw._id, {$set: {
+                       status: '成功',
+                       endTime: moment().format('YYYY-MM-DD HH:mm:ss')
+                   }}).then(function() {
+                       User.open().updateById(user._id, {
+                           $set: {
+                               freezeFunds: (parseFloat(user.freezeFunds) - parseFloat(withdraw.funds)).toFixed(4)
+                           }
+                       }).then(function () {
+                           resolve();
+                       });
+                   })
+               })
+           });
        })
     },
     refused: function(id, info, funds, userId) {
@@ -79,11 +93,14 @@ Withdraw.extend({
             }}).then(function() {
                 User.open().findById(userId)
                     .then(function (user) {
-                        var userFunds = (parseFloat(user.funds) + parseFloat(funds)).toFixed(4);
-                        User.open().updateById(user._id, {$set: {funds: userFunds}})
-                            .then(function () {
-                                resolve();
-                            });
+                        User.open().updateById(user._id, {
+                            $set: {
+                                funds: (parseFloat(user.funds) + parseFloat(funds)).toFixed(4),
+                                freezeFunds: (parseFloat(user.freezeFunds) - parseFloat(funds)).toFixed(4)
+                            }
+                        }).then(function () {
+                            resolve();
+                        });
                     });
             })
         })

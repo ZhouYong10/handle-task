@@ -70,12 +70,12 @@ module.exports = {
             haveCollection(function () {
                 collection.find(obj)
                     .sort({'_id': -1})
-                    .limit(1)
+                    .limit(2)
                     .toArray(function (error, result) {
                         if (error) {
                             reject(error);
                         }
-                        resolve(result[0]);
+                        resolve(result);
                     })
             }, reject);
         })

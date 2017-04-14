@@ -22,7 +22,7 @@
 
     <!-- 内容区域 -->
     <div class="tpl-content-wrapper">
-        <div class="row-content am-cf">
+        <div class="row-content am-cf tpl-form-border-form tpl-form-border-br">
             <div class="row">
                 <div class="am-u-sm-12 am-u-md-12 am-u-lg-12">
                     <div class="widget am-cf">
@@ -54,7 +54,7 @@
                                         <td><%= withdraws[i].funds %></td>
                                         <td><%= withdraws[i].userFunds %></td>
                                         <td>
-                                            <input type="text" value="<%= withdraws[i].alipayCount %>" style="width: 56px;"><br/>
+                                            <input type="text" value="<%= withdraws[i].alipayCount %>" style="width: 56px;">
                                             <a class="clipboard am-btn am-btn-primary am-radius am-btn-xs"
                                                title="<%= withdraws[i].alipayCount %>"
                                                data-clipboard-text="<%= withdraws[i].alipayCount %>">复制</a>
@@ -63,7 +63,7 @@
                                         <td>
                                             <a class="am-btn am-btn-primary am-radius am-btn-xs"
                                                href="/admin/withdraw/complete?id=<%= withdraws[i]._id %>&url=<%= path %>">完成 </a>
-                                            <a class="am-btn am-btn-primary am-radius am-btn-xs refused"
+                                            <a class="am-btn am-btn-danger am-radius am-btn-xs refused"
                                                href="/admin/withdraw/refused?id=<%= withdraws[i]._id %>&userId=<%= withdraws[i].userId %>&funds=<%= withdraws[i].funds %>&url=<%= path %>">拒绝</a>
                                         </td>
                                     </tr>
@@ -92,7 +92,7 @@
 <script src="/static/plugins/laypage/laypage.js"></script>
 
 <script>
-    require('adminMenuContent');
+    require('adminMenu');
 
     $(function() {
         var clip = new Clipboard('.clipboard');
@@ -117,7 +117,6 @@
                 offset: '6%'
             }, function (value, index) {
                 href += '&info=' + value.replace(/\r\n/g,"").replace(/\n/g,"");
-                console.log(href, '=================');
                 layer.close(index);
                 $('<a href=' + href + '></a>').get(0).click();
             });

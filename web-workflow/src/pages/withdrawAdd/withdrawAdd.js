@@ -1,12 +1,13 @@
 /**
  * Created by ubuntu64 on 3/21/16.
  */
+var Utils = require('utils');
 var Vue = require('vue');
 Vue.use(require('vue-validator'));
-var Utils = require('utils');
+
 
 new Vue({
-    el: '#withdraw',
+    el: '#withdrawAdd',
     data: {
         userFunds: ''
     },

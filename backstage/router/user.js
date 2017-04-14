@@ -32,16 +32,12 @@ router.get('/update/header/nav', function (req, res) {
                 taskUserId: user._id,
                 taskStatus: '被投诉'
             }).then(function (complaints) {
-                if (complaints) {
-                    updateNav.complaints = complaints.length;
-                }
+                updateNav.complaints = complaints.length;
                 Task.open().find({
                     userId: user._id,
                     taskStatus: '待审核'
                 }).then(function (checks) {
-                    if (checks) {
-                        updateNav.checks = checks.length;
-                    }
+                    updateNav.checks = checks.length;
                     res.send(updateNav);
                 });
             });
@@ -495,7 +491,7 @@ router.post('/feedback/add', function (req, res) {
             feedback.userId = user._id;
             Feedback.createFeedback(feedback)
                 .then(function (result) {
-                    socketIO.emit('updateNav', {'feedback': 1});
+                    socketIO.emit('updateNav', {feedback: 1});
                     res.redirect('/user/feedback');
                 }, function (error) {
                     res.send('提交反馈失败： ' + error);
@@ -534,7 +530,7 @@ router.post('/withdraw/add', function (req, res) {
             if(msg) {
                 res.send(msg);
             }else {
-                socketIO.emit('updateNav', {'withdraw': 1});
+                socketIO.emit('updateNav', {withdraw: 1});
                 res.redirect('/user/withdraw');
             }
         })

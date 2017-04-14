@@ -93,7 +93,6 @@ router.get('/alre', function (req, res) {
                     taskUserId: user._id
                 }, (req.query.page ? req.query.page : 1))
                 .then(function (obj) {
-                    console.log(obj, '========================');
                     res.render('handerAlre', {
                         title: '我做过的任务',
                         user: user,
