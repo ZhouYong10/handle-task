@@ -300,7 +300,7 @@ ul.tpl-dropdown-content .tpl-dropdown-menu-messages-item .menu-messages-content 
 }
 .user-panel-logged-in-text {
   display: block;
-  color: #cfcfcf;
+  color: #5eb968;
   font-size: 14px;
 }
 .tpl-user-panel-action-link {
@@ -1945,4 +1945,9 @@ ul.tpl-dropdown-content .tpl-dropdown-menu-messages-item .menu-messages-content 
   display: inline-block;
   max-width: 120px;
   cursor: pointer;
+}
+
+.feedback-content {
+  max-width: 260px;
+  overflow: auto;
 }
