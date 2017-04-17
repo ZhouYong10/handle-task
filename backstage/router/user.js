@@ -414,7 +414,7 @@ router.get('/my/price', function (req, res) {
 router.get('/lowerUser/profit', function (req, res) {
     User.open().findById(req.session.passport.user)
         .then(function (user) {
-            Profit.getProfitTotal({userId: user._id, status: 'success'})
+            Profit.getProfitTotal({userId: user._id})
                 .then(function(totalProfit) {
                     Profit.open().findPages({userId: user._id}, (req.query.page ? req.query.page : 1))
                         .then(function(obj) {
@@ -435,7 +435,6 @@ router.get('/search/lowerUser/profit', function (req, res) {
         .then(function (user) {
             Profit.getProfitTotal({
                 userId: user._id,
-                status: 'success',
                 createTime: new RegExp(req.query.createTime)
             }).then(function(totalProfit) {
                     Profit.open().findPages({

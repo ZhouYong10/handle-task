@@ -271,7 +271,21 @@ function profitFunds(task) {
                                                 parseFloat(task.handerParentProfit)).toFixed(4)
                                             }
                                         }).then(function () {
-                                            resolve();
+                                            Profit.open().insert({
+                                                orderId: task.orderId,
+                                                type: task.type,
+                                                typeName: task.typeName,
+                                                title: task.title,
+                                                createTime: moment().format('YYYY-MM-DD HH:mm:ss'),
+                                                taskId: task._id,
+                                                username: taskUserParent.username,
+                                                userId: taskUserParent._id,
+                                                childName: task.taskUser,
+                                                childId: task.taskUserId,
+                                                price: +task.handerParentProfit
+                                            }).then(function () {
+                                                resolve();
+                                            });
                                         })
                                     } else {
                                         adminFunds = (parseFloat(adminFunds) +
@@ -326,7 +340,21 @@ function profitFunds(task) {
                                                 parseFloat(task.taskerParentProfit)).toFixed(4)
                                             }
                                         }).then(function () {
-                                            resolve();
+                                            Profit.open().insert({
+                                                orderId: task.orderId,
+                                                type: task.type,
+                                                typeName: task.typeName,
+                                                title: task.title,
+                                                createTime: moment().format('YYYY-MM-DD HH:mm:ss'),
+                                                taskId: task._id,
+                                                username: orderUserParent.username,
+                                                userId: orderUserParent._id,
+                                                childName: task.user,
+                                                childId: task.userId,
+                                                price: +task.taskerParentProfit
+                                            }).then(function () {
+                                                resolve();
+                                            });
                                         });
                                     }else{
                                         adminFunds = (parseFloat(adminFunds) +

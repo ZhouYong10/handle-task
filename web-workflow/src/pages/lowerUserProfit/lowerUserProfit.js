@@ -12,4 +12,5 @@ new Vue({
 
 $(function () {
     Utils.layPage();
+    Utils.breakText();
 });
