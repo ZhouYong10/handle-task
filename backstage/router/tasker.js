@@ -4,6 +4,7 @@
 var User = require('../models/User');
 var Order = require('../models/Order');
 var Product = require('../models/Product');
+var Consume = require('../models/Consume');
 var Task = require('../models/Task');
 
 var moment = require('moment');
@@ -510,13 +511,22 @@ router.get('/order/refund', function (req, res) {
                     surplus: 0
                 }}).then(function() {
                     User.open().findById(order.userId).then(function(user) {
-                        var funds = (parseFloat(user.funds) + parseFloat(order.surplus)).toFixed(4);
-                        var freezeFunds = (parseFloat(user.freezeFunds) - parseFloat(order.surplus)).toFixed(4);
                         User.open().updateById(user._id, {$set: {
-                            funds: funds,
-                            freezeFunds: freezeFunds
+                            funds: (parseFloat(user.funds) + parseFloat(order.surplus)).toFixed(4),
+                            freezeFunds: (parseFloat(user.freezeFunds) - parseFloat(order.surplus)).toFixed(4)
                         }}).then(function() {
-                            res.redirect(req.query.path);
+                            Consume.open().insert({
+                                orderId: order._id,
+                                type: order.type,
+                                typeName: order.typeName,
+                                userName: order.user,
+                                userId: order.userId,
+                                createTime: moment().format('YYYY-MM-DD HH:mm:ss'),
+                                price: +order.surplus,
+                                description: order.typeName + '取消执行' + (order.num - order.taskNum)
+                            }).then(function () {
+                                res.redirect(req.query.path);
+                            });
                         })
                     })
                 })

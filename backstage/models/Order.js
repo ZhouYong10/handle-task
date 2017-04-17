@@ -5,6 +5,7 @@ var db = require('../dbWrap');
 var User = require('./User');
 var Product = require('./Product');
 var Profit = require('./Profit');
+var Consume = require('./Consume');
 var Address = require('./Address');
 var request = require('request');
 var cheerio = require('cheerio');
@@ -154,13 +155,27 @@ Order.include({
             .save(sourcePath);
         return new Promise(function (resolve) {
             Order.open().insert(self)
-                .then(function () {
-                    User.open().updateById(user._id, {$set: {
-                        funds: (parseFloat(user.funds) - parseFloat(self.totalPrice)).toFixed(4),
-                        freezeFunds: (parseFloat(user.freezeFunds) + parseFloat(self.surplus)).toFixed(4)
-                    }}).then(function () {
+                .then(function (results) {
+                    var order = results[0];
+                    User.open().updateById(user._id, {
+                        $set: {
+                            funds: (parseFloat(user.funds) - parseFloat(order.totalPrice)).toFixed(4),
+                            freezeFunds: (parseFloat(user.freezeFunds) + parseFloat(order.totalPrice)).toFixed(4)
+                        }
+                    }).then(function () {
+                        Consume.open().insert({
+                            orderId: order._id,
+                            type: order.type,
+                            typeName: order.typeName,
+                            userName: order.user,
+                            userId: order.userId,
+                            createTime: order.createTime,
+                            price: -order.totalPrice,
+                            description: order.description
+                        }).then(function () {
                             resolve(self);
                         });
+                    });
                 });
         });
     },

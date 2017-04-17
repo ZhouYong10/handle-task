@@ -1951,3 +1951,11 @@ ul.tpl-dropdown-content .tpl-dropdown-menu-messages-item .menu-messages-content 
   max-width: 260px;
   overflow: auto;
 }
+
+#laypage {
+  text-align: center;
+}
+
+#laypage .laypage_total label{
+  color: #a9a3a3;
+}
