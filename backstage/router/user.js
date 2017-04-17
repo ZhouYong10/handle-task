@@ -165,7 +165,7 @@ router.get('/search/consume', function (req, res) {
 router.get('/info', function (req, res) {
     User.open().findById(req.session.passport.user)
         .then(function (user) {
-            Profit.getProfitTotal({userId: user._id, status: 'success'})
+            Profit.getProfitTotal({userId: user._id})
                 .then(function (profit) {
                     user.profit = profit;
                     res.render('userInfo', {

@@ -1959,3 +1959,9 @@ ul.tpl-dropdown-content .tpl-dropdown-menu-messages-item .menu-messages-content 
 #laypage .laypage_total label{
   color: #a9a3a3;
 }
+
+.placard_list li{
+  padding: 10px 0;
+  line-height: 26px;
+  border-bottom: 1px solid #908d8d;
+}
