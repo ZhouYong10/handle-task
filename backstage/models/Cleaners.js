@@ -5,10 +5,9 @@ var Schedule = require('node-schedule');
 var Feedback = require('./Feedback');
 var Order = require('./Order');
 var Task = require('./Task');
-var Placard = require('./Placard');
 var Profit = require('./Profit');
-var Recharge = require('./Recharge');
 var Withdraw = require('./Withdraw');
+var Consume = require('./Consume');
 
 var fs = require('fs');
 
@@ -23,9 +22,7 @@ function getDateStr(AddDayCount) {
 
 function removePhoto(path) {
     var photoPath = global.handleExam + '..' + path;
-    fs.unlink(photoPath, function() {
-
-    });
+    fs.unlink(photoPath);
 }
 
 function remove(model, date) {
@@ -34,48 +31,49 @@ function remove(model, date) {
             var result = results[i];
             var ts = result._id.getTimestamp();
             if(ts < date){
-                if(result.type == 'handle'){
-                    if(result.status == '已退款' || result.status == '已完成'){
-                        removeTask(result, model);
-                    }
-                }else {
-                    model.open().remove(result);
-                }
+                model.open().remove(result);
             }
         }
     })
 }
 
-function removeTask(order, model) {
-    var result = order;
-    removePhoto(result.codePhoto);
-    removePhoto(result.photo);
-    model.open().removeById(result._id);
-
-    Task.open().find({orderId: result._id + ''})
-        .then(function (tasks) {
-            for (var j = 0; j < tasks.length; j++) {
-                var task = tasks[j];
-                removeTaskOrder(task)
+function removeOrder(model, date) {
+    model.open().find({status: {$in: ['已退款', '已完成']}}).then(function (results) {
+        for (var i = 0; i < results.length; i++) {
+            var result = results[i];
+            var ts = result._id.getTimestamp();
+            if (ts < date) {
+                if(result.codePhoto) {
+                    removePhoto(result.codePhoto);
+                }
+                if(result.photo) {
+                    removePhoto(result.photo);
+                }
+                model.open().removeById(result._id).then(function() {
+                    Task.open().find({orderId: result._id + ''})
+                        .then(function (tasks) {
+                            for (var j = 0; j < tasks.length; j++) {
+                                var task = tasks[j];
+                                if (task.taskPhoto) {
+                                    removePhoto(task.taskPhoto);
+                                }
+                                Task.open().removeById(task._id);
+                            }
+                        });
+                });
             }
-        });
-
-    function removeTaskOrder(task) {
-        if (task.taskPhoto) {
-            removePhoto(task.taskPhoto);
         }
-        Task.open().remove(task);
-    }
+    });
 }
 
 module.exports = {
     test: function() {
-        var older = Date.parse(getDateStr(-30));
+        var older = Date.parse(getDateStr(+1));
+        console.log('开始清理数据了 ===============================================');
+        removeOrder(Order, older);
+        remove(Consume, older);
         remove(Feedback, older);
-        remove(Order, older);
-        //remove(Placard, older);
         remove(Profit, older);
-        remove(Recharge, older);
         remove(Withdraw, older);
     },
     seconds: function () {
@@ -95,7 +93,6 @@ module.exports = {
             //var older = Date.parse(getDateStr(-30));
             //remove(Feedback, older);
             //remove(Order, older);
-            ////remove(Placard, older);
             //remove(Profit, older);
             //remove(Recharge, older);
             //remove(Withdraw, older);
@@ -110,11 +107,10 @@ module.exports = {
         Schedule.scheduleJob(rule, function() {
             var older = Date.parse(getDateStr(-30));
             console.log('开始清理数据了 ===============================================');
+            removeOrder(Order, older);
+            remove(Consume, older);
             remove(Feedback, older);
-            remove(Order, older);
-            //remove(Placard, older);
             remove(Profit, older);
-            remove(Recharge, older);
             remove(Withdraw, older);
         })
     }
