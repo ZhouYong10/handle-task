@@ -1497,7 +1497,7 @@ ul.tpl-dropdown-content .tpl-dropdown-menu-messages-item .menu-messages-content 
 }
 .theme-black .tpl-form-border-form .am-form-label {
   padding-top: 5px;
-  font-size: 16px;
+  font-size: 14px;
   color: #fff;
   font-weight: inherit;
   text-align: right;
@@ -1934,6 +1934,7 @@ ul.tpl-dropdown-content .tpl-dropdown-menu-messages-item .menu-messages-content 
 
 .tips{
   color: red;
+  font-size: 13px;
 }
 .disable{
   margin: 0;
@@ -1964,4 +1965,9 @@ ul.tpl-dropdown-content .tpl-dropdown-menu-messages-item .menu-messages-content 
   padding: 10px 0;
   line-height: 26px;
   border-bottom: 1px solid #908d8d;
+  font-size: 14px;
+}
+
+.am-form-label{
+  font-size: 15px;
 }

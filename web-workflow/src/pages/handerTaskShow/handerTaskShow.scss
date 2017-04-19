@@ -1,19 +1,15 @@
-.tips{
-  color: red;
-}
 
 .no-margin{
-  margin-bottom:0 !important;
+  margin-bottom:6px !important;
 }
 
 .order-content{
   margin: 0;
   padding: 0;
   padding-top: 8px;
+  font-size: 15px;
 }
 
-@media (min-width: 800px) {
-  form{
-    padding-right: 88px;
-  }
+.am-g-collapse{
+  padding-top: 5px;
 }

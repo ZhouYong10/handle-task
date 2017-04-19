@@ -32,7 +32,7 @@
                     <p class="page-header-description">
                         1、支付宝账号：vip990011@qq.com支付宝名称：李青青 <br/>
                         2、通过支付宝进行转账，请核对收款名称与支付宝名称是否与上面一致。<br/>
-                        3、转账完成后，点击付款页面的“查看详情”，记录下 28 或 32 位的交易号。<br/>
+                        3、转账完成后，点击付款页面的“查看详情”，记录下 32 位的交易号。<br/>
                         4、输入交易号，稍等 30 秒即可自动入账。<br/>
                         5、如果付款后提示交易号无法充值，请提交问题反馈。<br/><br/>
                         <span class="tips">注意： 交易号当天有效（晚上十二点之前），第二天提交会自动过期。</span>
@@ -60,8 +60,8 @@
                                             支付宝交易号
                                         </label>
                                         <div class="am-u-sm-8 am-u-lg-10">
-                                            <input id="taskAddress" class="am-radius am-input-sm" type="text" placeholder="输入28 或 32 位的支付宝交易号"
-                                                   v-validate:num="{required: true, minlength: 28, maxlength: 32, isnum: true}" v-model="num">
+                                            <input id="taskAddress" class="am-radius am-input-sm" type="text" placeholder="输入 32 位的支付宝交易号"
+                                                   v-validate:num="{required: true, minlength: 32, maxlength: 32, isnum: true}" v-model="num">
                                             <span class="tips" v-if="$recharge.num.required">支付宝交易号不能为空!</span>
                                             <span class="tips" v-if="$recharge.num.minlength || $recharge.num.maxlength || $recharge.num.isnum">请输入合法的支付宝交易号!</span>
                                         </div>

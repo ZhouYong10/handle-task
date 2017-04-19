@@ -190,6 +190,7 @@ Order.include({
                     if(!self.price || parseFloat(self.price) < parseFloat(myPrice)) {
                         self.price = myPrice;
                     }
+                    self.taskerPrice = parseFloat(self.price);
                     self.totalPrice = (self.price * self.num).toFixed(4);
                     if((self.totalPrice - user.funds) > 0) {
                         return reject();
@@ -260,7 +261,8 @@ Order.include({
                             if(!self.price2 || parseFloat(self.price2) < parseFloat(myPrice2)) {
                                 self.price2 = myPrice2;
                             }
-                            self.totalPrice = ((parseFloat(self.price) + parseFloat(self.price2)) * self.num).toFixed(4);
+                            self.taskerPrice = parseFloat(self.price) + parseFloat(self.price2);
+                            self.totalPrice = (self.taskerPrice * self.num).toFixed(4);
                             if ((self.totalPrice - user.funds) > 0) {
                                 return reject();
                             }

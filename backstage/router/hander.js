@@ -14,9 +14,8 @@ router.get('/all', function (req, res) {
             Order.open().findPages({
                     status: '已发布',
                     taskUsers: {$not: {$all: [user._id]}}
-                }, (req.query.page ? req.query.page : 1))
+                }, (req.query.page ? req.query.page : 1), {'taskerPrice': -1})
                 .then(function (obj) {
-                    console.log(obj, '=================');
                     res.render('handerAll', {
                         title: '任务大厅',
                         user: user,

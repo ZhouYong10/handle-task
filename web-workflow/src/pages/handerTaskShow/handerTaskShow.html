@@ -37,10 +37,10 @@
                                 <input type="hidden" value="<%= orderFlag %>" name="orderFlag">
                                 <input type="hidden" name="orderId" value="<%= order._id %>">
                                 <div class="am-form-group no-margin">
-                                    <label class="am-u-sm-4 am-u-lg-2 am-form-label">价格</label>
+                                    <label class="am-u-sm-4 am-u-lg-2 am-form-label">任务价格</label>
                                     <div class="am-u-sm-8 am-u-lg-10">
                                         <p class="order-content">
-                                            <% if(user.parent){ %>
+                                            ￥ <% if(user.parent){ %>
                                             <%= order.handerChildPrice %>
                                             <% }else{ %>
                                             <%= order.handerParentPrice %>
@@ -52,7 +52,7 @@
                                 <% if(order.address){ %>
                                 <div class="am-form-group am-form-file no-margin">
                                     <label class="am-u-sm-4 am-u-lg-2 am-form-label">任务地址</label>
-                                    <div class="am-u-sm-8 am-u-lg-10 am-g-collapse">
+                                    <div class="am-u-sm-8 am-u-lg-10 ">
                                         <p class="order-content">
                                             <a href="<%= order.address %>">手机上长按复制地址</a><br>
                                             <%= order.address %>
@@ -64,7 +64,7 @@
                                 <% if(order.account){ %>
                                 <div class="am-form-group am-form-file no-margin">
                                     <label class="am-u-sm-4 am-u-lg-2 am-form-label">任务账号</label>
-                                    <div class="am-u-sm-8 am-u-lg-10 am-g-collapse">
+                                    <div class="am-u-sm-8 am-u-lg-10 ">
                                         <p class="order-content">
                                             <a href="<%= order.account %>">手机上长按复制账号</a><br>
                                             <%= order.account %>
@@ -82,7 +82,7 @@
 
                                 <% if(order.codePhoto){ %>
                                 <div class="am-form-group am-form-file no-margin">
-                                    <label class="am-u-sm-4 am-u-lg-2 am-form-label">二维码</label>
+                                    <label class="am-u-sm-4 am-u-lg-2 am-form-label">任务二维码</label>
                                     <div class="am-u-sm-8 am-u-lg-10 am-g-collapse">
                                         <div class="am-u-sm-12 am-u-lg-4">
                                             <a class="fancybox" href="<%= order.codePhoto %>"
@@ -95,7 +95,7 @@
                                 <% } %>
 
                                 <div class="am-form-group am-form-file">
-                                    <label class="am-u-sm-4 am-u-lg-2 am-form-label">样图</label>
+                                    <label class="am-u-sm-4 am-u-lg-2 am-form-label">任务样图</label>
                                     <div class="am-u-sm-8 am-u-lg-10 am-g-collapse">
                                         <div class="am-u-sm-12 am-u-lg-5">
                                             <a class="fancybox" href="<%= order.photo %>"
