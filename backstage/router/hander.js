@@ -14,7 +14,7 @@ router.get('/all', function (req, res) {
             Order.open().findPages({
                     status: '已发布',
                     taskUsers: {$not: {$all: [user._id]}}
-                }, (req.query.page ? req.query.page : 1), {'taskerReleasePrice': -1})
+                }, (req.query.page ? req.query.page : 1), {'onTop': -1, 'taskerReleasePrice': -1})
                 .then(function (obj) {
                     res.render('handerAll', {
                         title: '任务大厅',
@@ -33,7 +33,7 @@ router.get('/type', function (req, res) {
                     type: req.query.type,
                     status: '已发布',
                     taskUsers: {$not: {$all: [user._id]}}
-                }, (req.query.page ? req.query.page : 1), {'taskerReleasePrice': -1})
+                }, (req.query.page ? req.query.page : 1), {'onTop': -1, 'taskerReleasePrice': -1})
                 .then(function (obj) {
                     res.render('handerAll', {
                         title: '任务大厅',

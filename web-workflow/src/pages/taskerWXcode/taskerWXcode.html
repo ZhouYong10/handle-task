@@ -74,6 +74,8 @@
                                         <th>样图</th>
                                         <th>任务说明</th>
                                         <th>状态</th>
+                                        <th>置顶价格</th>
+                                        <th>置顶</th>
                                         <th>操作</th>
                                     </tr>
                                     </thead>
@@ -132,6 +134,16 @@
                                             <a class="am-text-truncate text-break" title="<%= orders[i].refundInfo %>">
                                                 <%= orders[i].refundInfo %>
                                             </a>
+                                            <% } %>
+                                        </td>
+                                        <td>
+                                            <%= orders[i].onTop %>
+                                        </td>
+                                        <td>
+                                            <% if(orders[i].status == '已发布'){ %>
+                                            <a class="am-btn am-btn-primary am-radius am-btn-xs onTop"
+                                               href="/tasker/order/on/top?id=<%= orders[i]._id %>&path=/tasker/WX/fans"
+                                               title="使任务在任务大厅的显示置顶">置顶</a>
                                             <% } %>
                                         </td>
                                         <td>

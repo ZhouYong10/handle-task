@@ -412,6 +412,36 @@ router.post('/WX/article/add', function (req, res) {
     });
 });
 
+router.get('/order/on/top', function (req, res) {
+    if(/^[0-9]+.?[0-9]*$/.test(req.query.info)){
+        var onTop = parseFloat(req.query.info);
+        if(onTop >= 1) {
+            User.open().findById(req.session.passport.user)
+                .then(function (user) {
+                    if(user.funds > onTop) {
+                        Order.open().findById(req.query.id).then(function(order) {
+                            Order.open().updateById(order._id, {$set: {
+                                onTop: order.onTop ? (order.onTop + onTop) : onTop
+                            }}).then(function() {
+                                User.open().updateById(user._id, {$set: {
+                                    funds: (user.funds - onTop).toFixed(4)
+                                }}).then(function() {
+                                    res.redirect(req.query.path);
+                                })
+                            })
+                        })
+                    }else{
+                        res.send('<h1>账户余额不足，请 </h1><a href="/user/recharge"> 充值 !</a>');
+                    }
+                });
+        }else{
+            res.send('<h1>置顶价格不能小于１！</h1>');
+        }
+    }else{
+        res.send('<h1>请输入合法的置顶的价格！必须是正数！</h1>');
+    }
+});
+
 router.get('/order/details', function (req, res) {
     User.open().findById(req.session.passport.user)
         .then(function (user) {

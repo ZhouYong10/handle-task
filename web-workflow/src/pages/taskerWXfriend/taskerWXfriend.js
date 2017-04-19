@@ -12,7 +12,7 @@ new Vue({
 
 $(function () {
     $('.fancybox').fancybox();
-    Utils.layPrompt('请输入错误原因！');
+    Utils.layPrompt('出价越高，在任务大厅的显示越靠前！', '.onTop');
     Utils.breakText();
     Utils.isFreeze();
     Utils.layPage();
