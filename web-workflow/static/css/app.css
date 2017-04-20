@@ -1936,6 +1936,11 @@ ul.tpl-dropdown-content .tpl-dropdown-menu-messages-item .menu-messages-content 
   color: red;
   font-size: 13px;
 }
+
+.tips.err {
+  display: none;
+}
+
 .disable{
   margin: 0;
   padding-top: 4px;

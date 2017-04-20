@@ -13,30 +13,6 @@ new Vue({
         funds: ''
     },
     methods: {
-        totalPrice: function() {
-            var fansPrice = $('#fansPrice').val();
-            var replayPrice = $('#replayPrice').val();
-            var isReply = $('#isReply').is(':checked');
-            var num = $('#fansNum').val();
-
-            if(isReply){
-                this.count = ((parseFloat(fansPrice) + parseFloat(replayPrice)) * parseInt(num)).toFixed(4);
-            }else {
-                this.count = (parseFloat(fansPrice) * parseInt(num)).toFixed(4);
-            }
-            if(Utils.isPlusNum(this.count)) {
-                if(parseFloat(this.count) > parseFloat(this.funds)) {
-                    $('#totalPrice').next().css('display', 'inline');
-                    return false;
-                }else{
-                    $('#totalPrice').next().css('display', 'none');
-                    return true;
-                }
-            }else{
-                $('#totalPrice').next().css('display', 'none');
-                return false;
-            }
-        },
         viewImg: function() {
             var $file = $('#doc-ipt-file-2');
             var fileObj = $file[0];
@@ -66,6 +42,30 @@ new Vue({
 
             }
             $('#photoTip').css('display', 'none');
+        },
+        totalPrice: function() {
+            var fansPrice = $('#fansPrice').val();
+            var replayPrice = $('#replayPrice').val();
+            var isReply = $('#isReply').is(':checked');
+            var num = $('#fansNum').val();
+
+            if(isReply){
+                this.count = ((parseFloat(fansPrice) + parseFloat(replayPrice)) * parseInt(num)).toFixed(4);
+            }else {
+                this.count = (parseFloat(fansPrice) * parseInt(num)).toFixed(4);
+            }
+            if(Utils.isPlusNum(this.count)) {
+                if(parseFloat(this.count) > parseFloat(this.funds)) {
+                    $('#totalPrice').next().css('display', 'inline');
+                    return false;
+                }else{
+                    $('#totalPrice').next().css('display', 'none');
+                    return true;
+                }
+            }else{
+                $('#totalPrice').next().css('display', 'none');
+                return false;
+            }
         },
         checkTitle: function() {
             var $title = $('#title');

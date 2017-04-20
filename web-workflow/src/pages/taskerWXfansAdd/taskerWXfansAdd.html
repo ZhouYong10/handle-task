@@ -7,11 +7,6 @@
     <title><%=title%></title>
 
     <link rel="import" href="../../components/head/head.html?__inline">
-    <style>
-        .tips.err {
-            display: none;
-        }
-    </style>
 </head>
 
 <body data-type="WXfans">
@@ -152,7 +147,7 @@
                                         <div class="am-u-sm-8 am-u-lg-10 am-g-collapse">
                                             <button type="button" class="am-btn am-btn-default am-btn-sm">
                                                 <i class="am-icon-cloud-upload"></i> 点击上传样图</button>
-                                            <span class="tips" id="photoTip" style="display: none">请上传任务验收样图!</span>
+                                            <span class="tips err" id="photoTip">请上传任务验收样图!</span>
                                             <input type="file" id="doc-ipt-file-2" @change="viewImg" name="photo">
                                         </div>
                                     </div>
