@@ -84,6 +84,16 @@ module.exports = {
             return /^[0-9]*[1-9][0-9]*$/.test(val);
         }
     },
+    isEmpty: function(val) {
+        var result = val.replace(/(^\s*)|(\s*$)/g, "");
+        return val == '' || result == '';
+    },
+    isPlusNum: function(val) {
+        return /^\d+(?=\.{0,1}\d+$|$)/.test(val);
+    },
+    isInteger: function(val) {
+        return /^[0-9]+$/.test(val);
+    },
     min100: function(val) {
         return parseInt(val) >= 100;
     },
