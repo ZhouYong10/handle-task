@@ -4,38 +4,19 @@
 
 var Vue = require('vue');
 Vue.use(require('vue-resource'));
+var Utils = require('utils');
 
-var allField = {
-    username: false,
-    password: false,
-    securityCode: false
-};
-
-function checkAllField(vueObj) {
-    for(var field in allField) {
-        if(!allField[field]){
-            vueObj.allFieldTrue = false;
-            return;
-        }
-    }
-    vueObj.allFieldTrue = true;
-}
-
-function isTrue(field, vueObj) {
+function isTrue(field) {
     $('#'+field).css({color: 'green'});
     layer.closeAll('tips');
-    allField[field] = true;
-    checkAllField(vueObj);
 }
 
-function isFalse(msg, field, vueObj) {
+function isFalse(msg, field) {
     $('#'+field).css({color: 'red'});
     layer.tips(msg, '#'+field, {
         tips: [1, '#3595CC'],
         time: 0
     });
-    allField[field] = false;
-    checkAllField(vueObj);
 }
 
 new Vue({
@@ -44,8 +25,7 @@ new Vue({
         username: '',
         password: '',
         securityCode: '',
-        isAutoLogin: false,
-        allFieldTrue: false
+        isAutoLogin: false
     },
     created: function() {
         var loginInfo = Cookies.get('loginInfo');
@@ -66,47 +46,58 @@ new Vue({
         closeTips: function() {
             layer.closeAll('tips');
         },
-        checkUsername: function(val) {
-            var username = val.replace(/(^\s*)|(\s*$)/g, "");
-            if(username !== ''){
-                isTrue('username',this);
+        checkUsername: function() {
+            var val = $('#username').val();
+            if(Utils.isEmpty(val)){
+                isFalse('用户名不能为空！', 'username');
+                return false;
             }else{
-                isFalse('用户名不能为空！', 'username', this);
+                isTrue('username');
+                return true;
             }
         },
-        checkPassword: function(val) {
-            if(val === ''){
-                isFalse('密码不能为空！', 'password', this);
+        checkPassword: function() {
+            var val = $('#password').val();
+            if(Utils.isEmpty(val)){
+                isFalse('密码不能为空！', 'password');
+                return false;
             }else{
-                isTrue('password', this);
+                isTrue('password');
+                return true;
             }
         },
-        checkSecurityCode: function(val) {
-            if(val !== ''){
-                isTrue('securityCode', this);
+        checkSecurityCode: function() {
+            var val = $('#securityCode').val();
+            if(Utils.isEmpty(val) || val.length != 4){
+                isFalse('请输入4位验证码！', 'securityCode');
+                return false;
             }else{
-                isFalse('请输入验证码！', 'securityCode', this);
+                isTrue('securityCode');
+                return true;
             }
         },
         onLogin: function() {  //使用es6语法,获取不到相应的数据,例如this.username,得不到数据.
-            if(this.isAutoLogin) {
-                Cookies.set('loginInfo', {
+            var isCommit = this.checkUsername() && this.checkPassword() && this.checkSecurityCode();
+            if(isCommit) {
+                if(this.isAutoLogin) {
+                    Cookies.set('loginInfo', {
+                        username: this.username,
+                        password: this.password,
+                        isAuto: true
+                    }, {expires: 14, path: '/'});
+                }
+                this.$http.post('/login', {
                     username: this.username,
                     password: this.password,
-                    isAuto: true
-                }, {expires: 14, path: '/'});
+                    securityCode: this.securityCode
+                }).then((res) => {
+                    if(res.data.isOK) {
+                        location.href = res.data.path;
+                    }else{
+                        layer.msg(res.data.message);
+                    }
+                });
             }
-            this.$http.post('/login', {
-                username: this.username,
-                password: this.password,
-                securityCode: this.securityCode
-            }).then((res) => {
-                if(res.data.isOK) {
-                    location.href = res.data.path;
-                }else{
-                    layer.msg(res.data.message);
-                }
-            });
         }
     }
 });
