@@ -2,23 +2,16 @@
  * Created by ubuntu64 on 3/8/16.
  */
 var Vue = require('vue');
-Vue.use(require('vue-validator'));
-
 var Utils = require('utils');
 
 new Vue({
     el: '#wxFans',
     data: {
         fansPrice: '',
-        myFansPrice: '',
-        num: '',
         count: 0,
         funds: ''
     },
     methods: {
-        total: function() {
-            this.count = (parseFloat(this.myFansPrice) * parseInt(this.num)).toFixed(4);
-        },
         viewImg: function() {
             var $file = $('#doc-ipt-file-2');
             var fileObj = $file[0];
@@ -49,24 +42,91 @@ new Vue({
             }
             $('#photoTip').css('display', 'none');
         },
+        totalPrice: function() {
+            var fansPrice = $('#fansPrice').val();
+            var num = $('#fansNum').val();
+
+            this.count = (parseFloat(fansPrice) * parseInt(num)).toFixed(4);
+            if(Utils.isPlusNum(this.count)) {
+                if(parseFloat(this.count) > parseFloat(this.funds)) {
+                    $('#totalPrice').next().css('display', 'inline');
+                    return false;
+                }else{
+                    $('#totalPrice').next().css('display', 'none');
+                    return true;
+                }
+            }else{
+                $('#totalPrice').next().css('display', 'none');
+                return false;
+            }
+        },
+        checkTitle: function() {
+            var $title = $('#title');
+            if(Utils.isEmpty($title.val())){
+                $title.next().css('display', 'inline');
+                return false;
+            }else{
+                $title.next().css('display', 'none');
+                return true;
+            }
+        },
+        checkFansID: function() {
+            var $fansID = $('#fansID');
+            if(Utils.isEmpty($fansID.val())){
+                $fansID.next().css('display', 'inline');
+                return false;
+            }else{
+                $fansID.next().css('display', 'none');
+                return true;
+            }
+        },
+        checkRemark: function() {
+            var $fansRemark = $('#remark');
+            if(Utils.isEmpty($fansRemark.val())){
+                $fansRemark.next().css('display', 'inline');
+                return false;
+            }else{
+                $fansRemark.next().css('display', 'none');
+                return true;
+            }
+        },
+        checkFansPrice: function() {
+            var $fansPrice = $('#fansPrice');
+            var fansPrice = $fansPrice.val();
+            if(Utils.isPlusNum(fansPrice) && parseFloat(fansPrice) >= parseFloat(this.fansPrice)){
+                $fansPrice.next().css('display', 'none');
+                this.totalPrice();
+                return true;
+            }else{
+                $fansPrice.next().css('display', 'inline');
+                return false;
+            }
+        },
+        checkFansNum: function() {
+            var $num = $('#fansNum');
+            var num = $num.val();
+            if(Utils.isInteger(num) && Utils.min20(num)){
+                $num.next().css('display', 'none');
+                this.totalPrice();
+                return true;
+            }else{
+                $num.next().css('display', 'inline');
+                return false;
+            }
+        },
         check: function(e) {
+            var isCommit = this.checkTitle() && this.checkFansID() && this.checkRemark() && this.checkFansPrice() &&
+                this.checkFansNum() && this.totalPrice();
+            if(!isCommit) {
+                e.stopPropagation();
+                e.preventDefault();
+                return;
+            }
             if(!$('#doc-ipt-file-2').val()){
                 e.stopPropagation();
                 e.preventDefault();
                 $('#photoTip').css('display', 'inline-block');
             }
-        }
-    },
-    validators: {
-        isnum: Utils.isNum,
-        min20: Utils.min20,
-        maxprice: function(num) {
-            var myFansPrice = this.myFansPrice ? this.myFansPrice : 0;
-            return parseFloat(myFansPrice) * parseInt(num ? num : 0) <= parseFloat(this.funds);
-        },
-        isfloat: Utils.isfloat,
-        minfansprice: function(price) {
-            return parseFloat(price) >= parseFloat(this.fansPrice);
         }
     }
 });
