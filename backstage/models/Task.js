@@ -595,7 +595,7 @@ function followedByPayment(tasks) {
         var task = tasks.shift();
         var taskCreateTime = task._id.getTimestamp();
         var timeNow = new Date().getTime();
-        if((timeNow - taskCreateTime) > 1000 * 60 * 60 * 24) {
+        if((timeNow - taskCreateTime) > 1000 * 60 * 60 * 12) {
             var taskIns = Task.wrapToInstance(task);
             taskIns.success().then(function () {
                 console.log(moment().format('YYYY-MM-DD HH:mm:ss') + ': 自动审核通过了任务' + task._id);

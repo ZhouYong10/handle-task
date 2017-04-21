@@ -96,7 +96,7 @@
                                         <input type="hidden" v-model="fansPrice" value="<%= fansPrice %>">
                                         <input id="fansPrice" class="am-radius am-input-sm" type="text"
                                                @keyup="checkFansPrice" @change="checkFansPrice" @blur="checkFansPrice"
-                                               name="price">
+                                               placeholder="价格必须是正数，且不能小于平台定价 ￥<%= fansPrice %>!" name="price">
                                         <span class="tips err">价格必须是正数，且不能小于平台定价 ￥<%= fansPrice %>!</span>
                                     </div>
                                 </div>
@@ -117,7 +117,7 @@
                                         <input type="hidden" v-model="replyPrice" value="<%= replyPrice %>">
                                         <input id="replayPrice" class="am-radius am-input-sm" type="text"
                                                @keyup="checkReplayPrice" @change="checkReplayPrice" @blur="checkReplayPrice"
-                                               name="price2">
+                                               placeholder="价格必须是正数，且不能小于平台定价 ￥<%= replyPrice %>!" name="price2">
                                         <span class="tips err">价格必须是正数，且不能小于平台定价 ￥<%= replyPrice %>!</span>
                                     </div>
                                 </div>
