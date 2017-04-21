@@ -25,25 +25,21 @@
             <form class="am-form tpl-form-line-form">
                 <div class="am-form-group">
                     <input id="username" type="text" class="tpl-form-input" placeholder="用户名"
-                           @keyup="checkUsername(username)" @blur="checkUsername(username)"
                            @focus="closeTips" v-model="username">
                 </div>
 
                 <div class="am-form-group">
                     <input id="password" type="password" class="tpl-form-input" placeholder="请输入密码"
-                           @keyup="checkPassword(password)" @blur="checkPassword(password)"
                            @focus="closeTips" v-model="password">
                 </div>
 
                 <div class="am-form-group">
                     <input id="repassword" type="password" class="tpl-form-input" placeholder="再次输入密码"
-                           @keyup="checkRepassword(repassword)" @blur="checkRepassword(repassword)"
                            @focus="closeTips" v-model="repassword">
                 </div>
 
                 <div class="am-form-group">
                     <input id="qq" type="text" class="tpl-form-input" placeholder="请输入ＱＱ号"
-                           @keyup="checkQQ(qq)" @blur="checkQQ(qq)"
                            @focus="closeTips" v-model="qq">
                 </div>
                
@@ -61,7 +57,6 @@
                 <div class="am-form-group am-g-collapse">
                     <div class="am-u-sm-5">
                         <input id="securityCode" type="text" class="am-form-field" placeholder="不区分大小写"
-                               @keyup="checkSecurityCode(securityCode)" @blur="checkSecurityCode(securityCode)"
                                @focus="closeTips" v-model="securityCode">
                     </div>
                     <div class="am-u-sm-7">
@@ -70,8 +65,7 @@
                 </div>
 
                 <div class="am-form-group tpl-login-remember-me">
-                    <input id="readme" name="readme" type="checkbox" v-model="readme"
-                           @mouseout="checkReadMe(readme)" @focus="closeTips">
+                    <input id="readme" name="readme" type="checkbox" v-model="readme" @focus="closeTips">
                     <label>
                         我已阅读并同意 <a href="javascript:;">《用户注册协议》</a>
                     </label>
@@ -81,7 +75,7 @@
                 <div class="am-form-group">
 
                     <button type="button" class="am-btn am-btn-primary  am-btn-block tpl-btn-bg-color-success  tpl-login-btn"
-                            @click.stop.prevent="onSignIn" v-if="allFieldTrue">提交</button>
+                            @click.stop.prevent="onSignIn">提交</button>
 
                 </div>
             </form>

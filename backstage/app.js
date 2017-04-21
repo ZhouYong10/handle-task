@@ -189,56 +189,99 @@ app.post('/check/securityCode', function (req, res) {
     }
 });
 
-app.post('/sign/in', function(req, res, next) {
-  if(req.body.securityCode != req.session.securityCode) {
-    res.send({
-      isOK: false,
-      message: '验证码错误！'
-    });
-    return;
-  }
-
-  User.open().findOne({username: req.body.username.replace(/(^\s*)|(\s*$)/g, "")})
-      .then(function (user) {
-        if (user) {
-          res.send({
+app.post('/sign/in', function (req, res, next) {
+    var info = req.body;
+    if(!info.readme) {
+        res.send({
             isOK: false,
-            message: '用户名' + req.body.username + '已经存在！'
-          });
-          return;
-        }
+            field: 'readme',
+            message: '请阅读并同意《用户注册协议》！'
+        });
+        return;
+    }
+    if (info.securityCode != req.session.securityCode) {
+        res.send({
+            isOK: false,
+            field: 'securityCode',
+            message: '验证码错误！'
+        });
+        return;
+    }
+    if(info.username.replace(/(^\s*)|(\s*$)/g, "") == ''){
+        res.send({
+            isOK: false,
+            field: 'username',
+            message: '用户名不能为空！'
+        });
+        return;
+    }
+    if(info.password == ''){
+        res.send({
+            isOK: false,
+            field: 'password',
+            message: '密码不能为空！'
+        });
+        return;
+    }
+    if(info.password !== info.repassword){
+        res.send({
+            isOK: false,
+            field: 'repassword',
+            message: '两次输入的密码不一致！'
+        });
+        return;
+    }
+    if(!(/^[0-9]*[1-9][0-9]*$/.test(info.qq)) || 5 > info.qq.length || info.qq.length > 13){
+        res.send({
+            isOK: false,
+            field: 'qq',
+            message: '请输入5 - 13位的合法ＱＱ号！'
+        });
+        return;
+    }
 
-        var invitationCode = req.body.invitation;
-        var userInfo = {
-          username: req.body.username.replace(/(^\s*)|(\s*$)/g, ""),
-          password: req.body.password,
-          qq: req.body.qq,
-          role: req.body.role,
-          roleName: User.role[req.body.role]
-        };
+    User.open().findOne({username: info.username.replace(/(^\s*)|(\s*$)/g, "")})
+        .then(function (user) {
+            if (user) {
+                res.send({
+                    isOK: false,
+                    field: 'username',
+                    message: '用户名: ' + info.username + ' 已经存在！'
+                });
+                return;
+            }
 
-        if(invitationCode) {
-            var userId = Utils.decipher(invitationCode, Utils.invitationKey);
-            User.open().findById(userId)
-                .then(function (result) {
-                    var parent = User.wrapToInstance(result);
-                    userInfo.parent = parent.username;
-                    userInfo.parentID = parent._id;
-                    User.createUser(userInfo, function (user) {
-                        parent.addChild(user[0]._id);
-                        User.open().updateById(parent._id, {
-                            $set: parent
-                        }).then(function () {
-                            login(req, res, next);
+            var invitationCode = info.invitation;
+            var userInfo = {
+                username: info.username.replace(/(^\s*)|(\s*$)/g, ""),
+                password: info.password,
+                qq: info.qq,
+                role: info.role,
+                roleName: User.role[info.role]
+            };
+
+            if (invitationCode) {
+                var userId = Utils.decipher(invitationCode, Utils.invitationKey);
+                User.open().findById(userId)
+                    .then(function (result) {
+                        var parent = User.wrapToInstance(result);
+                        userInfo.parent = parent.username;
+                        userInfo.parentID = parent._id;
+                        User.createUser(userInfo, function (user) {
+                            parent.addChild(user[0]._id);
+                            User.open().updateById(parent._id, {
+                                $set: parent
+                            }).then(function () {
+                                login(req, res, next);
+                            });
                         });
                     });
+            } else {
+                User.createUser(userInfo, function () {
+                    login(req, res, next);
                 });
-        }else {
-          User.createUser(userInfo, function () {
-            login(req, res, next);
-          });
-        }
-      });
+            }
+        });
 });
 
 //对外公共接口
