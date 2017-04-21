@@ -426,7 +426,16 @@ router.get('/order/on/top', function (req, res) {
                                 User.open().updateById(user._id, {$set: {
                                     funds: (user.funds - onTop).toFixed(4)
                                 }}).then(function() {
-                                    res.redirect(req.query.path);
+                                    User.open().findOne({username: 'admin'})
+                                        .then(function (admin) {
+                                            User.open().updateById(admin._id, {
+                                                $set: {
+                                                    funds:(parseFloat(admin.funds) + onTop).toFixed(4)
+                                                }
+                                            }).then(function() {
+                                                res.redirect(req.query.path);
+                                            })
+                                        });
                                 })
                             })
                         })
