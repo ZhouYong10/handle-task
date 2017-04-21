@@ -48,7 +48,7 @@
 
                                 <div class="am-form-group">
                                     <label class="am-u-sm-4 am-form-label">
-                                        账户名 <span class="tpl-form-line-small-title">Username</span>
+                                        账户名称
                                     </label>
                                     <div class="am-u-sm-8">
                                         <p class="user-info"><%= user.username %></p>
@@ -57,7 +57,7 @@
 
                                 <div class="am-form-group">
                                     <label class="am-u-sm-4 am-form-label">
-                                        账户余额 <span class="tpl-form-line-small-title">Account Balance</span>
+                                        账户余额
                                     </label>
                                     <div class="am-u-sm-8">
                                         <p class="user-info">￥ <%= user.funds %></p>
@@ -66,7 +66,7 @@
 
                                 <div class="am-form-group">
                                     <label class="am-u-sm-4 am-form-label">
-                                        冻结金额 <span class="tpl-form-line-small-title">Frozen Amount</span>
+                                        冻结金额
                                     </label>
                                     <div class="am-u-sm-8">
                                         <p class="user-info">￥ <%= user.freezeFunds %></p>
@@ -75,7 +75,7 @@
 
                                 <div class="am-form-group">
                                     <label class="am-u-sm-4 am-form-label">
-                                        下级返利 <span class="tpl-form-line-small-title">Subordinate Rebate</span>
+                                        下级返利
                                     </label>
                                     <div class="am-u-sm-8">
                                         <p class="user-info">
@@ -86,7 +86,7 @@
 
                                 <div class="am-form-group">
                                     <label class="am-u-sm-4 am-form-label">
-                                        账户状态 <span class="tpl-form-line-small-title">Account Status</span>
+                                        账户状态
                                     </label>
                                     <div class="am-u-sm-8">
                                         <p class="user-info"><%= user.status %></p>
@@ -95,7 +95,7 @@
 
                                 <div class="am-form-group">
                                     <label class="am-u-sm-4 am-form-label">
-                                        账户角色 <span class="tpl-form-line-small-title">Account Role</span>
+                                        账户角色
                                     </label>
                                     <div class="am-u-sm-8">
                                         <p class="user-info"><%= user.roleName %></p>
@@ -104,7 +104,7 @@
 
                                 <div class="am-form-group">
                                     <label class="am-u-sm-4 am-form-label">
-                                        上级 <span class="tpl-form-line-small-title">Superior</span>
+                                        上级名称
                                     </label>
                                     <div class="am-u-sm-8">
                                         <p class="user-info"><%= user.parent %></p>
@@ -113,7 +113,7 @@
 
                                 <div class="am-form-group">
                                     <label  class="am-u-sm-4 am-form-label">
-                                        下级/人 <span class="tpl-form-line-small-title">Subordinate</span>
+                                        下级人数
                                     </label>
                                     <div class="am-u-sm-8">
                                         <p class="user-info"><%= user.childNum %></p>
@@ -122,7 +122,7 @@
 
                                 <div class="am-form-group">
                                     <label class="am-u-sm-4 am-form-label">
-                                        注册时间 <span class="tpl-form-line-small-title">Registration Time</span>
+                                        注册时间
                                     </label>
                                     <div class="am-u-sm-8">
                                         <p class="user-info"><%= user.createTime %></p>
@@ -131,7 +131,7 @@
 
                                 <div class="am-form-group">
                                     <label class="am-u-sm-4 am-form-label">
-                                        最后登陆时间 <span class="tpl-form-line-small-title">Last Login Time</span>
+                                        最后登陆
                                     </label>
                                     <div class="am-u-sm-8">
                                         <p class="user-info"><%= user.lastLoginTime %></p>
@@ -140,7 +140,7 @@
 
                                 <div class="am-form-group">
                                     <label class="am-u-sm-4 am-form-label">
-                                        ＱＱ账户 <span class="tpl-form-line-small-title">QQ Account</span>
+                                        ＱＱ账户
                                     </label>
                                     <div class="am-u-sm-8">
                                         <p class="user-info disable" v-if="!isEdit"><%= user.qq %></p>
@@ -151,7 +151,7 @@
 
                                 <div class="am-form-group">
                                     <label class="am-u-sm-4 am-form-label">
-                                        电话号码 <span class="tpl-form-line-small-title">Telephone Number</span>
+                                        电话号码
                                     </label>
                                     <div class="am-u-sm-8">
                                         <p class="user-info disable" v-if="!isEdit"><%= user.phone %></p>
@@ -162,7 +162,7 @@
 
                                 <div class="am-form-group">
                                     <label class="am-u-sm-4 am-form-label">
-                                        邮箱 <span class="tpl-form-line-small-title">Email</span>
+                                        邮箱地址
                                     </label>
                                     <div class="am-u-sm-8">
                                         <p class="user-info disable" v-if="!isEdit"><%= user.email %></p>

@@ -29,7 +29,7 @@
                         提示 <small>提现必看</small>
                     </div>
                     <p class="page-header-description">
-                        1、提现金额不能小于30元。<br/>
+                        1、提现金额不能小于５元。<br/>
                         2、平台用户提现支付宝必须和充值支付宝一致，否则平台不受理（投手提现不受此限制）。<br/>
                         3、提现支付宝昵称请填实名（个别支付宝用户需要实名验证，敬请谅解），否则支付宝无法转账。<br/>
                     </p>
@@ -58,7 +58,7 @@
                                                    placeholder="请填写提现金额，为保证提现成功，尽量提取正整数。" name="funds"
                                                    v-validate:funds="{required: true, isfloat: true, mintotal: true, mustOne: true}">
                                             <span class="tips" v-if="$withdraw.funds.required">提现金额不能为空!</span>
-                                            <span class="tips" v-if="$withdraw.funds.mustOne">提现金额不能少于30元!</span>
+                                            <span class="tips" v-if="$withdraw.funds.mustOne">提现金额不能少于５元!</span>
                                             <span class="tips" v-if="$withdraw.funds.isfloat">请输入合法的提现金额!</span>
                                             <span class="tips" v-if="$withdraw.funds.mintotal">您的账户当前没有这么多资金!</span>
                                         </div>

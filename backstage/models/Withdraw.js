@@ -35,8 +35,8 @@ Withdraw.extend({
     },
     saveOne: function(withdraw, userId) {
         return new Promise(function(resolve, reject) {
-            if(withdraw.funds < 30) {
-                resolve('请不要跳过页面验证提现，提现不足30元仍然不能提现哦。。。。');
+            if(withdraw.funds < 5) {
+                resolve('请不要跳过页面验证提现，提现不足5元仍然不能提现哦。。。。');
             }
             User.open().findById(userId)
                 .then(function(user) {
