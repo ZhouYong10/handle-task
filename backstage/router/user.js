@@ -487,6 +487,7 @@ router.post('/feedback/add', function (req, res) {
         .then(function (user) {
             feedback.user = user.username;
             feedback.userId = user._id;
+            feedback.userRole = user.role;
             Feedback.createFeedback(feedback)
                 .then(function (result) {
                     socketIO.emit('updateNav', {feedback: 1});
