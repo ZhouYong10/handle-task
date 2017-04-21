@@ -170,6 +170,10 @@ app.get('/sign/in', function (req, res) {
   res.render('signIn', {title: '用户注册'});
 });
 
+app.get('/sign/readme', function(req, res) {
+    res.render('readme', {title: '用户注册协议'});
+});
+
 app.post('/check/username', function (req, res) {
     User.open().findOne({username: req.body.username})
     .then(function(user) {
