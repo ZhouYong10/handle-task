@@ -261,6 +261,7 @@ app.post('/sign/in', function (req, res, next) {
                 password: info.password,
                 qq: info.qq,
                 role: info.role,
+                readme: info.readme,
                 roleName: User.role[info.role]
             };
 
