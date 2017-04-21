@@ -95,8 +95,9 @@
                                         </label>
                                         <div class="am-u-sm-8 am-u-lg-10">
                                             <input type="hidden" v-model="fansPrice" value="<%= fansPrice %>">
-                                            <input id="fansPrice" class="am-radius am-input-sm" type="text" name="price"
-                                                   @keyup="checkFansPrice" @change="checkFansPrice" @blur="checkFansPrice">
+                                            <input id="fansPrice" class="am-radius am-input-sm" type="text"
+                                                   @keyup="checkFansPrice" @change="checkFansPrice" @blur="checkFansPrice"
+                                                   name="price">
                                             <span class="tips err">价格必须是正数，且不能小于平台定价 ￥<%= fansPrice %>!</span>
                                         </div>
                                     </div>
@@ -115,8 +116,9 @@
                                         </label>
                                         <div class="am-u-sm-8 am-u-lg-10">
                                             <input type="hidden" v-model="replyPrice" value="<%= replyPrice %>">
-                                            <input id="replayPrice" class="am-radius am-input-sm" type="text" name="price2"
-                                                   @keyup="checkReplayPrice" @change="checkReplayPrice" @blur="checkReplayPrice">
+                                            <input id="replayPrice" class="am-radius am-input-sm" type="text"
+                                                   @keyup="checkReplayPrice" @change="checkReplayPrice" @blur="checkReplayPrice"
+                                                   name="price2">
                                             <span class="tips err">价格必须是正数，且不能小于平台定价 ￥<%= replyPrice %>!</span>
                                         </div>
                                     </div>
@@ -127,8 +129,8 @@
                                         </label>
                                         <div class="am-u-sm-8 am-u-lg-10">
                                             <input id="fansNum" class="am-radius am-input-sm" type="text"
-                                                   placeholder="需要增加的粉丝数量，最低20起" name="num"
-                                                   @keyup="checkFansNum" @change="checkFansNum" @blur="checkFansNum">
+                                                   @keyup="checkFansNum" @change="checkFansNum" @blur="checkFansNum"
+                                                   placeholder="需要增加的粉丝数量，最低20起" name="num">
                                             <span class="tips err">任务数量必须为正整数,且最低20起!</span>
                                         </div>
                                     </div>
