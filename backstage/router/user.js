@@ -339,78 +339,6 @@ router.get('/search/lowerUser', function (req, res) {
         });
 });
 
-router.get('/addLowerUser', function (req, res) {
-    User.open().findById(req.session.passport.user)
-        .then(function (user) {
-            res.render('addLowerUser', {
-                title: '添加下级用户',
-                user: user
-            });
-        });
-});
-
-router.post('/addLowerUser', function (req, res) {
-    var userInfo = req.body;
-    userInfo.username = userInfo.username.replace(/(^\s*)|(\s*$)/g, "");
-    User.open().findById(req.session.passport.user)
-        .then(function (result) {
-            var parent = User.wrapToInstance(result);
-            userInfo.parent = parent.username;
-            userInfo.parentID = parent._id;
-            userInfo.role = parent.childRole();
-            User.createUser(userInfo, function (user) {
-                parent.addChild(user[0]._id);
-                User.open().updateById(parent._id, {
-                    $set: parent
-                }).then(function (result) {
-                    res.redirect('/user/lowerUser');
-                }, function(error) {
-                    throw (new Error(error));
-                });
-            }, function (error) {
-                res.send('添加下级用户失败： ' + error);
-            });
-        }, function (error) {
-            res.send('查询上级用户信息失败： ' + error);
-        });
-});
-
-router.get('/removeLowerUser', function (req, res) {
-    User.removeUser(req.query.id).then(function () {
-        res.redirect('/user/lowerUser');
-    });
-});
-
-router.get('/my/price', function (req, res) {
-    User.open().findById(req.session.passport.user)
-        .then(function (user) {
-
-            var product = Product.open();
-            product.find({type: 'forum'}).then(function(forums) {
-                product.find({type: 'flow'}).then(function(flows) {
-                    product.find({type: 'wx'}).then(function(wxs) {
-                        product.find({type: 'mp'}).then(function(mps) {
-                            product.find({type: 'wb'}).then(function(wbs) {
-                                product.find({type: 'handle'}).then(function(handles) {
-                                    res.render('userPrice', {
-                                        title: '我的价格详情',
-                                        user: user,
-                                        forums: forums,
-                                        flows: flows,
-                                        wxs: wxs,
-                                        mps: mps,
-                                        wbs: wbs,
-                                        handles: handles
-                                    });
-                                })
-                            })
-                        })
-                    })
-                })
-            })
-        });
-});
-
 router.get('/lowerUser/profit', function (req, res) {
     User.open().findById(req.session.passport.user)
         .then(function (user) {
@@ -532,59 +460,6 @@ router.post('/withdraw/add', function (req, res) {
                 socketIO.emit('updateNav', {withdraw: 1});
                 res.redirect('/user/withdraw');
             }
-        })
-});
-
-router.get('/errorSummary', function (req, res) {
-    User.open().findById(req.session.passport.user)
-        .then(function (user) {
-            Order.open().findPages({
-                userId: user._id,
-                error: {$in: ['未处理', '已处理']}
-            }, (req.query.page ? req.query.page : 1), {'errorTime': -1})
-                .then(function (obj) {
-                res.render('errorSummary', {
-                    title: '错误信息汇总',
-                    user: user,
-                    orders: obj.results,
-                    pages: obj.pages
-                });
-            });
-        });
-});
-
-router.get('/search/error', function (req, res) {
-    var types = req.query.type.split('-');
-    var type = types.shift();
-    User.open().findById(req.session.passport.user)
-        .then(function (user) {
-            var query = {
-                userId: user._id,
-                type: type,
-                smallType: {$in: types},
-                error: {$in: ['未处理', '已处理']}
-            };
-            Order.open().findPages(query, (req.query.page ? req.query.page : 1), {'errorTime': -1})
-                .then(function (obj) {
-                    res.render('errorSummary', {
-                        title: '错误信息汇总',
-                        user: user,
-                        orders: obj.results,
-                        pages: obj.pages
-                    });
-                });
-        });
-});
-
-router.get('/order/error', function (req, res) {
-    var msg = req.query;
-    Order.open().findById(msg.id)
-        .then(function(order) {
-            var orderIns = Order.wrapToInstance(order);
-            orderIns.orderError(msg.info, function() {
-                socketIO.emit('updateNav', {'error': 1});
-                res.redirect(msg.url);
-            });
         })
 });
 
