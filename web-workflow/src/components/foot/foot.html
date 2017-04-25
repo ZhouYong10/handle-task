@@ -16,12 +16,12 @@
 <script src="/static/js/js-cookie.js"></script>
 
 <script>
-    require('menu');
     $(function() {
         var isIndex = location.pathname == '/';
         var isAdmin = location.pathname.split('/')[1] == 'admin';
         var isSign = location.pathname.split('/')[1] == 'sign';
         if(!isIndex && !isAdmin && !isSign){
+            require('menu');
             $.get('/new/placard', function (results) {
                 var content = '';
                 for(var i = 0; i < results.length; i++) {
