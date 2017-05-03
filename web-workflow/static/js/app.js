@@ -21,7 +21,7 @@ $(function () {
 
     autoLeftNav();
     $(window).resize(function () {
-        autoLeftNav();
+        //autoLeftNav();
     });
 });
 
