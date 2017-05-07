@@ -26,8 +26,7 @@ Task.extend({
                 req.session.orderFlag = '';
                 resolve();
             }else {
-                console.log('订单已经提交了，请勿重复提交！');
-                reject();
+                reject('订单已经提交了，请勿重复提交！');
             }
         })
     },
@@ -58,10 +57,12 @@ Task.extend({
                                 var taskUser = order.taskUsers[i];
                                 if ((taskUser + '') == (user._id + '')) {
                                     flag = false;
-                                    reject('您已经做过该任务了，不要以为我不知道哦！！！');
+                                    break;
                                 }
                             }
+                            console.log(flag, '11111111111111111111');
                             if(flag) {
+                                console.log(flag, '2222222222222222222222');
                                 order.orderId = order._id + '';
                                 delete order._id;
                                 order.taskAccount = user.taskAccount;
@@ -89,6 +90,9 @@ Task.extend({
                                             })
                                     })
                                 })
+                            }else{
+                                console.log(flag, '33333333333333333333333333');
+                                reject('您已经做过该任务了，不要以为我不知道哦！！！');
                             }
                         }else {
                             reject('不好意思，任务已经结束了，下次动作要快点哦！');

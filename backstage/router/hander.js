@@ -52,13 +52,25 @@ router.get('/show', function (req, res) {
             if(user.taskAccount && user.taskName){
                 Order.open().findById(orderId)
                     .then(function(order) {
-                        Task.getRandomStr(req).then(function(orderFlag) {
-                            res.render('handerTaskShow', {
-                                user: user,
-                                order: order,
-                                orderFlag: orderFlag
-                            });
-                        })
+                        var flag = true;
+                        for(var i = 0; i < order.taskUsers.length; i++) {
+                            var taskUser = order.taskUsers[i];
+                            if ((taskUser + '') == (user._id + '')) {
+                                flag = false;
+                                break;
+                            }
+                        }
+                        if(flag) {
+                            Task.getRandomStr(req).then(function(orderFlag) {
+                                res.render('handerTaskShow', {
+                                    user: user,
+                                    order: order,
+                                    orderFlag: orderFlag
+                                });
+                            })
+                        }else{
+                            res.send('<h1>您已经做过该任务了，不要以为我不知道哦！！！</h1>');
+                        }
                     })
             }else{
                 req.session.msg = '请填写您做任务的微信账户信息!';
@@ -78,7 +90,7 @@ router.post('/show', function (req, res) {
                 res.send('<h1>'+err+'</h1>'); //各种错误
             })
         }, function(msg) {
-            res.redirect('/hander/all');
+            res.send('<h1>'+msg+'</h1>');
         })
     }, function(err) {
         res.send('<h1>'+err+'</h1>'); //各种错误
