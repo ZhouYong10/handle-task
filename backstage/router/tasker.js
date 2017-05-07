@@ -418,7 +418,7 @@ router.get('/order/on/top', function (req, res) {
         if(onTop >= 1) {
             User.open().findById(req.session.passport.user)
                 .then(function (user) {
-                    if(user.funds > onTop) {
+                    if(user.funds >= onTop) {
                         Order.open().findById(req.query.id).then(function(order) {
                             Order.open().updateById(order._id, {$set: {
                                 onTop: order.onTop ? (order.onTop + onTop) : onTop
