@@ -60,9 +60,7 @@ Task.extend({
                                     break;
                                 }
                             }
-                            console.log(flag, '11111111111111111111');
                             if(flag) {
-                                console.log(flag, '2222222222222222222222');
                                 order.orderId = order._id + '';
                                 delete order._id;
                                 order.taskAccount = user.taskAccount;
@@ -82,7 +80,7 @@ Task.extend({
                                             $push: {taskUsers: user._id}
                                         };
                                         if((order.num - (order.taskNum ? order.taskNum : 0)) == 1) {
-                                            updateInfo[$set].status = '已完成';
+                                            updateInfo.$set.status = '已完成';
                                         }
                                         Order.open().updateById(info.orderId, updateInfo)
                                             .then(function() {
@@ -91,7 +89,6 @@ Task.extend({
                                     })
                                 })
                             }else{
-                                console.log(flag, '33333333333333333333333333');
                                 reject('您已经做过该任务了，不要以为我不知道哦！！！');
                             }
                         }else {
