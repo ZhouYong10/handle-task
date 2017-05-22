@@ -106,7 +106,7 @@ router.get('/update/header/nav', function (req, res) {
 
     function getRechargeNum() {
         return new Promise(function(resolve) {
-            var url = 'http://localhost:3000/handle/get/recharge/num?type=handle';
+            var url = 'http://www.hongtupingtai.com/handle/get/recharge/num?type=handle';
             request(url, function (err, resp, body) {
                 var obj = JSON.parse(body);
                 resolve(obj.num);
