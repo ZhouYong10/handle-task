@@ -58,7 +58,7 @@ router.get('/recharge', function (req, res) {
 router.post('/recharge', function (req, res) {
     User.open().findById(req.session.passport.user)
         .then(function (user) {
-            var url = 'http://localhost:3000/handle/recharge?type=handle' +
+            var url = 'http://www.hongtupingtai.com/handle/recharge?type=handle' +
                 '&alipayId=' + req.body.alipayId +
                 '&userId=' + user._id +
                 '&username=' + encodeURIComponent(user.username) +
@@ -90,7 +90,7 @@ router.post('/recharge', function (req, res) {
 router.get('/recharge/history', function (req, res) {
     User.open().findById(req.session.passport.user)
         .then(function (user) {
-            var url = 'http://localhost:3000/handle/recharge/history?type=handle' +
+            var url = 'http://www.hongtupingtai.com/handle/recharge/history?type=handle' +
                 '&userId=' + user._id +
                 '&page=' + (req.query.page ? req.query.page : 1);
             request(url, function (err, resp, body) {
@@ -112,7 +112,7 @@ router.get('/recharge/history', function (req, res) {
 router.get('/search/recharge', function (req, res) {
     User.open().findById(req.session.passport.user)
         .then(function (user) {
-            var url = 'http://localhost:3000/handle/search/recharge?type=handle&userId=' + user._id +
+            var url = 'http://www.hongtupingtai.com/handle/search/recharge?type=handle&userId=' + user._id +
                 '&page=' + (req.query.page ? req.query.page : 1);
             if(req.query.funds) {
                 url += '&funds=' + req.query.funds;

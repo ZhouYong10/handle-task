@@ -119,7 +119,7 @@ router.get('/update/header/nav', function (req, res) {
  * manage funds
  * */
 router.get('/recharge', function (req, res) {
-    var url = 'http://localhost:3000/handle/manage/recharge?type=handle' +
+    var url = 'http://www.hongtupingtai.com/handle/manage/recharge?type=handle' +
         '&page=' + (req.query.page ? req.query.page : 1);
     request(url, function (err, resp, body) {
         var obj = JSON.parse(body);
@@ -139,7 +139,7 @@ router.get('/recharge', function (req, res) {
 });
 
 router.get('/search/recharge/by/alipayId', function (req, res) {
-    var url = 'http://localhost:3000/handle/search/recharge/by/alipayId?type=handle' +
+    var url = 'http://www.hongtupingtai.com/handle/search/recharge/by/alipayId?type=handle' +
         '&alipayId=' + req.query.alipayId.replace(/(^\s*)|(\s*$)/g,"");
     request(url, function (err, resp, body) {
         var obj = JSON.parse(body);
@@ -178,7 +178,7 @@ router.get('/hand/recharge', function (req, res) {
     if(isNaN(msg.funds)) {
         res.send('充值金额必须是数字。。。。。。');
     }else {
-        var url = 'http://localhost:3000/handle/hand/recharge?' +
+        var url = 'http://www.hongtupingtai.com/handle/hand/recharge?' +
             'alipayId=' + msg.id +
             '&funds=' + msg.funds;
         request(url, function (err, resp, body) {
@@ -202,7 +202,7 @@ router.get('/hand/recharge', function (req, res) {
 });
 
 router.get('/hand/recharge/refuse', function (req, res) {
-    var url = 'http://localhost:3000/handle/hand/recharge/refuse?' +
+    var url = 'http://www.hongtupingtai.com/handle/hand/recharge/refuse?' +
         'alipayId=' + req.query.id +
         '&msg=' + encodeURIComponent(req.query.info);
     request(url, function (err, resp, body) {
