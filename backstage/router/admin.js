@@ -93,8 +93,8 @@ router.get('/update/header/nav', function (req, res) {
             updateNav.complaintTask = tasks.length;
             Feedback.open().find({status: '未处理'}).then(function (feedbacks) {
                 updateNav.feedback = feedbacks.length;
-                Recharge.open().find({status: '充值中'}).then(function (recharges) {
-                    updateNav.recharge = recharges.length;
+                getRechargeNum().then(function (num) {
+                    updateNav.recharge = num;
                     Withdraw.open().find({status: '未处理'}).then(function (withdraws) {
                         updateNav.withdraw = withdraws.length;
                         res.send(updateNav);
@@ -103,6 +103,16 @@ router.get('/update/header/nav', function (req, res) {
             });
         });
     });
+
+    function getRechargeNum() {
+        return new Promise(function(resolve) {
+            var url = 'http://localhost:3000/handle/get/recharge/num?type=handle';
+            request(url, function (err, resp, body) {
+                var obj = JSON.parse(body);
+                resolve(obj.num);
+            });
+        })
+    }
 });
 
 /*

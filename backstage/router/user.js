@@ -66,15 +66,20 @@ router.post('/recharge', function (req, res) {
                 '&userOldFunds=' + user.funds;
             request(url, function (err, resp, body) {
                 var info = JSON.parse(body);
-                if(info.isOK && info.alipayFunds) {
-                    User.open().updateById(user._id, {$set: {
-                        funds: (parseFloat(user.funds) + parseFloat(info.alipayFunds)).toFixed(4)
-                    }}).then(function() {
-                        res.send({
-                            isOK: true,
-                            path: '/user/recharge/history'
-                        });
-                    })
+                if(info.isOK) {
+                    if(info.alipayFunds) {
+                        User.open().updateById(user._id, {$set: {
+                            funds: (parseFloat(user.funds) + parseFloat(info.alipayFunds)).toFixed(4)
+                        }}).then(function() {
+                            res.send({
+                                isOK: true,
+                                path: '/user/recharge/history'
+                            });
+                        })
+                    }else{
+                        socketIO.emit('updateNav', {recharge: 1});
+                        res.send(info);
+                    }
                 }else{
                     res.send(info);
                 }
