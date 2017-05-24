@@ -187,7 +187,7 @@ router.post('/info', function (req, res) {
     var update = req.body;
     User.open().updateById(req.session.passport.user, {
         $set: {
-            QQ: update.QQ,
+            qq: update.qq,
             phone: update.phone,
             email: update.email
         }
