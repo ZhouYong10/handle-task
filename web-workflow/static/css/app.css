@@ -636,63 +636,62 @@ ul.tpl-dropdown-content .tpl-dropdown-menu-messages-item .menu-messages-content 
 .fc button {
   display: block;
 }
-
-body {
+.theme-black {
   background-color: #282d2f;
 }
-body .tpl-am-model-bd {
+.theme-black .tpl-am-model-bd {
   background: #424b4f;
 }
-body .tpl-model-dialog {
+.theme-black .tpl-model-dialog {
   background: #424b4f;
 }
-body .tpl-error-title {
+.theme-black .tpl-error-title {
   font-size: 210px;
   line-height: 220px;
   color: #868E8E;
 }
-body .tpl-error-title-info {
+.theme-black .tpl-error-title-info {
   line-height: 30px;
   font-size: 21px;
   margin-top: 20px;
   text-align: center;
   color: #868E8E;
 }
-body .tpl-error-btn {
+.theme-black .tpl-error-btn {
   background: #03a9f3;
   border: 1px solid #03a9f3;
   border-radius: 30px;
   padding: 6px 20px 8px;
 }
-body .tpl-error-content {
+.theme-black .tpl-error-content {
   margin-top: 20px;
   margin-bottom: 20px;
   font-size: 16px;
   text-align: center;
   color: #cfcfcf;
 }
-body .tpl-calendar-box {
+.theme-black .tpl-calendar-box {
   background: #424b4f;
   padding: 20px;
 }
-body .tpl-calendar-box .fc-button {
+.theme-black .tpl-calendar-box .fc-button {
   border-radius: 0;
   box-shadow: 0;
 }
-body .tpl-calendar-box .fc-event {
+.theme-black .tpl-calendar-box .fc-event {
   border-radius: 0;
   background: #03a9f3;
 }
-body .tpl-calendar-box .fc-axis {
+.theme-black .tpl-calendar-box .fc-axis {
   color: #fff;
 }
-body .tpl-calendar-box .fc-unthemed .fc-today {
+.theme-black .tpl-calendar-box .fc-unthemed .fc-today {
   background: #3a4144;
 }
-body .tpl-calendar-box .fc-more {
+.theme-black .tpl-calendar-box .fc-more {
   color: #fff;
 }
-body .tpl-calendar-box .fc th.fc-widget-header {
+.theme-black .tpl-calendar-box .fc th.fc-widget-header {
   background: #9675ce!important;
   color: #ffffff;
   font-size: 14px;
@@ -701,74 +700,74 @@ body .tpl-calendar-box .fc th.fc-widget-header {
   text-transform: uppercase;
   border: none!important;
 }
-body .tpl-calendar-box .fc th.fc-widget-header a {
+.theme-black .tpl-calendar-box .fc th.fc-widget-header a {
   color: #fff;
 }
-body .tpl-calendar-box .fc-center h2 {
+.theme-black .tpl-calendar-box .fc-center h2 {
   color: #fff;
 }
-body .tpl-calendar-box .fc-state-default {
+.theme-black .tpl-calendar-box .fc-state-default {
   background-image: none;
   background: #fff;
   font-size: 14px;
 }
-body .tpl-calendar-box .fc th,
-body .tpl-calendar-box .fc td,
-body .tpl-calendar-box .fc hr,
-body .tpl-calendar-box .fc thead,
-body .tpl-calendar-box .fc tbody,
-body .tpl-calendar-box .fc-row {
+.theme-black .tpl-calendar-box .fc th,
+.theme-black .tpl-calendar-box .fc td,
+.theme-black .tpl-calendar-box .fc hr,
+.theme-black .tpl-calendar-box .fc thead,
+.theme-black .tpl-calendar-box .fc tbody,
+.theme-black .tpl-calendar-box .fc-row {
   border-color: rgba(120, 130, 140, 0.4) !important;
 }
-body .tpl-calendar-box .fc-day-number {
+.theme-black .tpl-calendar-box .fc-day-number {
   color: #868E8E;
   padding-right: 6px;
 }
-body .tpl-calendar-box .fc th {
+.theme-black .tpl-calendar-box .fc th {
   color: #868E8E;
   font-weight: normal;
   font-size: 14px;
   padding: 6px 0;
 }
-body .tpl-login-logo {
+.theme-black .tpl-login-logo {
   background: url(/static/images/pages/index/logob.png) center no-repeat;
 }
-body .tpl-table-line-img {
+.theme-black .tpl-table-line-img {
   max-width: 100px;
   padding: 2px;
   border: none;
 }
-body .tpl-table-list-field {
+.theme-black .tpl-table-list-field {
   border: none;
 }
-body .tpl-table-list-select .am-dropdown-content {
+.theme-black .tpl-table-list-select .am-dropdown-content {
   color: #888;
 }
-body .tpl-table-list-select .am-selected-btn {
+.theme-black .tpl-table-list-select .am-selected-btn {
   border: 1px solid rgba(255, 255, 255, 0.2);
   color: #fff;
 }
-body .tpl-table-list-select .am-btn-default.am-active,
-body .tpl-table-list-select .am-btn-default:active,
-body .tpl-table-list-select .am-dropdown.am-active .am-btn-default.am-dropdown-toggle {
+.theme-black .tpl-table-list-select .am-btn-default.am-active,
+.theme-black .tpl-table-list-select .am-btn-default:active,
+.theme-black .tpl-table-list-select .am-dropdown.am-active .am-btn-default.am-dropdown-toggle {
   border: 1px solid rgba(255, 255, 255, 0.2);
   color: #fff;
   background: #5d6468;
 }
-body .tpl-pagination .am-disabled a,
-body .tpl-pagination li a {
+.theme-black .tpl-pagination .am-disabled a,
+.theme-black .tpl-pagination li a {
   color: #fff;
   padding: 6px 12px;
   background: #3f4649;
   border: none;
 }
-body .tpl-pagination .am-active a {
+.theme-black .tpl-pagination .am-active a {
   background: #167fa1;
   color: #fff;
   border: 1px solid #167fa1;
   padding: 6px 12px;
 }
-body .tpl-login-btn {
+.theme-black .tpl-login-btn {
   border: 1px solid #b5b5b5;
   background-color: rgba(0, 0, 0, 0);
   padding: 10px 16px;
@@ -776,67 +775,67 @@ body .tpl-login-btn {
   line-height: 14px;
   color: #b5b5b5;
 }
-body .tpl-login-btn:hover,
-body .tpl-login-btn:active {
+.theme-black .tpl-login-btn:hover,
+.theme-black .tpl-login-btn:active {
   background: #b5b5b5;
   color: #fff;
 }
-body .tpl-login-title {
+.theme-black .tpl-login-title {
   color: #fff;
 }
-body .tpl-login-title strong {
+.theme-black .tpl-login-title strong {
   color: #39bae4;
 }
-body .tpl-form-line-form,
-body .tpl-form-border-form {
+.theme-black .tpl-form-line-form,
+.theme-black .tpl-form-border-form {
   padding-top: 20px;
 }
-body .tpl-form-line-form .am-btn-default,
-body .tpl-form-border-form .am-btn-default {
+.theme-black .tpl-form-line-form .am-btn-default,
+.theme-black .tpl-form-border-form .am-btn-default {
   color: black;
   border: 1px solid rgba(255, 255, 255, 0.2);
 }
-body .tpl-form-line-form .am-selected-text,
-body .tpl-form-border-form .am-selected-text {
+.theme-black .tpl-form-line-form .am-selected-text,
+.theme-black .tpl-form-border-form .am-selected-text {
   color: #888;
 }
-body .tpl-form-border-form input[type=number]:focus,
-body .tpl-form-border-form input[type=search]:focus,
-body .tpl-form-border-form input[type=text]:focus,
-body .tpl-form-border-form input[type=password]:focus,
-body .tpl-form-border-form input[type=datetime]:focus,
-body .tpl-form-border-form input[type=datetime-local]:focus,
-body .tpl-form-border-form input[type=date]:focus,
-body .tpl-form-border-form input[type=month]:focus,
-body .tpl-form-border-form input[type=time]:focus,
-body .tpl-form-border-form input[type=week]:focus,
-body .tpl-form-border-form input[type=email]:focus,
-body .tpl-form-border-form input[type=url]:focus,
-body .tpl-form-border-form input[type=tel]:focus,
-body .tpl-form-border-form input[type=color]:focus,
-body .tpl-form-border-form select:focus,
-body .tpl-form-border-form textarea:focus,
-body .am-form-field:focus {
+.theme-black .tpl-form-border-form input[type=number]:focus,
+.theme-black .tpl-form-border-form input[type=search]:focus,
+.theme-black .tpl-form-border-form input[type=text]:focus,
+.theme-black .tpl-form-border-form input[type=password]:focus,
+.theme-black .tpl-form-border-form input[type=datetime]:focus,
+.theme-black .tpl-form-border-form input[type=datetime-local]:focus,
+.theme-black .tpl-form-border-form input[type=date]:focus,
+.theme-black .tpl-form-border-form input[type=month]:focus,
+.theme-black .tpl-form-border-form input[type=time]:focus,
+.theme-black .tpl-form-border-form input[type=week]:focus,
+.theme-black .tpl-form-border-form input[type=email]:focus,
+.theme-black .tpl-form-border-form input[type=url]:focus,
+.theme-black .tpl-form-border-form input[type=tel]:focus,
+.theme-black .tpl-form-border-form input[type=color]:focus,
+.theme-black .tpl-form-border-form select:focus,
+.theme-black .tpl-form-border-form textarea:focus,
+.theme-black .am-form-field:focus {
   -webkit-box-shadow: none;
   box-shadow: none;
 }
-body .tpl-form-border-form input[type=number],
-body .tpl-form-border-form input[type=search],
-body .tpl-form-border-form input[type=text],
-body .tpl-form-border-form input[type=password],
-body .tpl-form-border-form input[type=datetime],
-body .tpl-form-border-form input[type=datetime-local],
-body .tpl-form-border-form input[type=date],
-body .tpl-form-border-form input[type=month],
-body .tpl-form-border-form input[type=time],
-body .tpl-form-border-form input[type=week],
-body .tpl-form-border-form input[type=email],
-body .tpl-form-border-form input[type=url],
-body .tpl-form-border-form input[type=tel],
-body .tpl-form-border-form input[type=color],
-body .tpl-form-border-form select,
-body .tpl-form-border-form textarea,
-body .am-form-field {
+.theme-black .tpl-form-border-form input[type=number],
+.theme-black .tpl-form-border-form input[type=search],
+.theme-black .tpl-form-border-form input[type=text],
+.theme-black .tpl-form-border-form input[type=password],
+.theme-black .tpl-form-border-form input[type=datetime],
+.theme-black .tpl-form-border-form input[type=datetime-local],
+.theme-black .tpl-form-border-form input[type=date],
+.theme-black .tpl-form-border-form input[type=month],
+.theme-black .tpl-form-border-form input[type=time],
+.theme-black .tpl-form-border-form input[type=week],
+.theme-black .tpl-form-border-form input[type=email],
+.theme-black .tpl-form-border-form input[type=url],
+.theme-black .tpl-form-border-form input[type=tel],
+.theme-black .tpl-form-border-form input[type=color],
+.theme-black .tpl-form-border-form select,
+.theme-black .tpl-form-border-form textarea,
+.theme-black .am-form-field {
   display: block;
   width: 100%;
   padding: 6px 12px;
@@ -866,73 +865,73 @@ body .am-form-field {
   padding-right: 0;
   font-size: 14px;
 }
-body .tpl-form-border-form .am-checkbox,
-body .tpl-form-border-form .am-checkbox-inline,
-body .tpl-form-border-form .am-form-label,
-body .tpl-form-border-form .am-radio,
-body .tpl-form-border-form .am-radio-inline {
+.theme-black .tpl-form-border-form .am-checkbox,
+.theme-black .tpl-form-border-form .am-checkbox-inline,
+.theme-black .tpl-form-border-form .am-form-label,
+.theme-black .tpl-form-border-form .am-radio,
+.theme-black .tpl-form-border-form .am-radio-inline {
   margin-top: 0;
   margin-bottom: 0;
 }
-body .tpl-form-border-form .am-form-group:after {
+.theme-black .tpl-form-border-form .am-form-group:after {
   clear: both;
 }
-body .tpl-form-border-form .am-form-group:after,
-body .tpl-form-border-form .am-form-group:before {
+.theme-black .tpl-form-border-form .am-form-group:after,
+.theme-black .tpl-form-border-form .am-form-group:before {
   content: " ";
   display: table;
 }
-body .tpl-form-border-form .am-form-label {
+.theme-black .tpl-form-border-form .am-form-label {
   padding-top: 5px;
   font-size: 14px;
   color: #fff;
   font-weight: inherit;
   text-align: right;
 }
-body .tpl-form-border-form .am-form-group {
+.theme-black .tpl-form-border-form .am-form-group {
   /*padding: 20px 0;*/
 }
-body .tpl-form-border-form .am-form-label .tpl-form-line-small-title {
+.theme-black .tpl-form-border-form .am-form-label .tpl-form-line-small-title {
   color: #999;
   font-size: 12px;
 }
-body .tpl-form-line-form input[type=number]:focus,
-body .tpl-form-line-form input[type=search]:focus,
-body .tpl-form-line-form input[type=text]:focus,
-body .tpl-form-line-form input[type=password]:focus,
-body .tpl-form-line-form input[type=datetime]:focus,
-body .tpl-form-line-form input[type=datetime-local]:focus,
-body .tpl-form-line-form input[type=date]:focus,
-body .tpl-form-line-form input[type=month]:focus,
-body .tpl-form-line-form input[type=time]:focus,
-body .tpl-form-line-form input[type=week]:focus,
-body .tpl-form-line-form input[type=email]:focus,
-body .tpl-form-line-form input[type=url]:focus,
-body .tpl-form-line-form input[type=tel]:focus,
-body .tpl-form-line-form input[type=color]:focus,
-body .tpl-form-line-form select:focus,
-body .tpl-form-line-form textarea:focus,
-body .am-form-field:focus {
+.theme-black .tpl-form-line-form input[type=number]:focus,
+.theme-black .tpl-form-line-form input[type=search]:focus,
+.theme-black .tpl-form-line-form input[type=text]:focus,
+.theme-black .tpl-form-line-form input[type=password]:focus,
+.theme-black .tpl-form-line-form input[type=datetime]:focus,
+.theme-black .tpl-form-line-form input[type=datetime-local]:focus,
+.theme-black .tpl-form-line-form input[type=date]:focus,
+.theme-black .tpl-form-line-form input[type=month]:focus,
+.theme-black .tpl-form-line-form input[type=time]:focus,
+.theme-black .tpl-form-line-form input[type=week]:focus,
+.theme-black .tpl-form-line-form input[type=email]:focus,
+.theme-black .tpl-form-line-form input[type=url]:focus,
+.theme-black .tpl-form-line-form input[type=tel]:focus,
+.theme-black .tpl-form-line-form input[type=color]:focus,
+.theme-black .tpl-form-line-form select:focus,
+.theme-black .tpl-form-line-form textarea:focus,
+.theme-black .am-form-field:focus {
   -webkit-box-shadow: none;
   box-shadow: none;
 }
-body .tpl-form-line-form input[type=number],
-body .tpl-form-line-form input[type=search],
-body .tpl-form-line-form input[type=text],
-body .tpl-form-line-form input[type=password],
-body .tpl-form-line-form input[type=datetime],
-body .tpl-form-line-form input[type=datetime-local],
-body .tpl-form-line-form input[type=date],
-body .tpl-form-line-form input[type=month],
-body .tpl-form-line-form input[type=time],
-body .tpl-form-line-form input[type=week],
-body .tpl-form-line-form input[type=email],
-body .tpl-form-line-form input[type=url],
-body .tpl-form-line-form input[type=tel],
-body .tpl-form-line-form input[type=color],
-body .tpl-form-line-form select,
-body .tpl-form-line-form textarea,
-body .am-form-field {
+.theme-black .tpl-form-line-form input[type=number],
+.theme-black .tpl-form-line-form input[type=search],
+.theme-black .tpl-form-line-form input[type=text],
+.theme-black .tpl-form-line-form input[type=password],
+.theme-black .tpl-form-line-form input[type=datetime],
+.theme-black .tpl-form-line-form input[type=datetime-local],
+.theme-black .tpl-form-line-form input[type=date],
+.theme-black .tpl-form-line-form input[type=month],
+.theme-black .tpl-form-line-form input[type=time],
+.theme-black .tpl-form-line-form input[type=week],
+.theme-black .tpl-form-line-form input[type=email],
+.theme-black .tpl-form-line-form input[type=url],
+.theme-black .tpl-form-line-form input[type=tel],
+.theme-black .tpl-form-line-form input[type=color],
+.theme-black .tpl-form-line-form select,
+.theme-black .tpl-form-line-form textarea,
+.theme-black .am-form-field {
   display: block;
   width: 100%;
   padding: 6px 12px;
@@ -961,127 +960,127 @@ body .am-form-field {
   padding-right: 0;
   font-size: 14px;
 }
-body .tpl-form-line-form .am-checkbox,
-body .tpl-form-line-form .am-checkbox-inline,
-body .tpl-form-line-form .am-form-label,
-body .tpl-form-line-form .am-radio,
-body .tpl-form-line-form .am-radio-inline {
+.theme-black .tpl-form-line-form .am-checkbox,
+.theme-black .tpl-form-line-form .am-checkbox-inline,
+.theme-black .tpl-form-line-form .am-form-label,
+.theme-black .tpl-form-line-form .am-radio,
+.theme-black .tpl-form-line-form .am-radio-inline {
   margin-top: 0;
   margin-bottom: 0;
 }
-body .tpl-form-line-form .am-form-group:after {
+.theme-black .tpl-form-line-form .am-form-group:after {
   clear: both;
 }
-body .tpl-form-line-form .am-form-group:after,
-body .tpl-form-line-form .am-form-group:before {
+.theme-black .tpl-form-line-form .am-form-group:after,
+.theme-black .tpl-form-line-form .am-form-group:before {
   content: " ";
   display: table;
 }
-body .tpl-form-line-form .am-form-label {
+.theme-black .tpl-form-line-form .am-form-label {
   padding-top: 5px;
   font-size: 16px;
   color: #fff;
   font-weight: inherit;
   text-align: right;
 }
-body .tpl-form-line-form .am-form-group {
+.theme-black .tpl-form-line-form .am-form-group {
   /*padding: 20px 0;*/
 }
-body .tpl-form-line-form .am-form-label .tpl-form-line-small-title {
+.theme-black .tpl-form-line-form .am-form-label .tpl-form-line-small-title {
   color: #999;
   font-size: 12px;
 }
-body .tpl-table-black-operation a {
+.theme-black .tpl-table-black-operation a {
   border: 1px solid #7b878d;
   color: #7b878d;
 }
-body .tpl-table-black-operation a:hover {
+.theme-black .tpl-table-black-operation a:hover {
   background: #7b878d;
   color: #fff;
 }
-body .tpl-table-black-operation a.tpl-table-black-operation-del {
+.theme-black .tpl-table-black-operation a.tpl-table-black-operation-del {
   border: 1px solid #f35842;
   color: #f35842;
 }
-body .tpl-table-black-operation a.tpl-table-black-operation-del:hover {
+.theme-black .tpl-table-black-operation a.tpl-table-black-operation-del:hover {
   background: #f35842;
   color: #fff;
 }
-body .am-table-bordered {
+.theme-black .am-table-bordered {
   border: 1px solid #666d70;
 }
-body .am-table-bordered > tbody > tr > td,
-body .am-table-bordered > tbody > tr > th,
-body .am-table-bordered > tfoot > tr > td,
-body .am-table-bordered > tfoot > tr > th,
-body .am-table-bordered > thead > tr > td,
-body .am-table-bordered > thead > tr > th {
+.theme-black .am-table-bordered > tbody > tr > td,
+.theme-black .am-table-bordered > tbody > tr > th,
+.theme-black .am-table-bordered > tfoot > tr > td,
+.theme-black .am-table-bordered > tfoot > tr > th,
+.theme-black .am-table-bordered > thead > tr > td,
+.theme-black .am-table-bordered > thead > tr > th {
   border: 1px solid #666d70;
 }
-body .am-table-bordered > thead + tbody > tr:first-child > td,
-body .am-table-bordered > thead + tbody > tr:first-child > th {
+.theme-black .am-table-bordered > thead + tbody > tr:first-child > td,
+.theme-black .am-table-bordered > thead + tbody > tr:first-child > th {
   border: 1px solid #666d70;
 }
-body .am-table-striped > tbody > tr:nth-child(odd) > td,
-body .am-table-striped > tbody > tr:nth-child(odd) > th {
+.theme-black .am-table-striped > tbody > tr:nth-child(odd) > td,
+.theme-black .am-table-striped > tbody > tr:nth-child(odd) > th {
   background-color: #5d6468;
 }
-body .tpl-table-black {
+.theme-black .tpl-table-black {
   color: #fff;
 }
-body .tpl-table-black thead > tr > th {
+.theme-black .tpl-table-black thead > tr > th {
   font-size: 14px;
   padding: 6px;
   border-bottom: 1px solid #666d70;
 }
-body .tpl-table-black tbody > tr > td {
+.theme-black .tpl-table-black tbody > tr > td {
   font-size: 14px;
   padding: 7px 6px;
   border-top: 1px solid #666d70;
 }
-body .tpl-table-black tfoot > tr > th {
+.theme-black .tpl-table-black tfoot > tr > th {
   font-size: 14px;
   padding: 6px 0;
 }
-body .tpl-user-card {
+.theme-black .tpl-user-card {
   border: 1px solid #11627d;
   border-top: 2px solid #105f79;
   background: #1786aa;
   color: #ffffff;
 }
-body .tpl-user-card-title {
+.theme-black .tpl-user-card-title {
   font-size: 26px;
   margin-top: 0;
   font-weight: 300;
   margin-top: 25px;
   margin-bottom: 10px;
 }
-body .achievement-subheading {
+.theme-black .achievement-subheading {
   font-size: 12px;
   margin-top: 0;
   margin-bottom: 15px;
 }
-body .achievement-image {
+.theme-black .achievement-image {
   border-radius: 50%;
   margin-bottom: 22px;
 }
-body .achievement-description {
+.theme-black .achievement-description {
   margin: 0;
   font-size: 12px;
 }
-body .am-progress {
+.theme-black .am-progress {
   height: 12px;
   margin-bottom: 14px;
   background: rgba(0, 0, 0, 0.15);
 }
-body .am-progress-title {
+.theme-black .am-progress-title {
   font-size: 14px;
   margin-bottom: 8px;
 }
-body .am-progress-title-more {
+.theme-black .am-progress-title-more {
   color: #a1a8ab;
 }
-body .widget-fluctuation-tpl-btn {
+.theme-black .widget-fluctuation-tpl-btn {
   margin-top: 6px;
   display: block;
   color: #fff;
@@ -1091,42 +1090,42 @@ body .widget-fluctuation-tpl-btn {
   background-color: rgba(255, 255, 255, 0);
   border: 1px solid #fff;
 }
-body .widget-fluctuation-tpl-btn:hover {
+.theme-black .widget-fluctuation-tpl-btn:hover {
   background: #fff;
   color: #4b5357;
 }
-body .widget-fluctuation-description-text {
+.theme-black .widget-fluctuation-description-text {
   color: #c5cacd;
 }
-body .text-success {
+.theme-black .text-success {
   color: #08ed72;
 }
-body .widget-fluctuation-period-text {
+.theme-black .widget-fluctuation-period-text {
   color: #fff;
 }
-body .widget-head {
+.theme-black .widget-head {
   border-bottom: 1px solid #3f4649;
 }
-body .widget-function a {
+.theme-black .widget-function a {
   color: #7b878d;
 }
-body .widget-function a:hover {
+.theme-black .widget-function a:hover {
   color: #fff;
 }
-body .widget {
+.theme-black .widget {
   border: 1px solid #33393c;
   border-top: 2px solid #313639;
   background: #4b5357;
   color: #ffffff;
 }
-body .widget-primary {
+.theme-black .widget-primary {
   border: 1px solid #11627d;
   border-top: 2px solid #105f79;
   background: #1786aa;
   color: #ffffff;
   padding: 12px 17px;
 }
-body .widget-statistic-icon {
+.theme-black .widget-statistic-icon {
   position: absolute;
   z-index: 30;
   right: 30px;
@@ -1134,7 +1133,7 @@ body .widget-statistic-icon {
   font-size: 70px;
   color: #1b9eca;
 }
-body .widget-statistic-description {
+.theme-black .widget-statistic-description {
   position: relative;
   z-index: 35;
   display: block;
@@ -1143,7 +1142,7 @@ body .widget-statistic-description {
   padding-top: 8px;
   color: #fff;
 }
-body .widget-statistic-value {
+.theme-black .widget-statistic-value {
   position: relative;
   z-index: 35;
   font-weight: 300;
@@ -1153,104 +1152,104 @@ body .widget-statistic-value {
   line-height: 46px;
   margin-bottom: 8px;
 }
-body .widget-statistic-header {
+.theme-black .widget-statistic-header {
   color: #ffffff;
 }
-body .widget-purple {
+.theme-black .widget-purple {
   padding: 12px 17px;
   border: 1px solid #5e4578;
   border-top: 2px solid #5c4375;
   background: #785799;
   color: #ffffff;
 }
-body .widget-black {
+.theme-black .widget-black {
   padding: 12px 17px;
   border: 1px solid #3f4649;
   border-top: 2px solid #3f4649;
   background: #3f4649;
   color: #ffffff;
 }
-body .widget-purple .widget-statistic-icon {
+.theme-black .widget-purple .widget-statistic-icon {
   color: #8a6aaa;
 }
-body .widget-purple .widget-statistic-header {
+.theme-black .widget-purple .widget-statistic-header {
   color: #ded5e7;
 }
-body .widget-purple .widget-statistic-description {
+.theme-black .widget-purple .widget-statistic-description {
   color: #ded5e7;
 }
-body .page-header-description {
+.theme-black .page-header-description {
   color: #e6e6e6;
 }
-body .page-header-heading {
+.theme-black .page-header-heading {
   color: #666;
 }
-body .container-fluid {
+.theme-black .container-fluid {
   background: #424b4f;
 }
-body .page-header-heading {
+.theme-black .page-header-heading {
   color: #fff;
 }
-body .sidebar-nav-heading {
+.theme-black .sidebar-nav-heading {
   color: #fff;
 }
-body .tpl-sidebar-user-panel {
+.theme-black .tpl-sidebar-user-panel {
   background: #1f2224;
   border-bottom: 1px solid #1f2224;
 }
-body .tpl-content-wrapper {
+.theme-black .tpl-content-wrapper {
   background: #3a4144;
 }
-body .tpl-header-fluid {
+.theme-black .tpl-header-fluid {
   background: #2f3638;
 }
-body .sidebar-nav-link a.active {
+.theme-black .sidebar-nav-link a.active {
   background: #232829;
 }
-body .sidebar-nav-link a:hover {
+.theme-black .sidebar-nav-link a:hover {
   background: #232829;
 }
-body .tpl-header-switch-button {
+.theme-black .tpl-header-switch-button {
   background: #2f3638;
   border-right: 1px solid #282d2f;
 }
-body .tpl-header-switch-button:hover {
+.theme-black .tpl-header-switch-button:hover {
   background: #282d2f;
   color: #fff;
 }
-body .tpl-header-navbar a {
+.theme-black .tpl-header-navbar a {
   color: #cfcfcf;
 }
-body .tpl-header-navbar a:hover {
+.theme-black .tpl-header-navbar a:hover {
   color: #fff;
 }
-body .left-sidebar {
+.theme-black .left-sidebar {
   padding-top: 56px;
   background: #282d2f;
 }
-body .widget-color-green {
+.theme-black .widget-color-green {
   border: 1px solid #11627d;
   border-top: 2px solid #105f79;
   background: #1786aa;
   color: #ffffff;
 }
-body .widget-color-green .widget-head {
+.theme-black .widget-color-green .widget-head {
   border-bottom: 1px solid #147494;
 }
-body .widget-color-green .widget-fluctuation-description-text {
+.theme-black .widget-color-green .widget-fluctuation-description-text {
   color: #bbe7f6;
 }
-body .widget-color-green .widget-function a {
+.theme-black .widget-color-green .widget-function a {
   color: #42bde5;
 }
-body .widget-color-green .widget-function a:hover {
+.theme-black .widget-color-green .widget-function a:hover {
   color: #fff;
 }
 @media screen and (max-width: 1024px) {
   .tpl-index-settings-button {
     display: none;
   }
-  body .left-sidebar {
+  .theme-black .left-sidebar {
     padding-top: 111px;
   }
   .left-sidebar {
@@ -1273,7 +1272,7 @@ body .widget-color-green .widget-function a:hover {
     border-top: none;
     margin-left: 0;
   }
-  body .tpl-sidebar-user-panel {
+  .theme-black .tpl-sidebar-user-panel {
     border-top: 1px solid #1f2224;
   }
 }
@@ -1284,7 +1283,7 @@ body .widget-color-green .widget-function a:hover {
   }
 }
 @media screen and (max-width: 641px) {
-  body .tpl-error-title {
+  .theme-black .tpl-error-title {
     font-size: 130px;
     line-height: 140px;
   }
