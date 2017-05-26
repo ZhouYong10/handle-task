@@ -344,10 +344,13 @@ app.get('/tasker/home', function (req, res) {
     User.open().find({isLogin: true}).then(function (users) {
         User.open().findById(req.session.passport.user)
             .then(function (user) {
+                var invitation = 'http://' + req.headers.host + '/sign/in?invitation='
+                    + Utils.cipher(user._id + '', Utils.invitationKey);
                 Placard.open().findPages({type: {$ne: 'handerPlacard'}}, (req.query.page ? req.query.page : 1))
                     .then(function (obj) {
                         res.render('taskerHome', {
                             title: '系统公告',
+                            invitation: invitation,
                             placards: obj.results,
                             pages: obj.pages,
                             user: user,
@@ -364,10 +367,13 @@ app.get('/hander/home', function (req, res) {
     User.open().find({isLogin: true}).then(function (users) {
         User.open().findById(req.session.passport.user)
             .then(function (user) {
+                var invitation = 'http://' + req.headers.host + '/sign/in?invitation='
+                    + Utils.cipher(user._id + '', Utils.invitationKey);
                 Placard.open().findPages({type: {$ne: 'taskerPlacard'}}, (req.query.page ? req.query.page : 1))
                     .then(function (obj) {
                         res.render('handerHome', {
                             title: '系统公告',
+                            invitation: invitation,
                             placards: obj.results,
                             pages: obj.pages,
                             user: user,
