@@ -203,7 +203,7 @@ app.post('/sign/in', function (req, res, next) {
         });
         return;
     }
-    if (info.securityCode != req.session.securityCode) {
+    if (info.securityCode.toLowerCase() != req.session.securityCode) {
         res.send({
             isOK: false,
             field: 'securityCode',
