@@ -124,15 +124,16 @@ function profitFreezeFunds(task) {
                     return new Promise(function (resolve) {
                         if (task.taskUserParentId) {
                             price = task.handerChildPrice;
+
                             User.open().findById(task.taskUserParentId)
                                 .then(function (taskUserParent) {
-                                    if (taskUserParent) {
+                                    if (taskUserParent && taskUserParent.role != 'admin') {
                                         User.open().updateById(taskUserParent._id, {
                                             $set: {
                                                 freezeFunds: (parseFloat(taskUserParent.freezeFunds) +
                                                 parseFloat(task.handerParentProfit)).toFixed(4)
                                             }
-                                        }).then(function() {
+                                        }).then(function(aa) {
                                             resolve();
                                         })
                                     } else {
@@ -175,13 +176,13 @@ function profitFreezeFunds(task) {
                         if(task.userParentId) {
                             User.open().findById(task.userParentId)
                                 .then(function (orderUserParent) {
-                                    if(orderUserParent) {
+                                    if(orderUserParent && orderUserParent.role != 'admin') {
                                         User.open().updateById(orderUserParent._id, {
                                             $set: {
                                                 freezeFunds: (parseFloat(orderUserParent.freezeFunds) +
                                                 parseFloat(task.taskerParentProfit)).toFixed(4)
                                             }
-                                        }).then(function() {
+                                        }).then(function(bb) {
                                             resolve();
                                         })
                                     }else{
@@ -263,7 +264,7 @@ function profitFunds(task) {
                             price = task.handerChildPrice;
                             User.open().findById(task.taskUserParentId)
                                 .then(function (taskUserParent) {
-                                    if (taskUserParent) {
+                                    if (taskUserParent && taskUserParent.role != 'admin') {
                                         User.open().updateById(taskUserParent._id, {
                                             $set: {
                                                 freezeFunds: (parseFloat(taskUserParent.freezeFunds) -
@@ -332,7 +333,7 @@ function profitFunds(task) {
                         if(task.userParentId) {
                             User.open().findById(task.userParentId)
                                 .then(function (orderUserParent) {
-                                    if(orderUserParent) {
+                                    if(orderUserParent && orderUserParent.role != 'admin') {
                                         User.open().updateById(orderUserParent._id, {
                                             $set: {
                                                 freezeFunds: (parseFloat(orderUserParent.freezeFunds) -
@@ -420,7 +421,7 @@ function refuseProfitFreezeFunds(task) {
                             price = task.handerChildPrice;
                             User.open().findById(task.taskUserParentId)
                                 .then(function (taskUserParent) {
-                                    if (taskUserParent) {
+                                    if (taskUserParent && taskUserParent.role != 'admin') {
                                         User.open().updateById(taskUserParent._id, {
                                             $set: {
                                                 freezeFunds: (parseFloat(taskUserParent.freezeFunds) -
@@ -469,7 +470,7 @@ function refuseProfitFreezeFunds(task) {
                         if(task.userParentId) {
                             User.open().findById(task.userParentId)
                                 .then(function (orderUserParent) {
-                                    if(orderUserParent) {
+                                    if(orderUserParent && orderUserParent.role != 'admin') {
                                         User.open().updateById(orderUserParent._id, {
                                             $set: {
                                                 freezeFunds: (parseFloat(orderUserParent.freezeFunds) -
@@ -553,8 +554,8 @@ Task.include({
                                 surplus: (parseFloat(order.surplus) +
                                 (parseFloat(order.price) + parseFloat(order.price2 ? order.price2 : 0))).toFixed(4)
                             },
-                            $inc: {taskNum: -1}
-                            //$pull: {taskUsers: self.taskUserId}
+                            $inc: {taskNum: -1},
+                            $pull: {taskUsers: self.taskUserId}
                         }).then(function () {
                             resolve();
                         });
