@@ -26,7 +26,7 @@
                 <div class="am-u-sm-12 am-u-md-12 am-u-lg-12">
                     <div class="widget am-cf">
                         <div class="widget-head am-cf">
-                            <div class="widget-title  am-cf">文章列表</div>
+                            <div class="widget-title  am-cf"><%=title%></div>
                         </div>
                         <div class="widget-body  am-fr">
                             <div id="searchForm" class="am-form am-form-inline">
@@ -35,7 +35,7 @@
                                         <div class="am-input-group am-input-group-sm tpl-form-border-form cl-p">
                                             <form id="search" method="get" action="/tasker/WX/article">
                                                 <input id="taskName" type="text" class="am-form-field am-input-sm am-radius"
-                                                       name="account" placeholder="请输入任务微信账号" style="height:33px;"
+                                                       name="account" placeholder="请输入任务地址" style="height:33px;"
                                                        v-validate:account="{required: true}">
                                             </form>
                                         <span class="am-input-group-btn">
@@ -66,7 +66,6 @@
                                         <th>任务标题</th>
                                         <th>文章地址</th>
                                         <th>价格</th>
-                                        <th>是否收藏</th>
                                         <th>完成/数量</th>
                                         <th>总价/结余</th>
                                         <th>样图</th>
@@ -94,15 +93,7 @@
                                             </a>
                                         </td>
                                         <td>
-                                            分享: <%= orders[i].price %> <br/>
-                                            收藏: <%= orders[i].price2 %>
-                                        </td>
-                                        <td>
-                                            <% if(orders[i].isTow){ %>
-                                            是
-                                            <% }else{ %>
-                                            否
-                                            <% } %>
+                                            <%= orders[i].price %>
                                         </td>
                                         <td>
                                             <a href="/tasker/order/details?witchPage=WXarticleShare&orderId=<%= orders[i]._id %>"
@@ -140,23 +131,23 @@
                                         <td>
                                             <% if(orders[i].status == '已发布'){ %>
                                             <a class="am-btn am-btn-primary am-radius am-btn-xs onTop"
-                                               href="/tasker/order/on/top?id=<%= orders[i]._id %>&path=/tasker/WX/fans"
+                                               href="/tasker/order/on/top?id=<%= orders[i]._id %>&path=/tasker/WB/forward"
                                                title="使任务在任务大厅的显示置顶">置顶</a>
                                             <% } %>
                                         </td>
                                         <td>
                                             <% if(orders[i].status == '已发布'){ %>
                                             <a class="am-btn am-btn-primary am-radius am-btn-xs orderPause"
-                                               href="/tasker/order/pause?id=<%= orders[i]._id %>&path=/tasker/WX/article"
+                                               href="/tasker/order/pause?id=<%= orders[i]._id %>&path=/tasker/WB/forward"
                                                onclick="return confirm('确认要暂停该订单吗？');">暂停</a>
                                             <a class="am-btn am-btn-danger am-radius am-btn-xs orderRefund"
-                                               href="/tasker/order/refund?id=<%= orders[i]._id %>&path=/tasker/WX/article"
+                                               href="/tasker/order/refund?id=<%= orders[i]._id %>&path=/tasker/WB/forward"
                                                onclick="return confirm('确认要取消该订单吗(剩余任务金额将返还)？');">取消</a>
                                             <% }else if(orders[i].status == '已暂停'){ %>
                                             <a class="am-btn am-btn-primary am-radius am-btn-xs"
-                                               href="/tasker/order/start?id=<%= orders[i]._id %>&path=/tasker/WX/article">开始</a>
+                                               href="/tasker/order/start?id=<%= orders[i]._id %>&path=/tasker/WB/forward">开始</a>
                                             <a class="am-btn am-btn-danger am-radius am-btn-xs orderRefund"
-                                               href="/tasker/order/refund?id=<%= orders[i]._id %>&path=/tasker/WX/article"
+                                               href="/tasker/order/refund?id=<%= orders[i]._id %>&path=/tasker/WB/forward"
                                                onclick="return confirm('确认要取消该订单吗(剩余任务金额将返还)？');">取消</a>
                                             <% } %>
                                         </td>
