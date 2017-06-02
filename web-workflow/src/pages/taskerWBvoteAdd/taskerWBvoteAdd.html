@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <title><%=title%></title>
+
+    <link rel="import" href="../../components/head/head.html?__inline">
+</head>
+
+<body data-type="WBvote" class="theme-black">
+<div class="am-g tpl-g">
+    <!-- 头部 -->
+    <link rel="import" href="../../components/header/header.html?__inline">
+    <!-- 侧边导航栏 -->
+    <link rel="import" href="../../components/menu/menu.html?__inline">
+
+    <!-- 内容区域 -->
+    <div class="tpl-content-wrapper">
+
+        <div class="container-fluid am-cf">
+            <div class="row">
+                <div class="am-u-sm-12 am-u-md-12 am-u-lg-9">
+                    <div class="page-header-heading">
+                        <span class="am-icon-warning page-header-heading-icon"></span>
+                        提示 <small>发布任务必看</small>
+                    </div>
+                    <p class="page-header-description">
+                        1、同一任务请不要分开多次发布，造成投手重复提交量不足平台概不负责。<br/>
+                        2、请准确清楚填写各项发布内容，以便投手高效迅速完成任务。<br/>
+                        3、为保证平台良性发展，平台监督力度加强，无论是发布者或投手，一次违规，直接封号。望各位相互监督，共谋利益。<br/>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="row-content am-cf">
+
+            <div class="row">
+
+                <div class="am-u-sm-12 am-u-md-12 am-u-lg-12">
+                    <div class="widget am-cf">
+                        <div class="widget-head am-cf">
+                            <div class="widget-title am-fl"><%=title%></div>
+                        </div>
+                        <div id="wxFans" class="widget-body am-fr">
+
+                            <form class="am-form tpl-form-border-form tpl-form-border-br"
+                                  enctype="multipart/form-data" method="post" action="/tasker/WX/vote/add" >
+                                    <input type="hidden" value="<%= orderFlag %>" name="orderFlag">
+                                    <div class="am-form-group">
+                                        <label for="title" class="am-u-sm-4 am-u-lg-2 am-form-label">
+                                            <span class="tips">* </span>任务标题
+                                        </label>
+                                        <div class="am-u-sm-8 am-u-lg-10">
+                                            <input id="title" class="am-radius am-input-sm" type="text"
+                                                   @keyup="checkTitle" @change="checkTitle" @blur="checkTitle"
+                                                   placeholder="请填写任务标题" name="title">
+                                            <span class="tips err">任务标题不能为空!</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="am-form-group">
+                                        <label for="fansID" class="am-u-sm-4 am-u-lg-2 am-form-label">
+                                            <span class="tips">* </span>投票地址
+                                        </label>
+                                        <div class="am-u-sm-8 am-u-lg-10">
+                                            <input id="fansID" class="am-radius am-input-sm" type="text"
+                                                   @keyup="checkFansID" @change="checkFansID" @blur="checkFansID"
+                                                   placeholder="请填写投票地址" name="address">
+                                            <span class="tips err">投票地址不能为空!</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="am-form-group">
+                                        <label for="remark" class="am-u-sm-4 am-u-lg-2 am-form-label">
+                                            <span class="tips">* </span>任务描述
+                                        </label>
+                                        <div class="am-u-sm-8 am-u-lg-10">
+                                            <textarea id="remark" class="am-radius" rows="3"
+                                                      @keyup="checkRemark" @change="checkRemark" @blur="checkRemark"
+                                                  placeholder="添加任务说明，越详细，越有助于投手正确完成任务。" name="remark"></textarea>
+                                            <span class="tips err">任务描述不能为空，描述越详细，越有助于投手正确完成任务！</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="am-form-group">
+                                        <label for="fansPrice" class="am-u-sm-4 am-u-lg-2 am-form-label">
+                                            <span class="tips">* </span>投票价格
+                                        </label>
+                                        <div class="am-u-sm-8 am-u-lg-10">
+                                            <input type="hidden" v-model="fansPrice" value="<%= fansPrice %>">
+                                            <input id="fansPrice" class="am-radius am-input-sm" type="text"
+                                                   @keyup="checkFansPrice" @change="checkFansPrice" @blur="checkFansPrice"
+                                                   placeholder="价格必须是正数，且不能小于平台定价 ￥<%= fansPrice %>!" name="price">
+                                            <span class="tips err">价格必须是正数，且不能小于平台定价 ￥<%= fansPrice %>!</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="am-form-group">
+                                        <label for="fansNum" class="am-u-sm-4 am-u-lg-2 am-form-label">
+                                            <span class="tips">* </span>数量
+                                        </label>
+                                        <div class="am-u-sm-8 am-u-lg-10">
+                                            <input id="fansNum" class="am-radius am-input-sm" type="text"
+                                                   @keyup="checkFansNum" @change="checkFansNum" @blur="checkFansNum"
+                                                   placeholder="需要增加的粉丝数量，最低20起" name="num">
+                                            <span class="tips err">任务数量必须为正整数,且最低20起!</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="am-form-group">
+                                        <label class="am-u-sm-4 am-u-lg-2 am-form-label">任务总价</label>
+                                        <div class="am-u-sm-8 am-u-lg-10">
+                                            <p id="totalPrice" class="disable">￥ {{count}}</p>
+                                            <span class="tips err">您的余额不足，请充值!</span>
+                                            <input type="hidden" v-model="funds" value="<%= user.funds %>">
+                                        </div>
+                                    </div>
+
+                                    <div class="am-form-group am-form-file no-margin">
+                                        <label for="doc-ipt-file-2" class="am-u-sm-4 am-u-lg-2 am-form-label">样图</label>
+                                        <div class="am-u-sm-8 am-u-lg-10 am-g-collapse">
+                                            <button type="button" class="am-btn am-btn-default am-btn-sm">
+                                                <i class="am-icon-cloud-upload"></i> 点击上传样图</button>
+                                            <span class="tips err" id="photoTip">请上传任务验收样图!</span>
+                                            <input type="file" id="doc-ipt-file-2" @change="viewImg" name="photo">
+                                        </div>
+                                    </div>
+
+                                    <div class="am-form-group">
+                                        <label class="am-u-sm-4 am-u-lg-2 am-form-label"></label>
+                                        <div class="am-u-sm-8 am-u-lg-10 am-g-collapse">
+                                            <div class="am-u-sm-12 am-u-lg-5">
+                                                <img id="preview" class="am-img-responsive">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="am-form-group">
+                                        <div class="am-u-sm-8 am-u-sm-offset-4 am-u-lg-10 am-u-lg-offset-2">
+                                            <button type="submit" class="am-btn am-btn-primary am-radius"
+                                                    @click="check">提交任务</button>
+                                        </div>
+                                    </div>
+                                </form>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<link rel="import" href="../../components/foot/foot.html?__inline">
+
+<!--import plugin-->
+<script src="/static/plugins/laydate/laydate.js"></script>
+
+
+<script>
+    require('taskerWBvoteAdd');
+</script>
+
+</body>
+</html>
+

@@ -104,7 +104,6 @@ router.post('/WX/fans/add', function (req, res) {
     });
 });
 
-
 router.get('/WX/friend', function (req, res) {
     var obj = {
         type: 'WXfriend'
@@ -240,7 +239,6 @@ router.post('/WX/vote/add', function (req, res) {
     });
 });
 
-
 router.get('/WX/code', function (req, res) {
     var obj = {
         type: 'WXcode'
@@ -326,7 +324,6 @@ router.post('/WX/code/add', function (req, res) {
     });
 });
 
-
 router.get('/WX/article', function (req, res) {
     var obj = {
         type: 'WXarticleShare'
@@ -411,6 +408,416 @@ router.post('/WX/article/add', function (req, res) {
         res.end('提交表单失败： ',err); //各种错误
     });
 });
+
+
+router.get('/WB/fans', function (req, res) {
+    var obj = {
+        type: 'WBfans'
+    };
+    if(req.query.account) {
+        obj.account = new RegExp(req.query.account);
+    }
+    User.open().findById(req.session.passport.user)
+        .then(function (user) {
+            obj.userId = user._id;
+            Order.open().findPages(obj, (req.query.page ? req.query.page : 1))
+                .then(function(obj) {
+                    res.render('taskerWBfans', {
+                        title: '微博关注',
+                        user: user,
+                        orders: obj.results,
+                        pages: obj.pages,
+                        path: '/tasker/WB/fans'
+                    })
+                })
+        });
+});
+
+router.get('/WB/fans/add', function (req, res) {
+    User.open().findById(req.session.passport.user)
+        .then(function (user) {
+            Product.open().findOne({type: 'WXfans'})
+                .then(function(fansP) {
+                    var fans = Product.wrapToInstance(fansP);
+                    var fansPrice = fans.getPriceByUser(user);
+                    Product.open().findOne({type: 'WXfansReply'})
+                        .then(function(replyP) {
+                            var reply = Product.wrapToInstance(replyP);
+                            var replyPrice = reply.getPriceByUser(user);
+                            Order.getRandomStr(req).then(function(orderFlag) {
+                                res.render('taskerWXfansAdd', {
+                                    title: '添加微信粉丝(回复)任务',
+                                    user: user,
+                                    fansPrice: fansPrice,
+                                    replyPrice: replyPrice,
+                                    orderFlag: orderFlag
+                                })
+                            })
+                        });
+                });
+        });
+});
+
+router.post('/WB/fans/add', function (req, res) {
+    Order.getOrder(req).then(function (order) {
+        User.open().findById(req.session.passport.user)
+            .then(function (user) {
+                var orderIns = Order.wrapToInstance(order);
+                orderIns.checkRandomStr(req).then(function() {
+                    if(orderIns.isTow) {
+                        orderIns.createTwo(user, {type: 'WXfans'}, {type: 'WXfansReply'})
+                            .then(function () {
+                                if(global.orderCheckIsOpen == 'yes'){
+                                    socketIO.emit('updateNav', {checkOrder: 1});
+                                }
+                                res.redirect('/tasker/WX/fans');
+                            }, function() {
+                                res.send('<h1>您的余额不足，请充值！ 顺便多说一句，请不要跳过页面非法提交数据。。。不要以为我不知道哦！！</h1>')
+                            });
+                    }else {
+                        delete orderIns.price2;
+                        orderIns.createOne(user, {type: 'WXfans'})
+                            .then(function () {
+                                if(global.orderCheckIsOpen == 'yes'){
+                                    socketIO.emit('updateNav', {checkOrder: 1});
+                                }
+                                res.redirect('/tasker/WX/fans');
+                            }, function() {
+                                res.send('<h1>您的余额不足，请充值！ 顺便多说一句，请不要跳过页面非法提交数据。。。不要以为我不知道哦！！</h1>')
+                            });
+                    }
+                }, function(msg) {
+                    res.redirect('/tasker/WX/fans');
+                })
+            });
+    }, function(err) {
+        res.end('提交表单失败： ',err); //各种错误
+    });
+});
+
+router.get('/WB/vote', function (req, res) {
+    var obj = {
+        type: 'WBvote'
+    };
+    if(req.query.address) {
+        obj.address = new RegExp(req.query.address);
+    }
+    User.open().findById(req.session.passport.user)
+        .then(function (user) {
+            obj.userId = user._id;
+            Order.open().findPages(obj, (req.query.page ? req.query.page : 1))
+                .then(function(obj) {
+                    Order.addSchedule(obj.results, 10);
+                    res.render('taskerWBvote', {
+                        title: '微博投票',
+                        user: user,
+                        orders: obj.results,
+                        pages: obj.pages,
+                        path: '/tasker/WB/vote'
+                    })
+                })
+        });
+});
+
+router.get('/WB/vote/add', function (req, res) {
+    User.open().findById(req.session.passport.user)
+        .then(function (user) {
+            Product.open().findOne({type: 'WXvote'})
+                .then(function(result) {
+                    var fans = Product.wrapToInstance(result);
+                    var fansPrice = fans.getPriceByUser(user);
+                    Order.getRandomStr(req).then(function(orderFlag) {
+                        res.render('taskerWXvoteAdd', {
+                            title: '添加微信投票任务',
+                            user: user,
+                            fansPrice: fansPrice,
+                            orderFlag: orderFlag
+                        })
+                    })
+                });
+        });
+});
+
+router.post('/WB/vote/add', function (req, res) {
+    Order.getOrder(req).then(function (order) {
+        User.open().findById(req.session.passport.user)
+            .then(function (user) {
+                var orderIns = Order.wrapToInstance(order);
+                delete orderIns.price2;
+                orderIns.checkRandomStr(req).then(function() {
+                    orderIns.createOne(user, {type: 'WXvote'})
+                        .then(function () {
+                            if(global.orderCheckIsOpen == 'yes'){
+                                socketIO.emit('updateNav', {checkOrder: 1});
+                            }
+                            res.redirect('/tasker/WX/vote');
+                        }, function() {
+                            res.send('<h1>您的余额不足，请充值！ 顺便多说一句，请不要跳过页面非法提交数据。。。不要以为我不知道哦！！</h1>')
+                        });
+                }, function(msg) {
+                    res.redirect('/tasker/WX/vote');
+                })
+            });
+    }, function(err) {
+        res.end('提交表单失败： ',err); //各种错误
+    });
+});
+
+router.get('/WB/forward', function (req, res) {
+    var obj = {
+        type: 'WBforward'
+    };
+    if(req.query.address) {
+        obj.address = new RegExp(req.query.address);
+    }
+    User.open().findById(req.session.passport.user)
+        .then(function (user) {
+            obj.userId = user._id;
+            Order.open().findPages(obj, (req.query.page ? req.query.page : 1))
+                .then(function(obj) {
+                    res.render('taskerWBforward', {
+                        title: '微博转发',
+                        user: user,
+                        orders: obj.results,
+                        pages: obj.pages,
+                        path: '/tasker/WB/forward'
+                    })
+                })
+        });
+});
+
+router.get('/WB/forward/add', function (req, res) {
+    User.open().findById(req.session.passport.user)
+        .then(function (user) {
+            Product.open().findOne({type: 'WXarticleShare'})
+                .then(function(result) {
+                    var fans = Product.wrapToInstance(result);
+                    var fansPrice = fans.getPriceByUser(user);
+                    Product.open().findOne({type: 'WXarticleHide'})
+                        .then(function(result) {
+                            var reply = Product.wrapToInstance(result);
+                            var replyPrice = reply.getPriceByUser(user);
+                            Order.getRandomStr(req).then(function(orderFlag) {
+                                res.render('taskerWXarticleAdd', {
+                                    title: '添加微信原文/收藏/分享任务',
+                                    user: user,
+                                    fansPrice: fansPrice,
+                                    replyPrice: replyPrice,
+                                    orderFlag: orderFlag
+                                })
+                            })
+                        });
+                });
+        });
+});
+
+router.post('/WB/forward/add', function (req, res) {
+    Order.getOrder(req).then(function (order) {
+        User.open().findById(req.session.passport.user)
+            .then(function (user) {
+                var orderIns = Order.wrapToInstance(order);
+                orderIns.checkRandomStr(req).then(function() {
+                    if(orderIns.isTow) {
+                        orderIns.createTwo(user, {type: 'WXarticleShare'}, {type: 'WXarticleHide'})
+                            .then(function () {
+                                if(global.orderCheckIsOpen == 'yes'){
+                                    socketIO.emit('updateNav', {checkOrder: 1});
+                                }
+                                res.redirect('/tasker/WX/article');
+                            }, function() {
+                                res.send('<h1>您的余额不足，请充值！ 顺便多说一句，请不要跳过页面非法提交数据。。。不要以为我不知道哦！！</h1>')
+                            });
+                    }else {
+                        delete orderIns.price2;
+                        orderIns.createOne(user, {type: 'WXarticleShare'})
+                            .then(function () {
+                                if(global.orderCheckIsOpen == 'yes'){
+                                    socketIO.emit('updateNav', {checkOrder: 1});
+                                }
+                                res.redirect('/tasker/WX/article');
+                            }, function() {
+                                res.send('<h1>您的余额不足，请充值！ 顺便多说一句，请不要跳过页面非法提交数据。。。不要以为我不知道哦！！</h1>')
+                            });
+                    }
+                }, function(msg) {
+                    res.redirect('/tasker/WX/article');
+                })
+            });
+    }, function(err) {
+        res.end('提交表单失败： ',err); //各种错误
+    });
+});
+
+router.get('/WB/read', function (req, res) {
+    var obj = {
+        type: 'WBread'
+    };
+    if(req.query.address) {
+        obj.address = new RegExp(req.query.address);
+    }
+    User.open().findById(req.session.passport.user)
+        .then(function (user) {
+            obj.userId = user._id;
+            Order.open().findPages(obj, (req.query.page ? req.query.page : 1))
+                .then(function(obj) {
+                    res.render('taskerWBread', {
+                        title: '微博阅读',
+                        user: user,
+                        orders: obj.results,
+                        pages: obj.pages,
+                        path: '/tasker/WB/read'
+                    })
+                })
+        });
+});
+
+router.get('/WB/read/add', function (req, res) {
+    User.open().findById(req.session.passport.user)
+        .then(function (user) {
+            Product.open().findOne({type: 'WXarticleShare'})
+                .then(function(result) {
+                    var fans = Product.wrapToInstance(result);
+                    var fansPrice = fans.getPriceByUser(user);
+                    Product.open().findOne({type: 'WXarticleHide'})
+                        .then(function(result) {
+                            var reply = Product.wrapToInstance(result);
+                            var replyPrice = reply.getPriceByUser(user);
+                            Order.getRandomStr(req).then(function(orderFlag) {
+                                res.render('taskerWXarticleAdd', {
+                                    title: '添加微信原文/收藏/分享任务',
+                                    user: user,
+                                    fansPrice: fansPrice,
+                                    replyPrice: replyPrice,
+                                    orderFlag: orderFlag
+                                })
+                            })
+                        });
+                });
+        });
+});
+
+router.post('/WB/read/add', function (req, res) {
+    Order.getOrder(req).then(function (order) {
+        User.open().findById(req.session.passport.user)
+            .then(function (user) {
+                var orderIns = Order.wrapToInstance(order);
+                orderIns.checkRandomStr(req).then(function() {
+                    if(orderIns.isTow) {
+                        orderIns.createTwo(user, {type: 'WXarticleShare'}, {type: 'WXarticleHide'})
+                            .then(function () {
+                                if(global.orderCheckIsOpen == 'yes'){
+                                    socketIO.emit('updateNav', {checkOrder: 1});
+                                }
+                                res.redirect('/tasker/WX/article');
+                            }, function() {
+                                res.send('<h1>您的余额不足，请充值！ 顺便多说一句，请不要跳过页面非法提交数据。。。不要以为我不知道哦！！</h1>')
+                            });
+                    }else {
+                        delete orderIns.price2;
+                        orderIns.createOne(user, {type: 'WXarticleShare'})
+                            .then(function () {
+                                if(global.orderCheckIsOpen == 'yes'){
+                                    socketIO.emit('updateNav', {checkOrder: 1});
+                                }
+                                res.redirect('/tasker/WX/article');
+                            }, function() {
+                                res.send('<h1>您的余额不足，请充值！ 顺便多说一句，请不要跳过页面非法提交数据。。。不要以为我不知道哦！！</h1>')
+                            });
+                    }
+                }, function(msg) {
+                    res.redirect('/tasker/WX/article');
+                })
+            });
+    }, function(err) {
+        res.end('提交表单失败： ',err); //各种错误
+    });
+});
+
+router.get('/WB/comment', function (req, res) {
+    var obj = {
+        type: 'WBcomment'
+    };
+    if(req.query.address) {
+        obj.address = new RegExp(req.query.address);
+    }
+    User.open().findById(req.session.passport.user)
+        .then(function (user) {
+            obj.userId = user._id;
+            Order.open().findPages(obj, (req.query.page ? req.query.page : 1))
+                .then(function(obj) {
+                    res.render('taskerWBcomment', {
+                        title: '微博评论',
+                        user: user,
+                        orders: obj.results,
+                        pages: obj.pages,
+                        path: '/tasker/WB/comment'
+                    })
+                })
+        });
+});
+
+router.get('/WB/comment/add', function (req, res) {
+    User.open().findById(req.session.passport.user)
+        .then(function (user) {
+            Product.open().findOne({type: 'WXarticleShare'})
+                .then(function(result) {
+                    var fans = Product.wrapToInstance(result);
+                    var fansPrice = fans.getPriceByUser(user);
+                    Product.open().findOne({type: 'WXarticleHide'})
+                        .then(function(result) {
+                            var reply = Product.wrapToInstance(result);
+                            var replyPrice = reply.getPriceByUser(user);
+                            Order.getRandomStr(req).then(function(orderFlag) {
+                                res.render('taskerWXarticleAdd', {
+                                    title: '添加微信原文/收藏/分享任务',
+                                    user: user,
+                                    fansPrice: fansPrice,
+                                    replyPrice: replyPrice,
+                                    orderFlag: orderFlag
+                                })
+                            })
+                        });
+                });
+        });
+});
+
+router.post('/WB/comment/add', function (req, res) {
+    Order.getOrder(req).then(function (order) {
+        User.open().findById(req.session.passport.user)
+            .then(function (user) {
+                var orderIns = Order.wrapToInstance(order);
+                orderIns.checkRandomStr(req).then(function() {
+                    if(orderIns.isTow) {
+                        orderIns.createTwo(user, {type: 'WXarticleShare'}, {type: 'WXarticleHide'})
+                            .then(function () {
+                                if(global.orderCheckIsOpen == 'yes'){
+                                    socketIO.emit('updateNav', {checkOrder: 1});
+                                }
+                                res.redirect('/tasker/WX/article');
+                            }, function() {
+                                res.send('<h1>您的余额不足，请充值！ 顺便多说一句，请不要跳过页面非法提交数据。。。不要以为我不知道哦！！</h1>')
+                            });
+                    }else {
+                        delete orderIns.price2;
+                        orderIns.createOne(user, {type: 'WXarticleShare'})
+                            .then(function () {
+                                if(global.orderCheckIsOpen == 'yes'){
+                                    socketIO.emit('updateNav', {checkOrder: 1});
+                                }
+                                res.redirect('/tasker/WX/article');
+                            }, function() {
+                                res.send('<h1>您的余额不足，请充值！ 顺便多说一句，请不要跳过页面非法提交数据。。。不要以为我不知道哦！！</h1>')
+                            });
+                    }
+                }, function(msg) {
+                    res.redirect('/tasker/WX/article');
+                })
+            });
+    }, function(err) {
+        res.end('提交表单失败： ',err); //各种错误
+    });
+});
+
 
 router.get('/order/on/top', function (req, res) {
     if(/^[0-9]+.?[0-9]*$/.test(req.query.info)){
@@ -515,8 +922,6 @@ router.get('/check/complaints', function (req, res) {
     })
 
 });
-
-
 
 router.get('/complaint', function (req, res) {
     User.open().findById(req.session.passport.user)
