@@ -11,6 +11,11 @@ var type = '<td> ' +
     '<option value="WXcodeReply">微信扫码回复</option> ' +
     '<option value="WXarticleHide">微信原文收藏</option> ' +
     '<option value="WXarticleShare">微信原文分享</option> ' +
+    '<option value="WBfans">微博关注</option> ' +
+    '<option value="WBvote">微博投票</option> ' +
+    '<option value="WBforward">微博转发</option> ' +
+    '<option value="WBread">微博阅读</option> ' +
+    '<option value="WBcomment">微博评论</option> ' +
     '</select> ' +
     '</td> ';
 var saveBtn = '<button type="button" class="am-btn am-btn-primary am-radius am-btn-xs save">保存</button> ';

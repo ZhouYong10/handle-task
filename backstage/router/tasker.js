@@ -436,24 +436,18 @@ router.get('/WB/fans', function (req, res) {
 router.get('/WB/fans/add', function (req, res) {
     User.open().findById(req.session.passport.user)
         .then(function (user) {
-            Product.open().findOne({type: 'WXfans'})
+            Product.open().findOne({type: 'WBfans'})
                 .then(function(fansP) {
                     var fans = Product.wrapToInstance(fansP);
                     var fansPrice = fans.getPriceByUser(user);
-                    Product.open().findOne({type: 'WXfansReply'})
-                        .then(function(replyP) {
-                            var reply = Product.wrapToInstance(replyP);
-                            var replyPrice = reply.getPriceByUser(user);
-                            Order.getRandomStr(req).then(function(orderFlag) {
-                                res.render('taskerWXfansAdd', {
-                                    title: '添加微信粉丝(回复)任务',
-                                    user: user,
-                                    fansPrice: fansPrice,
-                                    replyPrice: replyPrice,
-                                    orderFlag: orderFlag
-                                })
-                            })
-                        });
+                    Order.getRandomStr(req).then(function(orderFlag) {
+                        res.render('taskerWBfansAdd', {
+                            title: '添加微博关注任务',
+                            user: user,
+                            fansPrice: fansPrice,
+                            orderFlag: orderFlag
+                        })
+                    })
                 });
         });
 });
@@ -464,30 +458,18 @@ router.post('/WB/fans/add', function (req, res) {
             .then(function (user) {
                 var orderIns = Order.wrapToInstance(order);
                 orderIns.checkRandomStr(req).then(function() {
-                    if(orderIns.isTow) {
-                        orderIns.createTwo(user, {type: 'WXfans'}, {type: 'WXfansReply'})
-                            .then(function () {
-                                if(global.orderCheckIsOpen == 'yes'){
-                                    socketIO.emit('updateNav', {checkOrder: 1});
-                                }
-                                res.redirect('/tasker/WX/fans');
-                            }, function() {
-                                res.send('<h1>您的余额不足，请充值！ 顺便多说一句，请不要跳过页面非法提交数据。。。不要以为我不知道哦！！</h1>')
-                            });
-                    }else {
-                        delete orderIns.price2;
-                        orderIns.createOne(user, {type: 'WXfans'})
-                            .then(function () {
-                                if(global.orderCheckIsOpen == 'yes'){
-                                    socketIO.emit('updateNav', {checkOrder: 1});
-                                }
-                                res.redirect('/tasker/WX/fans');
-                            }, function() {
-                                res.send('<h1>您的余额不足，请充值！ 顺便多说一句，请不要跳过页面非法提交数据。。。不要以为我不知道哦！！</h1>')
-                            });
-                    }
+                    delete orderIns.price2;
+                    orderIns.createOne(user, {type: 'WBfans'})
+                        .then(function () {
+                            if (global.orderCheckIsOpen == 'yes') {
+                                socketIO.emit('updateNav', {checkOrder: 1});
+                            }
+                            res.redirect('/tasker/WB/fans');
+                        }, function () {
+                            res.send('<h1>您的余额不足，请充值！ 顺便多说一句，请不要跳过页面非法提交数据。。。不要以为我不知道哦！！</h1>')
+                        });
                 }, function(msg) {
-                    res.redirect('/tasker/WX/fans');
+                    res.redirect('/tasker/WB/fans');
                 })
             });
     }, function(err) {

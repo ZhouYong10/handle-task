@@ -47,7 +47,7 @@
                         <div id="wxFans" class="widget-body am-fr">
 
                             <form class="am-form tpl-form-border-form tpl-form-border-br"
-                                      enctype="multipart/form-data" method="post" action="/tasker/WX/fans/add" >
+                                      enctype="multipart/form-data" method="post" action="/tasker/WB/fans/add" >
                                     <input type="hidden" value="<%= orderFlag %>" name="orderFlag">
 
                                     <div class="am-form-group">
@@ -64,13 +64,13 @@
 
                                     <div class="am-form-group">
                                         <label for="fansID" class="am-u-sm-4 am-u-lg-2 am-form-label">
-                                            <span class="tips">* </span>公众号
+                                            <span class="tips">* </span>关注账号
                                         </label>
                                         <div class="am-u-sm-8 am-u-lg-10">
                                             <input id="fansID" class="am-radius am-input-sm" type="text"
                                                    @keyup="checkFansID" @change="checkFansID" @blur="checkFansID"
-                                                   placeholder="请填写公众平台微信号或者ID" name="account">
-                                            <span class="tips err">公众号不能为空!</span>
+                                                   placeholder="请填写需要被关注的微博账号" name="account">
+                                            <span class="tips err">微博账号不能为空!</span>
                                         </div>
                                     </div>
 
@@ -88,7 +88,7 @@
 
                                     <div class="am-form-group">
                                         <label for="fansPrice" class="am-u-sm-4 am-u-lg-2 am-form-label">
-                                            <span class="tips">* </span>粉丝价格
+                                            <span class="tips">* </span>关注价格
                                         </label>
                                         <div class="am-u-sm-8 am-u-lg-10">
                                             <input type="hidden" v-model="fansPrice" value="<%= fansPrice %>">
@@ -100,34 +100,13 @@
                                     </div>
 
                                     <div class="am-form-group">
-                                        <label for="isReply" class="am-u-sm-4 am-u-lg-2 am-form-label">是否回复</label>
-                                        <div class="am-u-sm-8 am-u-lg-10" style="padding-top:8px;">
-                                            <input id="isReply" class="am-radius" type="checkbox"
-                                                   value="true" name="isTow" @change="checkIsReply">
-                                        </div>
-                                    </div>
-
-                                    <div id="myReplyPrice" class="am-form-group" style="display: none;">
-                                        <label for="replayPrice" class="am-u-sm-4 am-u-lg-2 am-form-label">
-                                            <span class="tips">* </span>回复价格
-                                        </label>
-                                        <div class="am-u-sm-8 am-u-lg-10">
-                                            <input type="hidden" v-model="replyPrice" value="<%= replyPrice %>">
-                                            <input id="replayPrice" class="am-radius am-input-sm" type="text"
-                                                   @keyup="checkReplayPrice" @change="checkReplayPrice" @blur="checkReplayPrice"
-                                                   placeholder="价格必须是正数，且不能小于平台定价 ￥<%= replyPrice %>!" name="price2">
-                                            <span class="tips err">价格必须是正数，且不能小于平台定价 ￥<%= replyPrice %>!</span>
-                                        </div>
-                                    </div>
-
-                                    <div class="am-form-group">
                                         <label for="fansNum" class="am-u-sm-4 am-u-lg-2 am-form-label">
-                                            <span class="tips">* </span>粉丝数量
+                                            <span class="tips">* </span>关注数量
                                         </label>
                                         <div class="am-u-sm-8 am-u-lg-10">
                                             <input id="fansNum" class="am-radius am-input-sm" type="text"
                                                    @keyup="checkFansNum" @change="checkFansNum" @blur="checkFansNum"
-                                                   placeholder="需要增加的粉丝数量，最低20起" name="num">
+                                                   placeholder="需要增加的关注数量，最低20起" name="num">
                                             <span class="tips err">任务数量必须为正整数,且最低20起!</span>
                                         </div>
                                     </div>
