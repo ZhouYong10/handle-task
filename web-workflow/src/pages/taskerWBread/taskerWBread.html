@@ -33,7 +33,7 @@
                                 <validator name="search">
                                     <div class="am-u-sm-12 am-u-md-12 am-u-lg-3">
                                         <div class="am-input-group am-input-group-sm tpl-form-border-form cl-p">
-                                            <form id="search" method="get" action="/tasker/WX/article">
+                                            <form id="search" method="get" action="/tasker/WB/read">
                                                 <input id="taskName" type="text" class="am-form-field am-input-sm am-radius"
                                                        name="account" placeholder="请输入任务地址" style="height:33px;"
                                                        v-validate:account="{required: true}">
@@ -46,7 +46,7 @@
                                         </div>
                                     </div>
                                 </validator>
-                                <a href="/tasker/WX/article/add" class="am-btn am-btn-primary am-radius am-btn-sm addTask">
+                                <a href="/tasker/WB/read/add" class="am-btn am-btn-primary am-radius am-btn-sm addTask">
                                     <i class="am-icon-plus-circle"></i>
                                     新增任务
                                 </a>
@@ -57,14 +57,14 @@
                                 </a>
                             </div>
 
-                            <div class="am-u-sm-12 am-scrollable-horizontal am-text-center forum-context">
+                            <div class="am-u-sm-12 am-scrollable-horizontal forum-context">
                                 <table width="100%" class="am-table am-text-nowrap am-table-striped tpl-table-black">
                                     <thead>
                                     <tr>
                                         <th>#</th>
                                         <th>创建时间</th>
                                         <th>任务标题</th>
-                                        <th>文章地址</th>
+                                        <th>任务地址</th>
                                         <th>价格</th>
                                         <th>完成/数量</th>
                                         <th>总价/结余</th>
@@ -96,7 +96,7 @@
                                             <%= orders[i].price %>
                                         </td>
                                         <td>
-                                            <a href="/tasker/order/details?witchPage=WXarticleShare&orderId=<%= orders[i]._id %>"
+                                            <a href="/tasker/order/details?witchPage=WBread&orderId=<%= orders[i]._id %>"
                                                title="点击查看任务">
                                                 <%= orders[i].taskNum %>/<%= orders[i].num %>
                                             </a>
