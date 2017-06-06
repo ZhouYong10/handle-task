@@ -33,9 +33,9 @@
                                 <validator name="search">
                                     <div class="am-u-sm-12 am-u-md-12 am-u-lg-3">
                                         <div class="am-input-group am-input-group-sm tpl-form-border-form cl-p">
-                                            <form id="search" method="get" action="/tasker/WX/vote">
+                                            <form id="search" method="get" action="/tasker/WB/vote">
                                                 <input id="taskName" type="text" class="am-form-field am-input-sm am-radius"
-                                                       name="account" placeholder="请输入任务微博账号" style="height:33px;"
+                                                       name="account" placeholder="请输入投票地址" style="height:33px;"
                                                        v-validate:account="{required: true}">
                                             </form>
                                         <span class="am-input-group-btn">
@@ -46,7 +46,7 @@
                                         </div>
                                     </div>
                                 </validator>
-                                <a href="/tasker/WX/vote/add" class="am-btn am-btn-primary am-radius am-btn-sm addTask">
+                                <a href="/tasker/WB/vote/add" class="am-btn am-btn-primary am-radius am-btn-sm addTask">
                                     <i class="am-icon-plus-circle"></i>
                                     新增任务
                                 </a>
@@ -94,7 +94,7 @@
                                         </td>
                                         <td><%= orders[i].price %></td>
                                         <td>
-                                            <a href="/tasker/order/details?witchPage=WXvote&orderId=<%= orders[i]._id %>" title="点击查看任务">
+                                            <a href="/tasker/order/details?witchPage=WBvote&orderId=<%= orders[i]._id %>" title="点击查看任务">
                                                 <%= orders[i].taskNum %>/<%= orders[i].num %>
                                             </a>
                                         </td>

@@ -458,7 +458,6 @@ router.post('/WB/fans/add', function (req, res) {
             .then(function (user) {
                 var orderIns = Order.wrapToInstance(order);
                 orderIns.checkRandomStr(req).then(function() {
-                    delete orderIns.price2;
                     orderIns.createOne(user, {type: 'WBfans'})
                         .then(function () {
                             if (global.orderCheckIsOpen == 'yes') {
@@ -481,8 +480,8 @@ router.get('/WB/vote', function (req, res) {
     var obj = {
         type: 'WBvote'
     };
-    if(req.query.address) {
-        obj.address = new RegExp(req.query.address);
+    if(req.query.account) {
+        obj.address = new RegExp(req.query.account);
     }
     User.open().findById(req.session.passport.user)
         .then(function (user) {
@@ -504,13 +503,13 @@ router.get('/WB/vote', function (req, res) {
 router.get('/WB/vote/add', function (req, res) {
     User.open().findById(req.session.passport.user)
         .then(function (user) {
-            Product.open().findOne({type: 'WXvote'})
+            Product.open().findOne({type: 'WBvote'})
                 .then(function(result) {
                     var fans = Product.wrapToInstance(result);
                     var fansPrice = fans.getPriceByUser(user);
                     Order.getRandomStr(req).then(function(orderFlag) {
-                        res.render('taskerWXvoteAdd', {
-                            title: '添加微信投票任务',
+                        res.render('taskerWBvoteAdd', {
+                            title: '添加微博投票任务',
                             user: user,
                             fansPrice: fansPrice,
                             orderFlag: orderFlag
@@ -525,19 +524,18 @@ router.post('/WB/vote/add', function (req, res) {
         User.open().findById(req.session.passport.user)
             .then(function (user) {
                 var orderIns = Order.wrapToInstance(order);
-                delete orderIns.price2;
                 orderIns.checkRandomStr(req).then(function() {
-                    orderIns.createOne(user, {type: 'WXvote'})
+                    orderIns.createOne(user, {type: 'WBvote'})
                         .then(function () {
                             if(global.orderCheckIsOpen == 'yes'){
                                 socketIO.emit('updateNav', {checkOrder: 1});
                             }
-                            res.redirect('/tasker/WX/vote');
+                            res.redirect('/tasker/WB/vote');
                         }, function() {
                             res.send('<h1>您的余额不足，请充值！ 顺便多说一句，请不要跳过页面非法提交数据。。。不要以为我不知道哦！！</h1>')
                         });
                 }, function(msg) {
-                    res.redirect('/tasker/WX/vote');
+                    res.redirect('/tasker/WB/vote');
                 })
             });
     }, function(err) {

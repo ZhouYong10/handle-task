@@ -47,7 +47,7 @@
                         <div id="wxFans" class="widget-body am-fr">
 
                             <form class="am-form tpl-form-border-form tpl-form-border-br"
-                                  enctype="multipart/form-data" method="post" action="/tasker/WX/vote/add" >
+                                  enctype="multipart/form-data" method="post" action="/tasker/WB/vote/add" >
                                     <input type="hidden" value="<%= orderFlag %>" name="orderFlag">
                                     <div class="am-form-group">
                                         <label for="title" class="am-u-sm-4 am-u-lg-2 am-form-label">
@@ -100,12 +100,12 @@
 
                                     <div class="am-form-group">
                                         <label for="fansNum" class="am-u-sm-4 am-u-lg-2 am-form-label">
-                                            <span class="tips">* </span>数量
+                                            <span class="tips">* </span>投票数量
                                         </label>
                                         <div class="am-u-sm-8 am-u-lg-10">
                                             <input id="fansNum" class="am-radius am-input-sm" type="text"
                                                    @keyup="checkFansNum" @change="checkFansNum" @blur="checkFansNum"
-                                                   placeholder="需要增加的粉丝数量，最低20起" name="num">
+                                                   placeholder="需要增加的投票数量，最低20起" name="num">
                                             <span class="tips err">任务数量必须为正整数,且最低20起!</span>
                                         </div>
                                     </div>
