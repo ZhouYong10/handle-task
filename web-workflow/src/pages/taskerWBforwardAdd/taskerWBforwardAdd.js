@@ -8,7 +8,6 @@ new Vue({
     el: '#wxFans',
     data: {
         fansPrice: '',
-        replyPrice: '',
         count: 0,
         funds: ''
     },
@@ -45,15 +44,9 @@ new Vue({
         },
         totalPrice: function() {
             var fansPrice = $('#fansPrice').val();
-            var replayPrice = $('#replayPrice').val();
-            var isReply = $('#isReply').is(':checked');
             var num = $('#fansNum').val();
 
-            if(isReply){
-                this.count = ((parseFloat(fansPrice) + parseFloat(replayPrice)) * parseInt(num)).toFixed(4);
-            }else {
-                this.count = (parseFloat(fansPrice) * parseInt(num)).toFixed(4);
-            }
+            this.count = (parseFloat(fansPrice) * parseInt(num)).toFixed(4);
             if(Utils.isPlusNum(this.count)) {
                 if(parseFloat(this.count) > parseFloat(this.funds)) {
                     $('#totalPrice').next().css('display', 'inline');
@@ -109,27 +102,6 @@ new Vue({
                 return false;
             }
         },
-        checkReplayPrice: function() {
-            var $replayPrice = $('#replayPrice');
-            var replayPrice = $replayPrice.val();
-            if(Utils.isPlusNum(replayPrice) && parseFloat(replayPrice) >= parseFloat(this.fansPrice)){
-                $replayPrice.next().css('display', 'none');
-                this.totalPrice();
-                return true;
-            }else{
-                $replayPrice.next().css('display', 'inline');
-                return false;
-            }
-        },
-        checkIsReply: function() {
-            var $isReply = $('#isReply');
-            if($isReply.is(':checked')){
-                $('#myReplyPrice').css('display', 'block');
-            }else{
-                $('#myReplyPrice').css('display', 'none');
-            }
-            this.totalPrice();
-        },
         checkFansNum: function() {
             var $num = $('#fansNum');
             var num = $num.val();
@@ -143,10 +115,8 @@ new Vue({
             }
         },
         check: function(e) {
-            var isCommit = $('#isReply').is(':checked') ? (this.checkTitle() && this.checkFansID() && this.checkRemark() &&
-            this.checkFansPrice() && this.checkReplayPrice() && this.checkFansNum() && this.totalPrice()) :
-                (this.checkTitle() && this.checkFansID() && this.checkRemark() && this.checkFansPrice() &&
-                this.checkFansNum() && this.totalPrice());
+            var isCommit = this.checkTitle() && this.checkFansID() && this.checkRemark() && this.checkFansPrice() &&
+                this.checkFansNum() && this.totalPrice();
             if(!isCommit) {
                 e.stopPropagation();
                 e.preventDefault();

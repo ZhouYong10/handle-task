@@ -547,8 +547,8 @@ router.get('/WB/forward', function (req, res) {
     var obj = {
         type: 'WBforward'
     };
-    if(req.query.address) {
-        obj.address = new RegExp(req.query.address);
+    if(req.query.account) {
+        obj.address = new RegExp(req.query.account);
     }
     User.open().findById(req.session.passport.user)
         .then(function (user) {
@@ -569,24 +569,18 @@ router.get('/WB/forward', function (req, res) {
 router.get('/WB/forward/add', function (req, res) {
     User.open().findById(req.session.passport.user)
         .then(function (user) {
-            Product.open().findOne({type: 'WXarticleShare'})
+            Product.open().findOne({type: 'WBforward'})
                 .then(function(result) {
                     var fans = Product.wrapToInstance(result);
                     var fansPrice = fans.getPriceByUser(user);
-                    Product.open().findOne({type: 'WXarticleHide'})
-                        .then(function(result) {
-                            var reply = Product.wrapToInstance(result);
-                            var replyPrice = reply.getPriceByUser(user);
-                            Order.getRandomStr(req).then(function(orderFlag) {
-                                res.render('taskerWXarticleAdd', {
-                                    title: '添加微信原文/收藏/分享任务',
-                                    user: user,
-                                    fansPrice: fansPrice,
-                                    replyPrice: replyPrice,
-                                    orderFlag: orderFlag
-                                })
-                            })
-                        });
+                    Order.getRandomStr(req).then(function(orderFlag) {
+                        res.render('taskerWBforwardAdd', {
+                            title: '添加微博转发任务',
+                            user: user,
+                            fansPrice: fansPrice,
+                            orderFlag: orderFlag
+                        })
+                    })
                 });
         });
 });
@@ -597,30 +591,17 @@ router.post('/WB/forward/add', function (req, res) {
             .then(function (user) {
                 var orderIns = Order.wrapToInstance(order);
                 orderIns.checkRandomStr(req).then(function() {
-                    if(orderIns.isTow) {
-                        orderIns.createTwo(user, {type: 'WXarticleShare'}, {type: 'WXarticleHide'})
-                            .then(function () {
-                                if(global.orderCheckIsOpen == 'yes'){
-                                    socketIO.emit('updateNav', {checkOrder: 1});
-                                }
-                                res.redirect('/tasker/WX/article');
-                            }, function() {
-                                res.send('<h1>您的余额不足，请充值！ 顺便多说一句，请不要跳过页面非法提交数据。。。不要以为我不知道哦！！</h1>')
-                            });
-                    }else {
-                        delete orderIns.price2;
-                        orderIns.createOne(user, {type: 'WXarticleShare'})
-                            .then(function () {
-                                if(global.orderCheckIsOpen == 'yes'){
-                                    socketIO.emit('updateNav', {checkOrder: 1});
-                                }
-                                res.redirect('/tasker/WX/article');
-                            }, function() {
-                                res.send('<h1>您的余额不足，请充值！ 顺便多说一句，请不要跳过页面非法提交数据。。。不要以为我不知道哦！！</h1>')
-                            });
-                    }
+                    orderIns.createOne(user, {type: 'WBforward'})
+                        .then(function () {
+                            if(global.orderCheckIsOpen == 'yes'){
+                                socketIO.emit('updateNav', {checkOrder: 1});
+                            }
+                            res.redirect('/tasker/WB/forward');
+                        }, function() {
+                            res.send('<h1>您的余额不足，请充值！ 顺便多说一句，请不要跳过页面非法提交数据。。。不要以为我不知道哦！！</h1>')
+                        });
                 }, function(msg) {
-                    res.redirect('/tasker/WX/article');
+                    res.redirect('/tasker/WB/forward');
                 })
             });
     }, function(err) {
