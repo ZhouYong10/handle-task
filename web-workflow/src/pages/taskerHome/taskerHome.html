@@ -21,6 +21,27 @@
     <div class="tpl-content-wrapper">
 
         <div class="row-content am-cf">
+
+            <div class="row am-cf">
+                <div class="am-u-sm-12">
+                    <div class="widget" style="min-height: 96px;">
+                        <div>
+                            &nbsp;&nbsp;下级推广：<br/>
+                            &nbsp;&nbsp;通过此链接注册的用户即为我的下级用户。
+                        </div>
+                        <div class="am-u-sm-9 am-u-lg-6">
+                            <input class="am-form-field am-input-sm am-radius" type="text"
+                                   value="<%= invitation %>">
+                        </div>
+                        <div class="am-u-sm-3 am-u-lg-6">
+                            <a class="clipboard am-btn am-btn-primary am-radius am-btn-sm"
+                               title="通过此链接注册的用户即为我的下级用户。"
+                               data-clipboard-text="<%= invitation %>">复制</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <div class="row  am-cf">
                 <div class="am-u-sm-12 am-u-md-6 am-u-lg-4">
                     <div class="widget widget-primary am-cf">
@@ -71,21 +92,6 @@
                             <span class="widget-statistic-icon am-icon-user-plus"></span>
                         </div>
                     </div>
-                </div>
-            </div>
-
-            <div>
-                <div style="color: white;">
-                    推广链接：　通过此链接注册的用户即为我的下级用户。
-                </div>
-                <div class="am-u-sm-8">
-                    <input class="am-form-field am-input-sm am-radius" type="text"
-                           value="<%= invitation %>">
-                </div>
-                <div class="am-u-sm-4">
-                    <a class="clipboard am-btn am-btn-primary am-radius am-btn-sm"
-                       title="通过此链接注册的用户即为我的下级用户。"
-                       data-clipboard-text="<%= invitation %>">复制</a>
                 </div>
             </div>
 
