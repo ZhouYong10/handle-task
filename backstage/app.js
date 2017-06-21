@@ -266,24 +266,45 @@ app.post('/sign/in', function (req, res, next) {
             };
 
             if (invitationCode) {
-                var userId = Utils.decipher(invitationCode, Utils.invitationKey);
-                User.open().findById(userId)
-                    .then(function (result) {
-                        var parent = User.wrapToInstance(result);
-                        userInfo.parent = parent.username;
-                        userInfo.parentID = parent._id;
-                        User.createUser(userInfo, function (user) {
-                            parent.addChild(user[0]._id);
-                            User.open().updateById(parent._id, {
-                                $set: parent
-                            }).then(function () {
-                                login(req, res, next);
-                            });
+                try{
+                    var userId = Utils.decipher(invitationCode, Utils.invitationKey);
+                    User.open().findById(userId)
+                        .then(function (result) {
+                            if(result) {
+                                var parent = User.wrapToInstance(result);
+                                userInfo.parent = parent.username;
+                                userInfo.parentID = parent._id;
+                                User.createUser(userInfo, function (user) {
+                                    parent.addChild(user[0]._id);
+                                    User.open().updateById(parent._id, {
+                                        $set: parent
+                                    }).then(function () {
+                                        login(req, res, next);
+                                    });
+                                });
+                            }else{
+                                res.send({
+                                    isOK: false,
+                                    field: 'username',
+                                    message: '当前推广链接的用户已被删除，请通过其他推广链接注册！'
+                                });
+                            }
                         });
+                } catch(err) {
+                    res.send({
+                        isOK: false,
+                        field: 'username',
+                        message: '链接中的推广码错误，请不要随意修改推广链接中的推广码！'
                     });
+                }
             } else {
-                User.createUser(userInfo, function () {
-                    login(req, res, next);
+                //User.createUser(userInfo, function () {
+                //    login(req, res, next);
+                //});
+                res.send({
+                    isOK: false,
+                    field: 'username',
+                    message: '暂不支持自由注册，需通过推广链接注册！如果是推广链接，请不要删除链接后的推广码！'
                 });
             }
         });
