@@ -14,7 +14,13 @@ new Vue({
         qq: '',
         role: '',
         securityCode: '',
-        readme: false
+        readme: false,
+        noInvitation: true
+    },
+    created: function() {
+        if(location.search) {
+            this.noInvitation = false;
+        }
     },
     methods: {
         changeImg: function() {

@@ -17,8 +17,8 @@
     <div id="login" class="tpl-login">
         <div class="tpl-login-content">
             <div class="tpl-login-title">注册用户</div>
-                <span class="tpl-login-content-info">
-                  创建一个新的用户
+                <span v-if="noInvitation" class="tpl-login-content-info" style="color: red;">
+                  暂不支持自由注册，需通过推广链接注册！如果没有推广链接，请联系平台管理员！
               </span>
 
             <form class="am-form tpl-form-line-form">
