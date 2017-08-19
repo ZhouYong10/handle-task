@@ -22,6 +22,16 @@
 
     <!-- 菜单 -->
     <ul class="sidebar-nav">
+
+        <!--VIP免费看电影-->
+        <% if(user.vipshow && user.vipshow == 'true'){ %>
+        <li class="sidebar-nav-link">
+            <a id="vipVideo" href="/user/vip/video" target="_blank">
+                <i class="am-icon-video-camera sidebar-nav-link-logo"></i> VIP电影
+            </a>
+        </li>
+        <% } %>
+
         <!-- 做任务者菜单列表 -->
         <% if(user.role == 'hander'){ %>
         <li class="sidebar-nav-link">

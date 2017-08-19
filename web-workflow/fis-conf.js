@@ -120,7 +120,7 @@ fis.match('::packager', {
         allInOne: {
             css: '/static/pak/${filepath}_aio.css',
             js: '/static/pak/${filepath}_aio.js',
-            ignore: '/static/plugins/**.js'
+            ignore: ['/static/plugins/**.js', '/static/plugins/**.css']
         },
         useInlineMap: true
     }),

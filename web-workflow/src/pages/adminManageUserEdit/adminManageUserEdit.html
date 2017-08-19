@@ -82,6 +82,29 @@
                                         </select>
                                     </div>
                                 </div>
+                                <div class="am-form-group" style="display: none">
+                                    <label class="am-u-sm-4 am-form-label">
+                                        VIP电影
+                                    </label>
+                                    <div class="am-u-sm-8">
+                                        <select id="vipshow" class="am-radius am-input-sm" name="vipshow" style="color: #999;">
+                                            <option value="true"
+                                            <% if(user.vipshow && user.vipshow == 'true'){ %> selected <% } %>>显示</option>
+                                            <option value="false"
+                                            <% if(!user.vipshow || user.vipshow == 'false'){ %> selected <% } %>>隐藏</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="am-form-group" style="display: none">
+                                    <label class="am-u-sm-4 am-form-label">
+                                        VIP日期
+                                    </label>
+                                    <div class="am-u-sm-8">
+                                        <input id="viptime" type="text" class="am-input-sm am-radius"
+                                               name="viptime" value="<%= user.viptime %>" placeholder="选择VIP日期"
+                                               onclick="laydate({istime: true, format: 'YYYY-MM-DD hh:mm:ss'})">
+                                    </div>
+                                </div>
                                 <div class="am-form-group">
                                     <label class="am-u-sm-4 am-form-label">
                                         等级
@@ -167,6 +190,7 @@
 
 <!--import plugin-->
 <script src="/static/plugins/layer/layer.js"></script>
+<script src="/static/plugins/laydate/laydate.js"></script>
 
 <script>
     require('adminMenu');

@@ -19,6 +19,69 @@ var moment = require('moment');
 
 
 /*
+* VIP免费看电影
+* */
+router.get('/vip/video', function (req, res) {
+    User.open().findById(req.session.passport.user)
+        .then(function (user) {
+            if(user.vipshow && user.vipshow == 'true'){
+                if(user.viptime) {
+                    var vipTime = Date.parse(user.viptime);
+                    var nowTime = new Date().getTime();
+                    if(vipTime - nowTime > 0){
+                        res.render('vip');
+                    }else{
+                        res.send('您的VIP电影会员已到期！');
+                    }
+                }else{
+                    res.send('您不是VIP电影会员！');
+                }
+            }else{
+                res.send('您不是VIP电影会员！');
+            }
+        });
+});
+
+router.get('/vip/video/teach', function (req, res) {
+    res.render('teach');
+});
+
+router.get('/vip/video/url', function (req, res) {
+    var msg = '您的VIP电影会员已到期！';
+    var address = 'http://www.wmxz.wang/video.php?url=';
+    User.open().findById(req.session.passport.user)
+        .then(function (user) {
+            if(user.vipshow && user.vipshow == 'true'){
+                if(user.viptime) {
+                    var vipTime = Date.parse(user.viptime);
+                    var nowTime = new Date().getTime();
+                    if(vipTime - nowTime > 0){
+                        res.send({
+                            isOk: true,
+                            address: address
+                        });
+                    }else{
+                        res.send({
+                            isOk: false,
+                            msg: msg
+                        });
+                    }
+                }else{
+                    res.send({
+                        isOk: false,
+                        msg: msg
+                    });
+                }
+            }else{
+                res.send({
+                    isOk: false,
+                    msg: msg
+                });
+            }
+        });
+});
+
+/*
  * update header nav
  * */
 router.get('/update/header/nav', function (req, res) {
